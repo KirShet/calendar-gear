@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 class ScheduleInputAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/kirshet/yii2/src/widgets/ScheduleInputWidget/assets';
+    public $sourcePath = '@vendor/kirshet/yii2/src/ScheduleInputWidget/assets';
     public $css = [
         'css/schedule-input.css',
     ];
