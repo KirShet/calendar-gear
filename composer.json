@@ -1,0 +1,21 @@
+{
+    "name": "kirshet/yii2",
+    "description": "Schedule input widget for Yii2",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "kirshet\\yii2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kirill Shetko",
+            "email": "kirshet2000@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "npm-asset/flatpickr": "^4.6.13"
+    }
+}
