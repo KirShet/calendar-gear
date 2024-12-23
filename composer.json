@@ -3,19 +3,24 @@
     "description": "Schedule input widget for Yii2",
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "kirshet\\yii2\\": "src/"
-        }
-    },
     "authors": [
         {
-            "name": "Kirill Shetko",
-            "email": "kirshet2000@gmail.com"
+            "name": "Ваше имя",
+            "email": "your-email@example.com"
         }
     ],
     "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "YourVendor\\YourWidgetPackage\\": "src/"
+        }
+    },
     "require": {
-        "npm-asset/flatpickr": "^4.6.13"
+        "php": ">=7.4"
+    },
+    "extra": {
+        "installer-paths": {
+            "common/widgets/{$name}/": ["your-vendor/your-widget-package"]
+        }
     }
 }
