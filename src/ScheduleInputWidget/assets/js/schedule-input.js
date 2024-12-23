@@ -56,7 +56,6 @@ $(document).ready(function () {
             alert('Пожалуйста, заполните все временные поля.');
             return;
         }
-        
         const newEntry = `
             <div class="days-wrapper">
                 <div class="work-time-info">
@@ -318,5 +317,44 @@ $(document).on('change', '.checkbox', function () {
             resetDates();
         });
 
+    // // Инициализация Flatpickr для полей времени
+    // $("input[type='time']").flatpickr({
+    //     // // enableTime: true,
+    //     // // // mode: "range",  // Диапазон выбора дат
+    //     // // dateFormat: "H:i",  // Формат даты и времени
+    //     // // // disable: [
+    //     // // //     function($date) {
+    //     // // //         // Отключаем выходные (воскресенье и субботу)
+    //     // // //         return ($date.getDay() === 0 || $date.getDay() === 6);
+    //     // // //     }
+    //     // // // ],
+    //     // // locale: 'ru',  // Локализация на русский
+    //     // // // weekNumbers: true,  // Отображать номера недель
+    //     // // // Пример подключения плагинов (если нужно)
+    //     // // // plugins: [new confirmDatePlugin({})]
+    //     // enableTime: true,
+    //     // noCalendar: true,
+    //     // dateFormat: "H:i",
+    //     // time_24hr: true
+    // });
+
+    // Инициализация календаря для модального окна
+    $(".calendar").flatpickr({
+        inline: true,  // Режим отображения календаря
+        locale: "ru",  // Локализация на русский
+        // "disable": [
+        //     function(date) {
+        //         // return true to disable
+        //         return (date.getDay() === 0 || date.getDay() === 6);
+    
+        //     }
+        // ],
+        mode: "range",
+        // enableTime: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Действия при изменении даты
+            $("#selected-date").text(dateStr);
+        }
+    });
 });
 

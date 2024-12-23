@@ -2,10 +2,10 @@
 
 namespace kirshet\yii2\ScheduleInputWidget;
 
-use yii\base\Widget;
+use yii\widgets\InputWidget;
 use kirshet\yii2\ScheduleInputWidget\assets\ScheduleInputAsset;
 
-class ScheduleInputWidget extends Widget
+class ScheduleInputWidget extends InputWidget
 {
     public $attribute;
     public $model;

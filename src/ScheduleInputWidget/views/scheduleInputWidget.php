@@ -111,7 +111,7 @@
             <h2 id="modal-title">Добавление особенного дня</h2>
             <p id="modal-description">Выберите день или период, когда режим работы не совпадает с рабочим днем или дополнительным интервалом.</p>
             <section class="calendar">
-            <div class="icon-arrow arrow_back"></div>
+            <!-- <div class="icon-arrow arrow_back"></div>
                 <article class="month">
                     <h3>Ноябрь 2024</h3>
                         <div class="weekdays"><div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div></div>
@@ -141,7 +141,7 @@
                             <div>29</div><div>30</div><div>31</div>
                         </div>
                     </article>
-                <div class="icon-arrow arrow_forward"></div>
+                <div class="icon-arrow arrow_forward"></div> -->
             </section>
             <section class="time-selection-wrapper">
                 <span id="selected-date">10 декабря</span> с
