@@ -1,9 +1,9 @@
 <?php
 
-namespace YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget;
+namespace kirshet\yii2\ScheduleInputWidget;
 
 use yii\base\Widget;
-use YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget\assets\ScheduleInputAsset;
+use kirshet\yii2\ScheduleInputWidget\assets\ScheduleInputAsset;
 
 class ScheduleInputWidget extends Widget
 {

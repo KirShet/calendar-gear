@@ -1,12 +1,12 @@
 <?php
 
-namespace YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget\assets;
+namespace kirshet\yii2\ScheduleInputWidget\assets;
 
 use yii\web\AssetBundle;
 
 class ScheduleInputAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/your-namespace/schedule-input-widget/src/widgets/ScheduleInputWidget/assets';
+    public $sourcePath = '@vendor/kirshet/yii2/src/widgets/ScheduleInputWidget/assets';
     public $css = [
         'css/schedule-input.css',
     ];
@@ -15,7 +15,7 @@ class ScheduleInputAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
-        'yii\bootstrap5\BootstrapAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];  
     public $publishOptions = ['forceCopy' => true];
 }

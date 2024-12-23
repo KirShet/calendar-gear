@@ -1,6 +1,6 @@
 <?php
 
-namespace YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget\models;
+namespace kirshet\yii2\ScheduleInputWidget\models;
 
 use yii\base\Model;
 
