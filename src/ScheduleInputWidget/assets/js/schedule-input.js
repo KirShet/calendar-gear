@@ -387,10 +387,17 @@ $(document).on('change', '.checkbox', function () {
                 ]
             }
         },
+        // "disable": [
+        //     function(date, selectedDates, mode) {
+        //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+        //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+        //     }        
+        // ],
         mode: "range", // Выбор диапазона
         dateFormat: "Y-m-d", // Внутренний формат данных
         altInput: true, // Показывать отформатированную строку
         altFormat: "d MMMM Y", // Формат отображаемой строки
+        defaultDate: [new Date().toISOString().split('T')[0]    ],
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const [startDate, endDate] = selectedDates;
@@ -401,6 +408,13 @@ $(document).on('change', '.checkbox', function () {
                 
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(customText);
+            } else if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+    
+                // Обновление текста в нужном элементе
+                $("#selected-date").text(formattedDate);
             }
         }
     });

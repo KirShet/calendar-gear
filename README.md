@@ -1,13 +1,14 @@
 Установка через Composer:
 ```
-composer require your-namespace/schedule-input-widget:dev-main
+composer require kirshet/yii2:dev-main
 ```
 
 Форма с виджетом:
 ```
 use yii\widgets\ActiveForm;
-use YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget\models\ScheduleForm;
-use YourVendor\YourWidgetPackage\widgets\ScheduleInputWidget\ScheduleInputWidget;
+use kirshet\yii2\ScheduleInputWidget\models\ScheduleForm;
+use kirshet\yii2\ScheduleInputWidget\ScheduleInputWidget;
+use cgsmith\flatpickr\FlatpickrWidget;
 
 $model = new ScheduleForm();
 
@@ -19,9 +20,25 @@ ActiveForm::end();
 
 Настройка автозагрузки
 ```
-"autoload": {
-    "psr-4": {
-        "YourVendor\\YourWidgetPackage\\": "src/"
+{
+    "name": "kirshet/yii2",
+    "description": "Schedule input widget for Yii2",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "kirshet\\yii2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kirill Shetko",
+            "email": "kirshet2000@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "npm-asset/flatpickr": "^4.6.13"
     }
 }
 ```
