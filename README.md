@@ -8,7 +8,6 @@ composer require kirshet/yii2:dev-main
 use yii\widgets\ActiveForm;
 use kirshet\yii2\ScheduleInputWidget\models\ScheduleForm;
 use kirshet\yii2\ScheduleInputWidget\ScheduleInputWidget;
-use cgsmith\flatpickr\FlatpickrWidget;
 
 $model = new ScheduleForm();
 

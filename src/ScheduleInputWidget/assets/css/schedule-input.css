@@ -701,3 +701,17 @@ input[name="days"] {
     100% {
         border-color: var(--color-border);}
   }
+  .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange{
+    background: #28B956 !important;
+    border-color: #28B956 !important; 
+  }
+  
+  :root {
+    --light-gray: #A9E3BB; /* Определяем переменную для цвета */
+  }
+  .flatpickr-day.inRange {
+    -webkit-box-shadow: -5px 0 0 var(--light-gray), 5px 0 0 var(--light-gray) !important;
+    box-shadow: -5px 0 0 var(--light-gray), 5px 0 0 var(--light-gray) !important;
+    background: var(--light-gray) !important;
+    border-color: var(--light-gray) !important;
+  }
