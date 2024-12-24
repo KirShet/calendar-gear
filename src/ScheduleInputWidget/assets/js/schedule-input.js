@@ -9,9 +9,36 @@ $(document).ready(function () {
 
     let workItemToDelete = null;
 
+// Функция для удаления класса 'inline'
+function removeInlineClass() {
+    $('.flatpickr-calendar').removeClass('inline');
+}
+
+// Создаем наблюдатель за изменениями в DOM
+const observer = new MutationObserver((mutationsList, observer) => {
+    // Проверяем все изменения DOM
+    mutationsList.forEach(mutation => {
+        if (mutation.type === 'childList') {
+            // Если новый элемент с классом 'flatpickr-calendar' добавлен в DOM
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1 && node.matches('.flatpickr-calendar')) {
+                    removeInlineClass();
+                }
+            });
+        }
+    });
+});
+
+// Настройка наблюдателя: отслеживаем добавление новых узлов в body
+observer.observe(document.body, { childList: true, subtree: true });
+
+// Вызовем сразу на случае, если элемент уже существует на момент инициализации
+removeInlineClass();
     // Открытие модального окна
     $('.add-special-day-button').on('click', function () {
         modalOverlay.addClass('show');
+
+        $('.flatpickr-calendar').addClass('inline');
     });
 
     // брос выборов
@@ -85,6 +112,7 @@ $(document).ready(function () {
         
         modalOverlay.removeClass('show');
         resetDates();
+        removeInlineClass()
     });
         
     $(document).ready(function () {
@@ -117,6 +145,7 @@ $(document).ready(function () {
         // Закрытие модального окна
         $('.calendar-cancel-btn').on('click', function () {
             modalOverlay.removeClass('show');
+            removeInlineClass();
         });
 
     $('form').on('submit', function(event) {
@@ -340,20 +369,39 @@ $(document).on('change', '.checkbox', function () {
 
     // Инициализация календаря для модального окна
     $(".calendar").flatpickr({
-        inline: true,  // Режим отображения календаря
-        locale: "ru",  // Локализация на русский
-        // "disable": [
-        //     function(date) {
-        //         // return true to disable
-        //         return (date.getDay() === 0 || date.getDay() === 6);
-    
-        //     }
-        // ],
-        mode: "range",
-        // enableTime: true,
+        inline: true, // Режим отображения календаря
+        locale: {
+            firstDayOfWeek: 1, // Неделя начинается с понедельника
+            weekdays: {
+                shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+            },
+            months: {
+                shorthand: [
+                    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                ],
+                longhand: [
+                    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                ]
+            }
+        },
+        mode: "range", // Выбор диапазона
+        dateFormat: "Y-m-d", // Внутренний формат данных
+        altInput: true, // Показывать отформатированную строку
+        altFormat: "d MMMM Y", // Формат отображаемой строки
         onChange: function(selectedDates, dateStr, instance) {
-            // Действия при изменении даты
-            $("#selected-date").text(dateStr);
+            if (selectedDates.length === 2) {
+                const [startDate, endDate] = selectedDates;
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                const customText = `${formattedStart} - ${formattedEnd}`;
+                
+                // Обновление текста в нужном элементе
+                $("#selected-date").text(customText);
+            }
         }
     });
 });
