@@ -665,7 +665,7 @@ input[name="days"] {
 }
 
 .time-selection-wrapper input[type="time"] {
-    -moz-appearance: textfield; 
+    /* -moz-appearance: textfield;  */
 }
     [data-tooltip] {
     position: relative;
