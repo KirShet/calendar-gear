@@ -746,3 +746,6 @@ button:hover {
     background: url(../images/close-square.svg) no-repeat center center;
     background-size: contain;
   }
+  #start-time-hidden, #end-time-hidden{
+    display: none;
+  }
