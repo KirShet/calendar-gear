@@ -83,15 +83,23 @@ removeInlineClass();
             alert('Пожалуйста, заполните все временные поля.');
             return;
         }
+        // Функция для генерации случайного числа в определённом диапазоне
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Генерация случайного числа
+        const randomValue = getRandomNumber(1, 1000); 
         const newEntry = `
             <div class="days-wrapper">
                 <div class="work-time-info">
+                    <input type="hidden" name="days-wrapper[${randomValue}][date-range][]" value="${selectedDate}">
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
-                    <input type="time" value="${startTime}" disabled>
+                    <input type="time" name="days-wrapper[${randomValue}][time-selection][]" value="${startTime}" disabled>
                     <div class="time-divider"></div>
-                    <input type="time" value="${endTime}" disabled>
+                    <input type="time" name="days-wrapper[${randomValue}][time-selection][]" value="${endTime}" disabled>
                 </div>
                 <div class="action-buttons">
                     <button type="button" class="edit-work-time" title="Редактировать"></button>
@@ -164,8 +172,8 @@ removeInlineClass();
 
     $(document).on('click', '.edit-work-time', function () {
         var parentWrapper = $(this).closest('.days-wrapper');
-        parentWrapper.find('.time-selection input[type="time"]').prop('disabled', false);
-        $(this).closest('.days-wrapper').find('.day input[type="checkbox"][name="days"]').removeAttr('disabled');
+        parentWrapper.find('.time-selection input[type="time"]').prop('disabled', false); 
+        $(this).closest('.days-wrapper').find('.day input[type="checkbox"][name^="days-wrapper"][name$="][days][]"]').removeAttr('disabled');
     });
 
         $(document).on('click', '.edit-work-time', function () {
@@ -185,10 +193,10 @@ removeInlineClass();
 
 //  // Функция для обновления стиля для всех чекбоксов
  function updateStyles() {
-    $('input[name="days"]').each(function() {
+    $('input[name^="days-wrapper"][name$="][days][]"]').each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
-        
+        console.log(isChecked);
         if (isChecked) {
             // Если чекбокс включен, добавляем классы
             dayCircle.addClass('highlighted-circle');
@@ -201,22 +209,22 @@ removeInlineClass();
     });
 }
 function disabled() {
-    $('input[name="days"]').each(function() {
+    $('input[name^="days-wrapper"][name$="][days][]"]').each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
-        $('input[name="days"]').not(this).prop('disabled', true);
+        $('input[name^="days-wrapper"][name$="][days][]"]').not(this).prop('disabled', true);
     });
 }
 
 $(document).on('click', '.can-remove', function () {
     var parentWrapper = $(this).closest('.days-wrapper');
-    parentWrapper.find('input[type="checkbox"][name="days"]').prop('checked', false).prop('disabled', false);
+    parentWrapper.find('input[type="checkbox"][name^="days-wrapper"][name$="][days][]"]').prop('checked', false).prop('disabled', false);
     updateStyles();
     parentWrapper.find('input[type="time"]').val('00:00');;
 });
 
 // // Обработчик события изменения состояния всех чекбоксов
-$('input[name="days"]').on('change', function() {
+$('input[name^="days-wrapper"][name$="][days][]"]').on('change', function() {
     updateStyles();
 });
 
@@ -273,7 +281,7 @@ $(document).on('change', '.checkbox', function () {
             console.log("33"+isAnyMatching);
             var parentWrapper = $(this).closest('.days-wrapper');
             parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
-            $(this).closest('.days-wrapper').find('.day input[type="checkbox"][name="days"]').addClass('disabled');
+            $(this).closest('.days-wrapper').find('.day input[type="checkbox"][name^="days-wrapper"][name$="][days][]"]').addClass('disabled');
 
             parentWrapper.find('.can-remove').addClass('remove-work-time');
             parentWrapper.find('.remove-work-time').removeClass('can-remove');
@@ -284,7 +292,13 @@ $(document).on('change', '.checkbox', function () {
         }
 
     });
+        // Функция для генерации случайного числа в определённом диапазоне
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
+        // Генерация случайного числа
+        const randomValue = getRandomNumber(1, 1000); // Генерация случайного числа от 1 до 100
         // Добавление рабочей часа по нажатию на "Добавить"
         $('.add-work-time').on('click', function () {   
             
@@ -292,38 +306,38 @@ $(document).on('change', '.checkbox', function () {
                         <div class="days-wrapper">
             <div class="weekday-group">
                 <label class="day">
-                    <input type="checkbox" name="days" value="Пн" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Mon" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Пн</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" name="days" value="Вт" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Tue" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Вт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" name="days" value="Ср" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Wed" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Ср</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" name="days" value="Чт" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Thu" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Чт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" name="days" value="Пт" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Fri" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Пт</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" name="days" value="Сб" disabled>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Sat" disabled>
                     <div class="day-circle"><span class="day-name text-white">Сб</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" name="days" value="Вс" disabled>
+                    <input type="checkbox" class="days-checkbox" name="days-wrapper[${randomValue}][days][]" value="Sun" disabled>
                     <div class="day-circle"><span class="day-name text-white">Вс</span></div>
                 </label>
             </div>
             <div class="time-selection">
-                <input type="time" value="12:00" disabled>
+                <input type="time" name="days-wrapper[${randomValue}][time-selection][]" value="12:00" disabled>
                 <div class="time-divider"></div>
-                <input type="time" value="19:00" disabled>
+                <input type="time" name="days-wrapper[${randomValue}][time-selection][]" value="19:00" disabled>
             </div>
             <div class="action-buttons">
                 <button type="button" class="edit-work-time" title="Редактировать"></button>
@@ -397,7 +411,7 @@ $(document).on('change', '.checkbox', function () {
         dateFormat: "Y-m-d", // Внутренний формат данных
         altInput: true, // Показывать отформатированную строку
         altFormat: "d MMMM Y", // Формат отображаемой строки
-        defaultDate: [new Date().toISOString().split('T')[0]    ],
+        // defaultDate: [new Date().toISOString().split('T')[0]    ],
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const [startDate, endDate] = selectedDates;
