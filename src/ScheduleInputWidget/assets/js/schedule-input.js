@@ -224,7 +224,8 @@ $(document).on('click', '.can-remove', function () {
 });
 
 // // Обработчик события изменения состояния всех чекбоксов
-$('input[name^="days-wrapper"][name$="][days][]"]').on('change', function() {
+$(document).on('change', 'input[name^="days-wrapper"][name$="][days][]"]', function() {
+    console.log("qw");
     updateStyles();
 });
 
