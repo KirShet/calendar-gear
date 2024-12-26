@@ -1,10 +1,13 @@
 <?php
+use yii\helpers\Html;
 /**
  * @var string $name
  * @var bool $enableTimeZone
  * @var bool $enableProductionCalendar
  */
 ?>
+<h2>Рабочие часы</h2>
+
 <div class="container">
     <div class="frame schedule-widget card p-3">
         <div class="header">Рабочие часы</div>
@@ -40,38 +43,38 @@
         <div class="days-wrapper">
             <div class="weekday-group">
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="1" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Пн</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="2" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Вт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="3" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Ср</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="4" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Чт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="5" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" disabled checked>
                     <div class="day-circle"><span class="day-name text-white">Пт</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="6" disabled>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" disabled>
                     <div class="day-circle"><span class="day-name text-white">Сб</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][0][days][]" value="7" disabled>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" disabled>
                     <div class="day-circle"><span class="day-name text-white">Вс</span></div>
                 </label>
             </div>
             <div class="time-selection">
-                <input type="time" name="schedule[work_time][0][start_time]" value="12:00" disabled>
+                <input type="time" class="schedule-time start-time" name="" value="12:00" disabled>
                 <div class="time-divider"></div>
-                <input type="time" name="schedule[work_time][0][end_time]" value="19:00" disabled>
+                <input type="time" class="schedule-time end-time" name="" value="19:00" disabled>
             </div>
             <div class="action-buttons">
                 <button type="button" class="edit-work-time" title="Редактировать"></button>
