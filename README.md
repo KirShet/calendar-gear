@@ -53,3 +53,22 @@ ActiveForm::end();
     }
 }
 ```
+Обращение через контроллер:
+```
+    $model = new ScheduleForm();
+    
+    $scheduleData = [
+        'enable_time_zone' => '1',
+        'enable_production_calendar' => '1',
+        'work_time' => [
+            ['days' => '1', 'start_time' => '08:00:00', 'end_time' => '18:00:00'],
+        ], 
+        'special_time' => [
+            ['start_time' => '2024-11-05 08:00:00', 'end_time' => '2024-11-05 18:00:00'],
+        ]
+    ];
+    
+    $model->schedule = $scheduleData;
+    
+    return $this->render('index', ['model' => $model]);
+```
