@@ -7,12 +7,24 @@ composer require kirshet/yii2:dev-main
 ```
 use yii\widgets\ActiveForm;
 use kirshet\yii2\ScheduleInputWidget\models\ScheduleForm;
-use kirshet\yii2\ScheduleInputWidget\ScheduleInputWidget;
 
 $model = new ScheduleForm();
 
 $form = ActiveForm::begin();
-echo $form->field($model, 'schedule')->widget(ScheduleInputWidget::class, [ 'attribute' => 'schedule', 'model' => $model, 'name' => 'schedule', 'enableTimeZone' => true, 'enableSpecialTime' => true, 'enableProductionCalendar' => false, 'allowMultipleItems' => true, ]);
+echo $form->field($model, 'schedule')->widget(
+    kirshet\yii2\ScheduleInputWidget\ScheduleInputWidget::class,
+    [
+        'attribute' => 'schedule',
+        'model' => $model,
+        'name' => 'schedule',
+        'enableTimeZone' => true,
+        'enableSpecialTime' => true,
+        'enableProductionCalendar' => true,
+        'allowMultipleItems' => true,
+        'header' => 'Укажите расписание',
+        'preheader' => 'Настройте расписание для ваших нужд',
+    ]
+);
 
 ActiveForm::end();
 ```
