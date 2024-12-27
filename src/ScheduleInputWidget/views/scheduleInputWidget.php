@@ -47,7 +47,7 @@ use yii\helpers\Html;
 <?php
 // Массив для хранения уникальных комбинаций start_time и end_time
 $grouped_work_time = [];
-
+if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
 // Группируем по start_time и end_time
 foreach ($model->schedule['work_time'] as $item) {
     $key = $item['start_time'] . '|' . $item['end_time'];  // ключ по комбинации времени
@@ -140,6 +140,7 @@ foreach ($grouped_work_time as $key => $group) {
         </div>
         <?php
 }
+}
 ?>
 <!--  -->
         </div>
@@ -195,7 +196,7 @@ foreach ($grouped_work_time as $key => $group) {
     <div class="button-group schedule-row d-flex align-items-center">
         <button type="button" class="btn btn-primary add-work-time button-calendar time-button-add">Добавить рабочие часы</button>
         <button type="button" class="btn btn-secondary add-special-time button-calendar add-special-day-button">Добавить особенные дни</button>
-        <!-- <button type="button" class="add-work1">1</button> -->
+        <button type="button" class="add-work1">1</button>
 
     </div>
 

@@ -12,8 +12,8 @@ class ScheduleForm extends Model
     public function rules()
     {
         return [
-            [['schedule'], 'required'],
-            [['schedule'], 'safe'],
+            [['schedule'], 'required'], // Обязательное поле
+            [['schedule'], 'safe'], // Разрешаем любое значение для schedule
         ];
     }
 }
