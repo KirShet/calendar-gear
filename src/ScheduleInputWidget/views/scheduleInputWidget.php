@@ -38,122 +38,111 @@ use yii\helpers\Html;
             </div>
         </div>
 
-        <div class="days-wrapper">
-            <div class="weekday-group">
-            <?php
-            // Выводим рабочее время
-            if (!empty($model->schedule['work_time'])) {
-                // Собираем дни недели из расписания в массив
-                $workDays = array_column($model->schedule['work_time'], 'days');
-            } else {
-                // Если расписание пустое, создаем пустой массив для дней
-                $workDays = [];
-            }
-            ?>
 
-            <label class="day">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" 
-                    <?php echo in_array(1, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Пн</span></div>
-            </label>
-            <label class="day">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" 
-                    <?php echo in_array(2, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Вт</span></div>
-            </label>
-            <label class="day">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" 
-                    <?php echo in_array(3, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Ср</span></div>
-            </label>
-            <label class="day">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" 
-                    <?php echo in_array(4, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Чт</span></div>
-            </label>
-            <label class="day">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" 
-                    <?php echo in_array(5, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Пт</span></div>
-            </label>
-            <label class="day disabled">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" 
-                    <?php echo in_array(6, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Сб</span></div>
-            </label>
-            <label class="day disabled">
-                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" 
-                    <?php echo in_array(7, $workDays) ? 'checked' : ''; ?> disabled>
-                <div class="day-circle"><span class="day-name text-white">Вс</span></div>
-            </label>
-        </div>
+        <div id="special-time-container">
+            <?php
+                // $daysCount = array_count_values(array_column($work_time, 'days'));
+            ?>
+<!--  -->
+<?php
+// Массив для хранения уникальных комбинаций start_time и end_time
+$grouped_work_time = [];
+
+// Группируем по start_time и end_time
+foreach ($model->schedule['work_time'] as $item) {
+    $key = $item['start_time'] . '|' . $item['end_time'];  // ключ по комбинации времени
+    if (!isset($grouped_work_time[$key])) {
+        $grouped_work_time[$key] = [
+            'start_time' => $item['start_time'],
+            'end_time' => $item['end_time'],
+            'days' => []
+        ];
+    }
+    // Добавляем день в группу
+    $grouped_work_time[$key]['days'][] = $item['days'];
+}
+
+// Выводим HTML
+foreach ($grouped_work_time as $key => $group) {
+    ?>
+    <div class="days-wrapper">
+        <?php
+                                // Удаляем последние три символа, если это ':00'
+                                if (substr($group['start_time'], -3) === ':00') {
+                                    $startTime = substr($group['start_time'], 0, -3);  // Удаляем последние 3 символа
+                                }
+        
+                                if (substr($group['end_time'], -3) === ':00') {
+                                    $endTime = substr($group['end_time'], 0, -3);  // Удаляем последние 3 символа
+                                }
+        ?>
+            <div class="weekday-group">
+
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" 
+                        <?php echo in_array(1,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Пн</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" 
+                        <?php echo in_array(2,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Вт</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" 
+                        <?php echo in_array(3,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Ср</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" 
+                        <?php echo in_array(4,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Чт</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" 
+                        <?php echo in_array(5,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Пт</span></div>
+                </label>
+                <label class="day disabled">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" 
+                        <?php echo in_array(6,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Сб</span></div>
+                </label>
+                <label class="day disabled">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" 
+                        <?php echo in_array(7,  $group['days']) ? 'checked' : ''; ?> disabled>
+                    <div class="day-circle"><span class="day-name text-white">Вс</span></div>
+                </label>
+            </div>
 
 
             <div class="time-selection">
-            <?php
-                // Инициализируем переменную isTimeDifferent, чтобы избежать ошибок.
-                $isTimeDifferent = false;
+                
 
-                if (!empty($model->schedule['work_time'])) {
-                    // Проходим по всем дням и сравниваем время начала и окончания
-                    $previousStartTime = null;
-                    $previousEndTime = null;
-
-                    foreach ($model->schedule['work_time'] as $workDay) {
-                        $startTime = !empty($workDay['start_time']) ? $workDay['start_time'] : '12:00:00';
-                        $endTime = !empty($workDay['end_time']) ? $workDay['end_time'] : '19:00:00';
-
-                        // Сравниваем с предыдущими значениями
-                        if ($previousStartTime !== null && ($startTime !== $previousStartTime || $endTime !== $previousEndTime)) {
-                            $isTimeDifferent = true;
-                        }
-
-                        // Обновляем предыдущие значения времени
-                        $previousStartTime = $startTime;
-                        $previousEndTime = $endTime;
-                    }
-
-                    // Если время различается, выводим сообщение
-                    if ($isTimeDifferent) {
-                        echo '<p>Время начала и окончания работы отличается для разных дней.</p>';
-                    }
-
-                    // Выводим инпуты для времени
-                    $firstWorkDay = $model->schedule['work_time'][0]; // Берем первый день для начальных значений
-                    $startTime = !empty($firstWorkDay['start_time']) ? $firstWorkDay['start_time'] : '12:00';
-                    $endTime = !empty($firstWorkDay['end_time']) ? $firstWorkDay['end_time'] : '19:00';
-
-                    // Удаляем последние три символа, если это ':00'
-                    if (substr($startTime, -3) === ':00') {
-                        $startTime = substr($startTime, 0, -3);  // Удаляем последние 3 символа
-                    }
-
-                    if (substr($endTime, -3) === ':00') {
-                        $endTime = substr($endTime, 0, -3);  // Удаляем последние 3 символа
-                    }
-                }
-                ?>
-
-                <!-- HTML форма с инпутами -->
-                <input type="time" class="schedule-time start-time" value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>" <?php echo ($isTimeDifferent ? '' : 'disabled'); ?>>
-                <div class="time-divider"></div>
-                <input type="time" class="schedule-time end-time" value="<?php echo !empty($endTime) ? $endTime : '00:00'; ?>" <?php echo ($isTimeDifferent ? '' : 'disabled'); ?>>
-            </div>
+                    <!-- HTML форма с инпутами -->
+                    <input type="time" class="schedule-time start-time" value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>" disabled>
+                    <div class="time-divider"></div>
+                    <input type="time" class="schedule-time end-time" value="<?php echo !empty($endTime) ? $endTime : '00:00'; ?>" disabled>
+                </div>
             <div class="action-buttons">
                 <button type="button" class="edit-work-time" title="Редактировать"></button>
                 <button type="button" class="remove-work-time" title="Удалить"></button>
             </div>
             <div id="modal-overlay-message" class="modal-overlay-message">
-                        <div class="modal-content">
-                            <div class="modal-message">Вы хотите удалить это правило?</div>
-                            <div class="modal-buttons">
-                                <button class="cancel-btn">Отмена</button>
-                                <button class="delete-btn">Удалить</button>
-                            </div>
+                <div class="modal-content">
+                    <div class="modal-message">Вы хотите удалить это правило?</div>
+                    <div class="modal-buttons">
+                            <button class="cancel-btn">Отмена</button>
+                            <button class="delete-btn">Удалить</button>
                         </div>
                     </div>
+                </div>
         </div>
-        <div id="special-time-container"></div>
+        <?php
+}
+?>
+<!--  -->
+        </div>
         <div id="work-time-container">
             <?php
             if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
