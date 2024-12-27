@@ -137,7 +137,6 @@ foreach ($grouped_work_time as $key => $group) {
                         </div>
                     </div>
                 </div>
-        </div>
         <?php
 }
 }else{ 
@@ -204,11 +203,12 @@ foreach ($grouped_work_time as $key => $group) {
                         </div>
                     </div>
             </div>
+
     <?php
 }
 ?>
 <!--  -->
-        </div>
+        </div></div>
         <div id="work-time-container">
             <?php
             if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
@@ -257,15 +257,14 @@ foreach ($grouped_work_time as $key => $group) {
                 }
             }
             ?>
-        </div>
+        
+    <!--  -->
+    </div>
     <div class="button-group schedule-row d-flex align-items-center">
         <button type="button" class="btn btn-primary add-work-time button-calendar time-button-add">Добавить рабочие часы</button>
         <button type="button" class="btn btn-secondary add-special-time button-calendar add-special-day-button">Добавить особенные дни</button>
-        <button type="button" class="add-work1">1</button>
+        <!-- <button type="button" class="add-work1">1</button> -->
 
-    </div>
-
-    <!--  -->
     </div>
 </div>
 
@@ -304,6 +303,7 @@ foreach ($grouped_work_time as $key => $group) {
         </div>
     </div>
 </div>
+
 <script>
 // // клик на кнопке
 document.querySelector('.add-work1').addEventListener('click', function(event) {

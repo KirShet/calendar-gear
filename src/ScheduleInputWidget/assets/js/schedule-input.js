@@ -330,23 +330,23 @@ $(document).on('change', '.checkbox', function () {
         <div class="days-wrapper">
             <div class="weekday-group">
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" disabled>
                     <div class="day-circle"><span class="day-name text-white">Пн</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" disabled>
                     <div class="day-circle"><span class="day-name text-white">Вт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" disabled>
                     <div class="day-circle"><span class="day-name text-white">Ср</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" disabled>
                     <div class="day-circle"><span class="day-name text-white">Чт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" disabled checked>
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" disabled>
                     <div class="day-circle"><span class="day-name text-white">Пт</span></div>
                 </label>
                 <label class="day disabled">
@@ -359,9 +359,9 @@ $(document).on('change', '.checkbox', function () {
                 </label>
             </div>
             <div class="time-selection">
-                <input type="time" class="schedule-time start-time" name="" value="12:00" disabled>
+                <input type="time" class="schedule-time start-time" name="" value="00:00" disabled>
                 <div class="time-divider"></div>
-                <input type="time" class="schedule-time end-time" name="" value="19:00" disabled>
+                <input type="time" class="schedule-time end-time" name="" value="00:00" disabled>
             </div>
             <div class="action-buttons">
                 <button type="button" class="edit-work-time" title="Редактировать"></button>
