@@ -47,7 +47,7 @@ use yii\helpers\Html;
 <?php
 
 $grouped_work_time = [];
-if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
+if (isset($model->schedule['work_time']) && is_array($model->schedule['work_time'])) {
 
 foreach ($model->schedule['work_time'] as $item) {
     $key = $item['start_time'] . '|' . $item['end_time']; 
@@ -140,6 +140,71 @@ foreach ($grouped_work_time as $key => $group) {
         </div>
         <?php
 }
+}else{ 
+    ?>
+        <div class="days-wrapper">
+            <div class="weekday-group">
+
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Пн</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Вт</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Ср</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Чт</span></div>
+                </label>
+                <label class="day">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Пт</span></div>
+                </label>
+                <label class="day disabled">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Сб</span></div>
+                </label>
+                <label class="day disabled">
+                    <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" 
+                         disabled>
+                    <div class="day-circle"><span class="day-name text-white">Вс</span></div>
+                </label>
+                </div>
+
+
+                <div class="time-selection">
+
+
+                    <!-- HTML форма с инпутами -->
+                    <input type="time" class="schedule-time start-time" value="00:00" disabled>
+                    <div class="time-divider"></div>
+                    <input type="time" class="schedule-time end-time" value="00:00" disabled>
+                </div>
+                <div class="action-buttons">
+                <button type="button" class="edit-work-time" title="Редактировать"></button>
+                <button type="button" class="remove-work-time" title="Удалить"></button>
+                </div>
+                <div id="modal-overlay-message" class="modal-overlay-message">
+                <div class="modal-content">
+                    <div class="modal-message">Вы хотите удалить это правило?</div>
+                    <div class="modal-buttons">
+                            <button class="cancel-btn">Отмена</button>
+                            <button class="delete-btn">Удалить</button>
+                        </div>
+                    </div>
+            </div>
+    <?php
 }
 ?>
 <!--  -->
