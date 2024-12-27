@@ -235,9 +235,9 @@ foreach ($grouped_work_time as $key => $group) {
                             <span class="work-date"><?php echo $dateRange; ?></span>
                         </div>
                         <div class="time-selection">
-                            <input type="time" value="<?php echo $startTime; ?>" disabled="">
+                            <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>" disabled="">
                             <div class="time-divider"></div>
-                            <input type="time" value="<?php echo $endTime; ?>" disabled="">
+                            <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
                         </div>
                         <div class="action-buttons">
                             <button type="button" class="edit-work-time" title="Редактировать"></button>
@@ -263,7 +263,6 @@ foreach ($grouped_work_time as $key => $group) {
     <div class="button-group schedule-row d-flex align-items-center">
         <button type="button" class="btn btn-primary add-work-time button-calendar time-button-add">Добавить рабочие часы</button>
         <button type="button" class="btn btn-secondary add-special-time button-calendar add-special-day-button">Добавить особенные дни</button>
-        <!-- <button type="button" class="add-work1">1</button> -->
 
     </div>
 </div>
@@ -281,9 +280,9 @@ foreach ($grouped_work_time as $key => $group) {
                 <span id="selected-date">10 декабря</span> с
                 <span id="start-time-hidden"></span>
                 <span id="end-time-hidden"></span>
-                <input type="time" value="12:00">
+                <input type="time" value="00:00">
                 <span>до</span>
-                <input type="time" value="19:00">
+                <input type="time" value="00:00">
             </section>
             <div class="divider"></div>
             <div class="buttons">
@@ -350,86 +349,5 @@ document.querySelector('.add-work1').addEventListener('click', function(event) {
         });
 
         
-const data = {
-    schedule: {
-        work_time: [
-            {
-                days: [1, 2, 3, 4, 5],
-                start_time: "09:00",
-                end_time: "18:00"
-            }
-        ],
-        special_time: [
-            {
-                start_date: "2024-12-25",
-                start_time: "10:00",
-                end_date: "2024-12-25",
-                end_time: "14:00"
-            }
-        ],
-        enable_time_zone: 1,
-        enable_production_calendar: 1
-    }
-};
-
-
-function formatSchedule(data) {
-    let schedule = {};
-
-    
-    if (data.schedule && data.schedule.work_time) {
-        schedule.work_time = [];
-        data.schedule.work_time.forEach(work_time => {
-            work_time.days.forEach(day => {
-                schedule.work_time.push({
-                    day: day,
-                    start_time: work_time.start_time ? work_time.start_time + ":00" : "08:00:00",
-                    end_time: work_time.end_time ? work_time.end_time + ":00" : "18:00:00"
-                });
-            });
-        });
-    }
-
-    
-    if (data.schedule && data.schedule.special_time) {
-        schedule.special_time = [];
-        data.schedule.special_time.forEach(special_day => {
-            schedule.special_time.push({
-                start_time: `${special_day.start_date} ${special_day.start_time}:00`,
-                end_time: `${special_day.end_date} ${special_day.end_time}:00`
-            });
-        });
-    }
-
-    
-    if (data.schedule && data.schedule.enable_time_zone !== undefined) {
-        schedule.enable_time_zone = parseInt(data.schedule.enable_time_zone);
-    }
-
-    if (data.schedule && data.schedule.enable_production_calendar !== undefined) {
-        schedule.enable_production_calendar = parseInt(data.schedule.enable_production_calendar);
-    }
-
-    
-    const formattedSchedule = {
-        schedule: {
-            work_time: schedule.work_time || [],
-            special_time: schedule.special_time || [],
-            enable_time_zone: schedule.enable_time_zone !== undefined ? schedule.enable_time_zone : 1,
-            enable_production_calendar: schedule.enable_production_calendar !== undefined ? schedule.enable_production_calendar : 1
-        }
-    };
-
-    return formattedSchedule;
-}
-
-
-const formattedSchedule = formatSchedule(data);
-
-
-console.log(JSON.stringify(formattedSchedule, null, 2));
-
-    const form = document.getElementById('w0');
-    form.submit();
 });
 </script>

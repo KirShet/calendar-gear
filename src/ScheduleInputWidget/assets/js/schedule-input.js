@@ -103,9 +103,9 @@ removeInlineClass();
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
-                    <input type="time" value="${startTime}" disabled>
+                    <input type="time" class="schedule-time start-time" value="${startTime}" disabled>
                     <div class="time-divider"></div>
-                    <input type="time" value="${endTime}" disabled>
+                    <input type="time" class="schedule-time start-time" value="${endTime}" disabled>
                 </div>
                 <div class="action-buttons">
                     <button type="button" class="edit-work-time" title="Редактировать"></button>
@@ -194,7 +194,7 @@ removeInlineClass();
 
         });
     
-
+        updateStyles();
 
 
 //  // Функция для обновления стиля для всех чекбоксов
@@ -331,31 +331,31 @@ $(document).on('change', '.checkbox', function () {
             <div class="weekday-group">
                 <label class="day">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Пн</span></div>
+                    <div class="day-circle"><span class="day-name">Пн</span></div>
                 </label>
                 <label class="day">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Вт</span></div>
+                    <div class="day-circle"><span class="day-name">Вт</span></div>
                 </label>
                 <label class="day">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Ср</span></div>
+                    <div class="day-circle"><span class="day-name">Ср</span></div>
                 </label>
                 <label class="day">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Чт</span></div>
+                    <div class="day-circle"><span class="day-name">Чт</span></div>
                 </label>
                 <label class="day">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Пт</span></div>
+                    <div class="day-circle"><span class="day-name">Пт</span></div>
                 </label>
                 <label class="day disabled">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Сб</span></div>
+                    <div class="day-circle"><span class="day-name">Сб</span></div>
                 </label>
                 <label class="day disabled">
                     <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" disabled>
-                    <div class="day-circle"><span class="day-name text-white">Вс</span></div>
+                    <div class="day-circle"><span class="day-name">Вс</span></div>
                 </label>
             </div>
             <div class="time-selection">
@@ -382,7 +382,6 @@ $(document).on('change', '.checkbox', function () {
             
             modalOverlay.removeClass('show');
             resetDates();
-            updateScheduleInputs();
         });
 
     // // Инициализация Flatpickr для полей времени
@@ -575,4 +574,29 @@ $(document).on('change', '.checkbox', function () {
 
     updateScheduleInputs();
     
+  const months = [
+    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+  ];
+
+  function translateDate(dateString) {
+
+    const englishMonths = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    for (let i = 0; i < englishMonths.length; i++) {
+      const regex = new RegExp(englishMonths[i], 'g');
+      dateString = dateString.replace(regex, months[i]);
+    }
+    
+    return dateString;
+  }
+
+  $('.work-date').each(function() {
+    let text = $(this).html();
+    text = translateDate(text);
+    $(this).html(text);
+  });
 });
