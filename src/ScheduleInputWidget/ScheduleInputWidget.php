@@ -14,6 +14,9 @@ class ScheduleInputWidget extends InputWidget
     public $enableSpecialTime = true;
     public $enableProductionCalendar = true;
     public $allowMultipleItems = true;
+    public $header;
+    public $preheader;
+
 
 
     public function run()
@@ -25,12 +28,21 @@ class ScheduleInputWidget extends InputWidget
             'enableSpecialTime' => $this->enableSpecialTime,
             'enableProductionCalendar' => $this->enableProductionCalendar,
             'allowMultipleItems' => $this->allowMultipleItems,
+            'header' => $this->header,
+            'preheader' => $this->preheader,
         ]);
     }
 
     public function init()
     {
         parent::init();
+        if ($this->header === null) {
+            $this->header = 'Рабочие часы';
+        }
+
+        if ($this->preheader === null) {
+            $this->preheader = 'Установить рабочие часы';
+        }
         ScheduleInputAsset::register($this->getView());
     }
 }

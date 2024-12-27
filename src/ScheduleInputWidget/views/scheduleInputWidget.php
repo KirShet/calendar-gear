@@ -8,8 +8,8 @@ use yii\helpers\Html;
 ?>
 <div class="container">
     <div class="frame schedule-widget card p-3">
-        <div class="header">Рабочие часы</div>
-        <div class="sub-header">Установить рабочие часы</div>
+        <div class="header"><?= htmlspecialchars($header) ?></div>
+        <div class="sub-header"><?= htmlspecialchars($preheader) ?></div>
         <div class="divider"></div>
 
         <div class="action-row">

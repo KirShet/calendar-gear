@@ -283,6 +283,23 @@ $(document).on('change', '.checkbox', function () {
             console.log("22"+isAnyMatching);
 
         });
+        var startTime = parentWrapper.find('.start-time').val();
+        var endTime = parentWrapper.find('.end-time').val();
+
+        function timeToMinutes(time) {
+            var parts = time.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+       
+            if (timeToMinutes(startTime) > timeToMinutes(endTime)) {
+                console.log(timeToMinutes(startTime)+">"+timeToMinutes(endTime));
+                setTimeout(() => {
+                    parentWrapper.find('.start-time').addClass('border-thick-slow');
+                    parentWrapper.find('.end-time').addClass('border-thick-slow');
+                }, 100);
+                isAnyMatching = true;
+            }
 
         if (!isAnyMatching) {
             console.log("33"+isAnyMatching);
