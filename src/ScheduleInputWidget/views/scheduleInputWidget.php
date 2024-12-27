@@ -45,12 +45,12 @@ use yii\helpers\Html;
             ?>
 <!--  -->
 <?php
-// Массив для хранения уникальных комбинаций start_time и end_time
+
 $grouped_work_time = [];
 if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
-// Группируем по start_time и end_time
+
 foreach ($model->schedule['work_time'] as $item) {
-    $key = $item['start_time'] . '|' . $item['end_time'];  // ключ по комбинации времени
+    $key = $item['start_time'] . '|' . $item['end_time']; 
     if (!isset($grouped_work_time[$key])) {
         $grouped_work_time[$key] = [
             'start_time' => $item['start_time'],
@@ -58,22 +58,22 @@ foreach ($model->schedule['work_time'] as $item) {
             'days' => []
         ];
     }
-    // Добавляем день в группу
+    
     $grouped_work_time[$key]['days'][] = $item['days'];
 }
 
-// Выводим HTML
+
 foreach ($grouped_work_time as $key => $group) {
     ?>
     <div class="days-wrapper">
         <?php
-                                // Удаляем последние три символа, если это ':00'
+                
                                 if (substr($group['start_time'], -3) === ':00') {
-                                    $startTime = substr($group['start_time'], 0, -3);  // Удаляем последние 3 символа
+                                    $startTime = substr($group['start_time'], 0, -3);  // 
                                 }
         
                                 if (substr($group['end_time'], -3) === ':00') {
-                                    $endTime = substr($group['end_time'], 0, -3);  // Удаляем последние 3 символа
+                                    $endTime = substr($group['end_time'], 0, -3);  // 
                                 }
         ?>
             <div class="weekday-group">
@@ -151,14 +151,14 @@ foreach ($grouped_work_time as $key => $group) {
                     $startDate = new DateTime($timeSlot['start_time']);
                     $endDate = new DateTime($timeSlot['end_time']);
                     
-                    // Форматируем дату в нужном формате
+                    
                     $startFormatted = $startDate->format('j F Y');
                     $endFormatted = $endDate->format('j F Y');
 
-                    // Определяем диапазон дат
+                    
                     $dateRange = ($startFormatted === $endFormatted) ? $startFormatted : $startFormatted . ' - ' . $endFormatted;
 
-                    // Форматируем время
+                    
                     $startTime = $startDate->format('H:i');
                     $endTime = $endDate->format('H:i');
 
@@ -284,7 +284,7 @@ document.querySelector('.add-work1').addEventListener('click', function(event) {
             timeField.disabled = false;
         });
 
-        // Пример входных данных (аналогичные данным PHP)
+        
 const data = {
     schedule: {
         work_time: [
@@ -307,11 +307,11 @@ const data = {
     }
 };
 
-// Функция для обработки данных
+
 function formatSchedule(data) {
     let schedule = {};
 
-    // Преобразуем рабочее время
+    
     if (data.schedule && data.schedule.work_time) {
         schedule.work_time = [];
         data.schedule.work_time.forEach(work_time => {
@@ -325,7 +325,7 @@ function formatSchedule(data) {
         });
     }
 
-    // Преобразуем специальные дни
+    
     if (data.schedule && data.schedule.special_time) {
         schedule.special_time = [];
         data.schedule.special_time.forEach(special_day => {
@@ -336,7 +336,7 @@ function formatSchedule(data) {
         });
     }
 
-    // Добавляем другие параметры
+    
     if (data.schedule && data.schedule.enable_time_zone !== undefined) {
         schedule.enable_time_zone = parseInt(data.schedule.enable_time_zone);
     }
@@ -345,7 +345,7 @@ function formatSchedule(data) {
         schedule.enable_production_calendar = parseInt(data.schedule.enable_production_calendar);
     }
 
-    // Форматируем результат в нужный формат
+    
     const formattedSchedule = {
         schedule: {
             work_time: schedule.work_time || [],
@@ -358,10 +358,10 @@ function formatSchedule(data) {
     return formattedSchedule;
 }
 
-// Формируем результат
+
 const formattedSchedule = formatSchedule(data);
 
-// Выводим результат в консоль
+
 console.log(JSON.stringify(formattedSchedule, null, 2));
 
     const form = document.getElementById('w0');
