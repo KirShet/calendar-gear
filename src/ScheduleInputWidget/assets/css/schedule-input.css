@@ -378,6 +378,7 @@ body {
 
 .modal-wrapper p {
     font-size: var(--font-size-base);
+    width: 290px;
 }
 
 .calendar {
@@ -529,11 +530,18 @@ input[type="time"] {
 }
 
 button {
+    /* width: 24px;
+    height: 24px; */
+    border: none;
+    /* border-radius: 4px;
+    cursor: pointer; */
+}
+
+.work-time-button {
     width: 24px;
     height: 24px;
     border: none;
     border-radius: 4px;
-    cursor: pointer;
 }
 
 button:hover {
@@ -642,6 +650,12 @@ button:hover {
 .text-white{
     color: #ffffff;
 }
+.day input[type="checkbox"]:disabled ~ .day-circle .day-name {
+    color: #BABABA;
+}
+.day input[type="checkbox"] ~ .day-circle .day-name {
+    color: #000000;
+}
 .day input[type="checkbox"]:checked:disabled ~ .day-circle{
     background-color: #A9E3BB;
 }
@@ -728,6 +742,8 @@ button:hover {
     justify-content: space-between;
     align-content: flex-start;
     align-items: center;
+    display: flex;
+    padding: 0px;
   }
   .calendar-close-btn {
     width: 24px;

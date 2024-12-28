@@ -125,8 +125,8 @@ foreach ($grouped_work_time as $key => $group) {
                     <input type="time" class="schedule-time end-time" value="<?php echo !empty($endTime) ? $endTime : '00:00'; ?>" disabled>
                 </div>
             <div class="action-buttons">
-                <button type="button" class="edit-work-time" title="Редактировать"></button>
-                <button type="button" class="remove-work-time" title="Удалить"></button>
+                <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
             </div>
             <div id="modal-overlay-message" class="modal-overlay-message">
                 <div class="modal-content">
@@ -191,8 +191,8 @@ foreach ($grouped_work_time as $key => $group) {
                     <input type="time" class="schedule-time end-time" value="00:00" disabled>
                 </div>
                 <div class="action-buttons">
-                <button type="button" class="edit-work-time" title="Редактировать"></button>
-                <button type="button" class="remove-work-time" title="Удалить"></button>
+                <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                 </div>
                 <div id="modal-overlay-message" class="modal-overlay-message">
                 <div class="modal-content">
@@ -240,8 +240,8 @@ foreach ($grouped_work_time as $key => $group) {
                             <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
                         </div>
                         <div class="action-buttons">
-                            <button type="button" class="edit-work-time" title="Редактировать"></button>
-                            <button type="button" class="remove-work-time" title="Удалить"></button>
+                            <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                            <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                         </div>
                         <div id="modal-overlay-message" class="modal-overlay-message">
                             <div class="modal-content">

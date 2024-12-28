@@ -108,8 +108,8 @@ removeInlineClass();
                     <input type="time" class="schedule-time start-time" value="${endTime}" disabled>
                 </div>
                 <div class="action-buttons">
-                    <button type="button" class="edit-work-time" title="Редактировать"></button>
-                    <button type="button" class="remove-work-time" title="Удалить"></button>
+                    <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                    <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                 </div>
                 <div id="modal-overlay-message" class="modal-overlay-message">
                         <div class="modal-content">
@@ -253,14 +253,6 @@ $(document).on('change', '.checkbox', function () {
     }
 });
 
-// Определяем именную функцию
-// function enableWorkTimeEditing() {
-//     console.log('22')
-//     var parentWrapper = $(this).closest('.days-wrapper');
-//     parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
-//     $(this).closest('.days-wrapper').find('.day input[type="checkbox"][name="days"]').addClass('disabled');
-// }
-
     $(document).on('click', '.check-work-time', function() {
 
         let isAnyMatching = false;
@@ -364,8 +356,8 @@ $(document).on('change', '.checkbox', function () {
                 <input type="time" class="schedule-time end-time" name="" value="00:00" disabled>
             </div>
             <div class="action-buttons">
-                <button type="button" class="edit-work-time" title="Редактировать"></button>
-                <button type="button" class="remove-work-time" title="Удалить"></button>
+                <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
             </div>
             <div id="modal-overlay-message" class="modal-overlay-message">
                         <div class="modal-content">
