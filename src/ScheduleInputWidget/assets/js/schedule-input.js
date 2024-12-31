@@ -105,7 +105,7 @@ removeInlineClass();
                 <div class="time-selection">
                     <input type="time" class="schedule-time start-time" value="${startTime}" disabled>
                     <div class="time-divider"></div>
-                    <input type="time" class="schedule-time start-time" value="${endTime}" disabled>
+                    <input type="time" class="schedule-time end-time" value="${endTime}" disabled>
                 </div>
                 <div class="action-buttons">
                     <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
