@@ -5,7 +5,6 @@ composer require kirshet/yii2:dev-main
 
 Форма с виджетом:
 ```
-use yii\widgets\ActiveForm;
 use kirshet\yii2\ScheduleInputWidget\models\ScheduleForm;
 
 $model = new ScheduleForm();
