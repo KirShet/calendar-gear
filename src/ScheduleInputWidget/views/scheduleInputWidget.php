@@ -1,10 +1,12 @@
 <?php
 use yii\helpers\Html;
-/**
- * @var string $name
- * @var bool $enableTimeZone
- * @var bool $enableProductionCalendar
- */
+/** @var yii\base\Model $model */
+/** @var bool $enableTimeZone */
+/** @var bool $enableSpecialTime */
+/** @var bool $enableProductionCalendar */
+/** @var bool $allowMultipleItems */
+/** @var string $header */
+/** @var string $preheader */
 ?>
 <div class="container">
     <div class="frame schedule-widget card p-3">
@@ -12,25 +14,27 @@ use yii\helpers\Html;
         <div class="sub-header"><?= htmlspecialchars($preheader) ?></div>
         <div class="divider"></div>
 
+    <?php if ($enableTimeZone): ?>
         <div class="action-row">
-            <div class="schedule-label">
+            <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" name="<?= htmlspecialchars($name) ?>[enable_time_zone]" value="1"
+                    <input type="checkbox" id="enable_time_zone" name="schedule[enable_time_zone]" value="1"
                         <?= $enableTimeZone ? 'checked' : '' ?> class="hidden-checkbox">
                     Учитывать часовой пояс
                 </label>
                 <div data-tooltip="Всплывающая подсказка сообщает о чём-то многозначном и полезном..."
                     class="icon-margin day disabled"></div>
             </div>
-            <div class="switch <?php echo $enableTimeZone ? 'active' : ''; ?>" id="timezone-switch">
+            <div class="switch <?= $enableTimeZone ? 'active' : ''; ?>" id="timezone-switch">
                 <div class="switch-thumb"></div>
             </div>
         </div>
-
+    <?php endif; ?>
+    <?php if ($enableProductionCalendar): ?>
         <div class="action-row">
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" name="<?= htmlspecialchars($name) ?>[enable_production_calendar]" value="1"
+                    <input type="checkbox" id="enable_production_calendar" name="schedule[enable_production_calendar]" value="1"
                         <?= $enableProductionCalendar ? 'checked' : '' ?> class="hidden-checkbox">
                     Использовать производственный календарь
                 </label>
@@ -41,7 +45,7 @@ use yii\helpers\Html;
                 <div class="switch-thumb"></div>
             </div>
         </div>
-
+    <?php endif; ?>
 
         <div id="special-time-container">
             <?php
@@ -81,35 +85,25 @@ use yii\helpers\Html;
                         }
                         ?>
                         <div class="weekday-group">
+<?php 
 
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1" <?php echo in_array(1, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Пн</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2" <?php echo in_array(2, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Вт</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3" <?php echo in_array(3, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Ср</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4" <?php echo in_array(4, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Чт</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5" <?php echo in_array(5, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Пт</span></div>
-                            </label>
-                            <label class="day disabled">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6" <?php echo in_array(6, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Сб</span></div>
-                            </label>
-                            <label class="day disabled">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7" <?php echo in_array(7, $group['days']) ? 'checked' : ''; ?> disabled>
-                                <div class="day-circle"><span class="day-name text-white">Вс</span></div>
-                            </label>
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пример массива дней недели
+foreach ($daysOfWeek as $index => $day) {
+    ?>
+    <label class="day" for="day-<?php echo $index + 1; ?>">
+        <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" 
+               value="<?php echo $index + 1; ?>" 
+               id="day-<?php echo $index + 1; ?>" 
+               <?php echo in_array($index + 1, $group['days']) ? 'checked' : ''; ?> disabled>
+        <div class="day-circle">
+            <span class="day-name text-white"><?php echo $day; ?></span>
+        </div>
+    </label>
+    <?php
+}
+
+?>
+
                         </div>
 
 
@@ -131,8 +125,8 @@ use yii\helpers\Html;
                             <div class="modal-content">
                                 <div class="modal-message">Вы хотите удалить это правило?</div>
                                 <div class="modal-buttons">
-                                    <button class="cancel-btn">Отмена</button>
-                                    <button class="delete-btn">Удалить</button>
+                                    <button type="button" class="cancel-btn">Отмена</button>
+                                    <button type="button" class="delete-btn">Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -143,41 +137,24 @@ use yii\helpers\Html;
                     <div class="days-wrapper">
                         <div class="weekday-group">
 
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="1"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Пн</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="2"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Вт</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="3"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Ср</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="4"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Чт</span></div>
-                            </label>
-                            <label class="day">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="5"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Пт</span></div>
-                            </label>
-                            <label class="day disabled">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="6"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Сб</span></div>
-                            </label>
-                            <label class="day disabled">
-                                <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" value="7"
-                                    disabled>
-                                <div class="day-circle"><span class="day-name text-white">Вс</span></div>
-                            </label>
+                        <?php 
+
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пример массива дней недели
+foreach ($daysOfWeek as $index => $day) {
+    ?>
+    <label class="day" for="day-<?php echo $index + 1; ?>">
+        <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" 
+               value="<?php echo $index + 1; ?>" 
+               id="day-<?php echo $index + 1; ?>" 
+                disabled>
+        <div class="day-circle">
+            <span class="day-name text-white"><?php echo $day; ?></span>
+        </div>
+    </label>
+    <?php
+}
+
+?>
                         </div>
 
 
@@ -197,8 +174,8 @@ use yii\helpers\Html;
                             <div class="modal-content">
                                 <div class="modal-message">Вы хотите удалить это правило?</div>
                                 <div class="modal-buttons">
-                                    <button class="cancel-btn">Отмена</button>
-                                    <button class="delete-btn">Удалить</button>
+                                    <button type="button" class="cancel-btn">Отмена</button>
+                                    <button type="button" class="delete-btn">Удалить</button>
                                 </div>
                             </div>
                         </div>
@@ -250,8 +227,8 @@ use yii\helpers\Html;
                                 <div class="modal-content">
                                     <div class="modal-message">Вы хотите удалить это правило?</div>
                                     <div class="modal-buttons">
-                                        <button class="cancel-btn">Отмена</button>
-                                        <button class="delete-btn">Удалить</button>
+                                        <button type="button" class="cancel-btn">Отмена</button>
+                                        <button type="button" class="delete-btn">Удалить</button>
                                     </div>
                                 </div>
                             </div>
@@ -264,12 +241,15 @@ use yii\helpers\Html;
                 <!--  -->
             </div>
             <div class="button-group schedule-row d-flex align-items-center">
+            <?php if ($allowMultipleItems): ?>
                 <button type="button" class="btn btn-primary add-work-time button-calendar time-button-add">Добавить
                     рабочие часы</button>
+            <?php endif; ?>
+            <?php if ($enableSpecialTime): ?>
                 <button type="button"
                     class="btn btn-secondary add-special-time button-calendar add-special-day-button">Добавить особенные
                     дни</button>
-
+            <?php endif; ?>
             </div>
         </div>
 
@@ -278,7 +258,7 @@ use yii\helpers\Html;
             <div class="modal-wrapper">
                 <div class="modal-header">
                     <h2 id="modal-title">Добавление особенного дня</h2>
-                    <button class="calendar-cancel-btn calendar-close-btn"></button>
+                    <button type="button" class="calendar-cancel-btn calendar-close-btn"></button>
                 </div>
                 <p id="modal-description">Выберите день или период, когда режим работы не совпадает с рабочим днем или
                     дополнительным интервалом.</p>
@@ -294,8 +274,8 @@ use yii\helpers\Html;
                 </section>
                 <div class="divider"></div>
                 <div class="buttons">
-                    <button class="add-btn">Добавить</button>
-                    <button class="calendar-cancel-btn">Отменить</button>
+                    <button type="button" class="add-btn">Добавить</button>
+                    <button type="button" class="calendar-cancel-btn">Отменить</button>
                 </div>
             </div>
         </div>
@@ -305,57 +285,9 @@ use yii\helpers\Html;
             <div class="modal-content">
                 <div class="modal-message">Вы хотите удалить это правило?</div>
                 <div class="modal-buttons">
-                    <button class="cancel-btn">Отмена</button>
-                    <button class="delete-btn">Удалить</button>
+                    <button type="button" class="cancel-btn">Отмена</button>
+                    <button type="button" class="delete-btn">Удалить</button>
                 </div>
             </div>
         </div>
     </div>
-        <script>
-            // // клик на кнопке
-            document.querySelector('.add-work1').addEventListener('click', function (event) {
-                //     // данные формы в объект
-                //     const scheduleData = {
-                //         enable_time_zone: document.querySelector('input[name="schedule[enable_time_zone]"]').checked,
-                //         enable_production_calendar: document.querySelector('input[name="schedule[enable_production_calendar]"]').checked,
-                //         days: Array.from(document.querySelectorAll('input[name="days"]:checked')).map(day => day.value),
-                //         work_times: {
-                //             start_time: document.querySelector('.time-selection input[type="time"]:first-child').value,
-                //             end_time: document.querySelector('.time-selection input[type="time"]:last-child').value
-                //         }
-                //     };
-
-                //     //  данные в консоль проверки
-                //     console.log('Отправляемые данные:', scheduleData);
-
-                // // нужно через AJAX
-                // const xhr = new XMLHttpRequest();
-                // xhr.open("POST", "/save_schedule", true);
-                // xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                // xhr.onload = function () {
-                //     if (xhr.status === 200) {
-                //         console.log("отправлены");
-                //     } else {
-                //         console.log("Ошибка");
-                //     }
-                // };
-                // xhr.send(JSON.stringify(scheduleData));
-
-                // // стандартным методом
-                // event.preventDefault();
-
-                // Снятие "disabled" с чекбоксов
-                let checkboxes = document.querySelectorAll('.days-wrapper input[type="checkbox"]');
-                checkboxes.forEach(function (checkbox) {
-                    checkbox.disabled = false;
-                });
-
-                // Снятие "disabled" с полей времени
-                let timeFields = document.querySelectorAll('.days-wrapper input[type="time"]');
-                timeFields.forEach(function (timeField) {
-                    timeField.disabled = false;
-                });
-
-
-            });
-        </script>
