@@ -276,3 +276,4 @@ foreach ($daysOfWeek as $index => $day) {
             </div>
         </div>
     </div>
+<!-- </div> -->

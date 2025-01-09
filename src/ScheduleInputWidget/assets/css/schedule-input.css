@@ -794,3 +794,10 @@ button:hover {
 #schedule {
     display: none;
 }
+.day input[type="checkbox"]:not(:disabled) ~ .day-circle {
+    transition: filter 0.3s ease;
+}
+
+.day input[type="checkbox"]:not(:disabled) ~ .day-circle:hover {
+    filter: brightness(120%);
+}
