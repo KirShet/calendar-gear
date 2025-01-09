@@ -20,13 +20,13 @@ use yii\helpers\Html;
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
                     <input type="checkbox" id="enable_time_zone" name="<?= $name ?>[enable_time_zone]" value="1"
-                        <?= $enableTimeZone ? 'checked' : '' ?> class="hidden-checkbox">
+                        <?= $model->schedule['enable_time_zone'] ? 'checked' : '' ?> class="hidden-checkbox">
                     Учитывать часовой пояс
                 </label>
                 <div data-tooltip="Всплывающая подсказка сообщает о чём-то многозначном и полезном..."
                     class="icon-margin day disabled"></div>
             </div>
-            <div class="switch <?= $enableTimeZone ? 'active' : ''; ?>" id="timezone-switch">
+            <div class="switch <?= $model->schedule['enable_time_zone'] ? 'active' : ''; ?>" id="timezone-switch">
                 <div class="switch-thumb"></div>
             </div>
         </div>
@@ -36,13 +36,13 @@ use yii\helpers\Html;
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
                     <input type="checkbox" id="enable_production_calendar" name="<?= $name ?>[enable_production_calendar]" value="1"
-                        <?= $enableProductionCalendar ? 'checked' : '' ?> class="hidden-checkbox">
+                        <?= $model->schedule['enable_production_calendar'] ? 'checked' : '' ?> class="hidden-checkbox">
                     Использовать производственный календарь
                 </label>
                 <div data-tooltip="Всплывающая подсказка сообщает о чём-то многозначном и полезном..."
                     class="icon-margin day disabled"></div>
             </div>
-            <div class="switch <?php echo $enableProductionCalendar ? 'active' : ''; ?>">
+            <div class="switch <?php echo $model->schedule['enable_production_calendar'] ? 'active' : ''; ?>">
                 <div class="switch-thumb"></div>
             </div>
         </div>
@@ -89,7 +89,7 @@ use yii\helpers\Html;
 $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
 foreach ($daysOfWeek as $index => $day) {
     ?>
-    <label class="day" for="day-<?php echo $index + 1; ?>">
+    <label class="day" >
         <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
@@ -135,7 +135,7 @@ foreach ($daysOfWeek as $index => $day) {
 $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
 foreach ($daysOfWeek as $index => $day) {
     ?>
-    <label class="day" for="day-<?php echo $index + 1; ?>">
+    <label class="day">
         <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
