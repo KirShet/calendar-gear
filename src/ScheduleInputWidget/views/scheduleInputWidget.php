@@ -47,12 +47,9 @@ use yii\helpers\Html;
             </div>
         </div>
     <?php endif; ?>
-
         <div id="special-time-container">
             <?php
-            // $daysCount = array_count_values(array_column($work_time, 'days'));
             ?>
-            <!--  -->
             <?php
 
             $grouped_work_time = [];
@@ -78,21 +75,21 @@ use yii\helpers\Html;
                         <?php
 
                         if (substr($group['start_time'], -3) === ':00') {
-                            $startTime = substr($group['start_time'], 0, -3);  // 
+                            $startTime = substr($group['start_time'], 0, -3); 
                         }
 
                         if (substr($group['end_time'], -3) === ':00') {
-                            $endTime = substr($group['end_time'], 0, -3);  // 
+                            $endTime = substr($group['end_time'], 0, -3); 
                         }
                         ?>
                         <div class="weekday-group">
 <?php 
 
-$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пример массива дней недели
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="<?= $name ?>[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][days]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                <?php echo in_array($index + 1, $group['days']) ? 'checked' : ''; ?> disabled>
@@ -102,16 +99,9 @@ foreach ($daysOfWeek as $index => $day) {
     </label>
     <?php
 }
-
 ?>
-
                         </div>
-
-
                         <div class="time-selection">
-
-
-                            <!-- HTML форма с инпутами -->
                             <input type="time" class="schedule-time start-time"
                                 value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>" disabled>
                             <div class="time-divider"></div>
@@ -131,6 +121,7 @@ foreach ($daysOfWeek as $index => $day) {
                                 </div>
                             </div>
                         </div>
+                    </div>
                         <?php
                 }
             } else {
@@ -140,11 +131,11 @@ foreach ($daysOfWeek as $index => $day) {
 
                         <?php 
 
-$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пример массива дней недели
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="<?= $name ?>[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][days]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                 disabled>
@@ -154,15 +145,10 @@ foreach ($daysOfWeek as $index => $day) {
     </label>
     <?php
 }
-
 ?>
                         </div>
-
-
                         <div class="time-selection">
 
-
-                            <!-- HTML форма с инпутами -->
                             <input type="time" class="schedule-time start-time" value="00:00" disabled>
                             <div class="time-divider"></div>
                             <input type="time" class="schedule-time end-time" value="00:00" disabled>
@@ -184,9 +170,8 @@ foreach ($daysOfWeek as $index => $day) {
                         <?php
             }
             ?>
-                    <!--  -->
                 </div>
-            </div>
+            
             <div id="work-time-container">
                 <?php
                 if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
@@ -239,7 +224,6 @@ foreach ($daysOfWeek as $index => $day) {
                 }
                 ?>
 
-                <!--  -->
             </div>
             <div class="button-group schedule-row d-flex align-items-center">
             <?php if ($allowMultipleItems): ?>
@@ -281,7 +265,6 @@ foreach ($daysOfWeek as $index => $day) {
             </div>
         </div>
 
-        <!-- Модальное окно подтверждения удаления -->
         <div id="modal-overlay-message" class="modal-overlay-message">
             <div class="modal-content">
                 <div class="modal-message">Вы хотите удалить это правило?</div>

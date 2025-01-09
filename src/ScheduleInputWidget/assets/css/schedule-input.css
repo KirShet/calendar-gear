@@ -791,3 +791,6 @@ button:hover {
 .button-group .btn:only-child {
     flex: 1 1 100%; 
 }
+#schedule {
+    display: none;
+}

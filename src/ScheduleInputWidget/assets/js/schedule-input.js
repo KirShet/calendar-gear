@@ -3,8 +3,7 @@ $(document).ready(function () {
     const selectedDateSpan = $('#selected-date');
     const workTimeContainer = $('#work-time-container');
     const specialTimeContainer = $('#special-time-container');
-    const schedule = $('#schedule').text();;
-
+    const schedule = $('#schedule').text();
     let firstDate = null; // Переменная для хранения первой выбранной даты
     let secondDate = null; // Переменная для второй даты
 
@@ -218,7 +217,7 @@ removeInlineClass();
     $(document).on('click', '.edit-work-time', function () {
         var parentWrapper = $(this).closest('.days-wrapper');
         parentWrapper.find('.time-selection input[type="time"]').prop('disabled', false); 
-        $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name^="${schedule}"][name$="][days]"]`).removeAttr('disabled');
+        $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][days]"]`).removeAttr('disabled');
     });
 
         $(document).on('click', '.edit-work-time', function () {
@@ -238,7 +237,7 @@ removeInlineClass();
 
 //  // Функция для обновления стиля для всех чекбоксов
  function updateStyles() {
-    $(`input[name^="${schedule}"][name$="][days]"]`).each(function() {
+    $(`input[name$="][days]"]`).each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
         // console.log(isChecked);
@@ -254,22 +253,22 @@ removeInlineClass();
     });
 }
 function disabled() {
-    $(`input[name^="${schedule}"][name$="][days]"]`).each(function() {
+    $(`input[name$="][days]"]`).each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
-        $(`input[name^="${schedule}"][name$="][days]"]`).not(this).prop('disabled', true);
+        $(`input[name$="][days]"]`).not(this).prop('disabled', true);
     });
 }
 
 $(document).on('click', '.can-remove', function () {
     var parentWrapper = $(this).closest('.days-wrapper');
-    parentWrapper.find(`input[type="checkbox"][name^="${schedule}"][name$="][days]"]`).prop('checked', false).prop('disabled', false);
+    parentWrapper.find(`input[type="checkbox"][name$="][days]"]`).prop('checked', false).prop('disabled', false);
     updateStyles();
     parentWrapper.find('input[type="time"]').val('00:00');;
 });
 
 // // Обработчик события изменения состояния всех чекбоксов
-$(document).on('change', `input[name^="${schedule}"][name$="][days]"]`, function() {
+$(document).on('change', `input[name$="][days]"]`, function() {
     // console.log("qw");
     updateStyles();
 });
@@ -336,7 +335,7 @@ $(document).on('change', '.checkbox', function () {
             // console.log("33"+isAnyMatching);
             var parentWrapper = $(this).closest('.days-wrapper');
             parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
-            $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name^="${schedule}"][name$="][days]"]`).addClass('disabled');
+            $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][days]"]`).addClass('disabled');
 
             parentWrapper.find('.can-remove').addClass('remove-work-time');
             parentWrapper.find('.remove-work-time').removeClass('can-remove');
@@ -511,7 +510,7 @@ $(document).on('change', '.checkbox', function () {
         $('input[name*="[work_time]"][name*="start_time"]').remove();
     
         // Проходим по всем инпутам с нужным name
-        $(`input[type="checkbox"][name^="${schedule}"][name$="][days]"]`).each(function(index, element) {
+        $(`input[type="checkbox"][name$="][days]"]`).each(function(index, element) {
 
             // console.log("Проходим по всем инпутам снова0");
 
@@ -525,15 +524,13 @@ $(document).on('change', '.checkbox', function () {
         });
     
         // Проходим по всем инпутам снова и присваиваем новые имена с индексами
-        $(`input[type="checkbox"][name^="${schedule}"][name$="][days]"]`).each(function(i, element) {
+        $(`input[type="checkbox"][name$="][days]"]`).each(function(i, element) {
 
             // console.log("Проходим по всем инпутам снова");
 
             if ($(element).is(':checked') && $(element).val() !== '') {
 
                 var activeIndex = activeIndexes.shift(); // Получаем следующий индекс для time инпутов
-                // console.log("Проходим по всем инпутам снова2");
-
                 // Обновляем атрибут name, ставя индекс
                 var newName = `${schedule}[work_time][${activeIndex}][days]`;
                 $(element).attr('name', newName);
