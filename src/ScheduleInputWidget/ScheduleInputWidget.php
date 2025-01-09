@@ -16,19 +16,6 @@ class ScheduleInputWidget extends InputWidget
 
     public function run()
     {
-        // $attribute = $this->attribute;
-        // \Yii::debug("Attribute: $attribute", __METHOD__);
-    
-        // $name = "$attribute-";
-        // \Yii::debug("Name: $name", __METHOD__);
-
-        // $attribute = $this->attribute;
-
-        // // Формируем имя
-        // $name = "$attribute-";
-    
-        // // Удаляем последний символ
-        // $name = substr($name, 0, -1);
 
         return $this->render('scheduleInputWidget', [
             'name' => $this->attribute,

@@ -47,6 +47,7 @@ use yii\helpers\Html;
             </div>
         </div>
     <?php endif; ?>
+
         <div id="special-time-container">
             <?php
             ?>
@@ -89,7 +90,7 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                <?php echo in_array($index + 1, $group['days']) ? 'checked' : ''; ?> disabled>
@@ -135,7 +136,7 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                 disabled>
