@@ -14,10 +14,24 @@ class ScheduleInputWidget extends InputWidget
     public $header = 'Рабочие часы';
     public $preheader = 'Установить рабочие часы';
 
-
     public function run()
     {
+        // $attribute = $this->attribute;
+        // \Yii::debug("Attribute: $attribute", __METHOD__);
+    
+        // $name = "$attribute-";
+        // \Yii::debug("Name: $name", __METHOD__);
+
+        // $attribute = $this->attribute;
+
+        // // Формируем имя
+        // $name = "$attribute-";
+    
+        // // Удаляем последний символ
+        // $name = substr($name, 0, -1);
+
         return $this->render('scheduleInputWidget', [
+            'name' => $this->attribute,
             'model' => $this->model,
             'enableTimeZone' => $this->enableTimeZone,
             'enableSpecialTime' => $this->enableSpecialTime,

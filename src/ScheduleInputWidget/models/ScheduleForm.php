@@ -13,7 +13,6 @@ class ScheduleForm extends Model
     {
         return [
 
-
         ];
     }
 }

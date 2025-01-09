@@ -12,13 +12,14 @@ use yii\helpers\Html;
     <div class="frame schedule-widget card p-3">
         <div class="header"><?= htmlspecialchars($header) ?></div>
         <div class="sub-header"><?= htmlspecialchars($preheader) ?></div>
+        <div id="schedule"><?= htmlspecialchars($name)?></div>
         <div class="divider"></div>
 
     <?php if ($enableTimeZone): ?>
         <div class="action-row">
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" id="enable_time_zone" name="schedule[enable_time_zone]" value="1"
+                    <input type="checkbox" id="enable_time_zone" name="<?= $name ?>[enable_time_zone]" value="1"
                         <?= $enableTimeZone ? 'checked' : '' ?> class="hidden-checkbox">
                     Учитывать часовой пояс
                 </label>
@@ -34,7 +35,7 @@ use yii\helpers\Html;
         <div class="action-row">
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" id="enable_production_calendar" name="schedule[enable_production_calendar]" value="1"
+                    <input type="checkbox" id="enable_production_calendar" name="<?= $name ?>[enable_production_calendar]" value="1"
                         <?= $enableProductionCalendar ? 'checked' : '' ?> class="hidden-checkbox">
                     Использовать производственный календарь
                 </label>
@@ -91,7 +92,7 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пр�
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?= $name ?>[work_time][][days]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                <?php echo in_array($index + 1, $group['days']) ? 'checked' : ''; ?> disabled>
@@ -143,7 +144,7 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; // Пр�
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" for="day-<?php echo $index + 1; ?>">
-        <input type="checkbox" class="days-checkbox" name="schedule[work_time][][days]" 
+        <input type="checkbox" class="days-checkbox" name="<?= $name ?>[work_time][][days]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                 disabled>
@@ -207,9 +208,9 @@ foreach ($daysOfWeek as $index => $day) {
                         ?>
                         <div class="days-wrapper">
                             <div class="work-time-info">
-                                <input type="hidden" name="schedule[special_time][<?php echo $key; ?>][start_time]"
+                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][start_time]"
                                     value="<?php echo $timeSlot['start_time']; ?>">
-                                <input type="hidden" name="schedule[special_time][<?php echo $key; ?>][end_time]"
+                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][end_time]"
                                     value="<?php echo $timeSlot['end_time']; ?>">
                                 <span class="work-date"><?php echo $dateRange; ?></span>
                             </div>
