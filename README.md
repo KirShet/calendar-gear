@@ -71,3 +71,43 @@ ActiveForm::end();
     
     return $this->render('index', ['model' => $model]);
 ```
+
+```
+    public function actionIndex()
+    {
+        $model = new ScheduleForm();
+        $model->load(Yii::$app->request->post());
+        if ($model->validate()) {
+            Yii::$app->session->setFlash('success', 'Данные успешно отправлены4445.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ошибка валидации данных.');
+        }
+        return $this->render('index', ['model' => $model]);
+    }
+```
+
+представление
+```
+<?php if ($model->hasErrors()): ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($model->errors as $error): ?>
+                <li><?= Html::encode($error[0]) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+
+<?php if (Yii::$app->session->hasFlash('success')): ?>
+    <div class="alert alert-success">
+        <?= Yii::$app->session->getFlash('success') ?>
+    </div>
+<?php endif; ?>
+
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger">
+        <?= Yii::$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?>
+```
