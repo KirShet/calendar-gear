@@ -7,6 +7,7 @@ use yii\helpers\Html;
 /** @var bool $allowMultipleItems */
 /** @var string $header */
 /** @var string $preheader */
+// print_r($model);
 ?>
 <div class="container">
     <div class="frame schedule-widget card p-3">
