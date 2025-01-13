@@ -10,20 +10,13 @@ use kirshet\yii2\ScheduleInputWidget\models\ScheduleForm;
 $model = new ScheduleForm();
 
 $form = ActiveForm::begin();
-echo $form->field($model, 'schedule')->widget(
-    kirshet\yii2\ScheduleInputWidget\ScheduleInputWidget::class,
-    [
-        'attribute' => 'schedule',
-        'model' => $model,
-        'name' => 'schedule',
-        'enableTimeZone' => true,
-        'enableSpecialTime' => true,
-        'enableProductionCalendar' => true,
-        'allowMultipleItems' => true,
-        'header' => 'Укажите расписание',
-        'preheader' => 'Настройте расписание для ваших нужд',
-    ]
-);
+
+    echo $form->field($model, 'schedule')->widget(ScheduleInputWidget::class, [
+        'enableTimeZone' => true, 
+        'enableSpecialTime' => true, 
+        'enableProductionCalendar' => true, 
+        'allowMultipleItems' => true
+    ]);
 
 ActiveForm::end();
 ```
@@ -54,22 +47,26 @@ ActiveForm::end();
 ```
 Обращение через контроллер:
 ```
-    $model = new ScheduleForm();
+        $model = new ScheduleForm();
+
+        $model->setAttributes($_POST);
+        $model->load(Yii::$app->request->post());
+        $model->validate();
+
+        $scheduleData = [
+            'enable_time_zone' => '1',
+            'enable_production_calendar' => '0',
+            'work_time' => [
+                ['days' => '1', 'start_time' => '00:00:00', 'end_time' => '00:00:00'],
+            ],
+            'special_time' => [
+                ['start_time' => '2024-11-05 08:00:00', 'end_time' => '2024-11-05 18:00:00'],
+            ]
+        ];
     
-    $scheduleData = [
-        'enable_time_zone' => '1',
-        'enable_production_calendar' => '1',
-        'work_time' => [
-            ['days' => '1', 'start_time' => '08:00:00', 'end_time' => '18:00:00'],
-        ], 
-        'special_time' => [
-            ['start_time' => '2024-11-05 08:00:00', 'end_time' => '2024-11-05 18:00:00'],
-        ]
-    ];
+        $model->schedule = $scheduleData;
     
-    $model->schedule = $scheduleData;
-    
-    return $this->render('index', ['model' => $model]);
+        return $this->render('index', ['model' => $model]);
 ```
 
 ```
@@ -84,30 +81,4 @@ ActiveForm::end();
         }
         return $this->render('index', ['model' => $model]);
     }
-```
-
-представление
-```
-<?php if ($model->hasErrors()): ?>
-    <div class="alert alert-danger">
-        <ul>
-            <?php foreach ($model->errors as $error): ?>
-                <li><?= Html::encode($error[0]) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
-
-
-<?php if (Yii::$app->session->hasFlash('success')): ?>
-    <div class="alert alert-success">
-        <?= Yii::$app->session->getFlash('success') ?>
-    </div>
-<?php endif; ?>
-
-<?php if (Yii::$app->session->hasFlash('error')): ?>
-    <div class="alert alert-danger">
-        <?= Yii::$app->session->getFlash('error') ?>
-    </div>
-<?php endif; ?>
 ```
