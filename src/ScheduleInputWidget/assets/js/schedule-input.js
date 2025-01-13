@@ -35,24 +35,268 @@ observer.observe(document.body, { childList: true, subtree: true });
 // Вызовем сразу на случае, если элемент уже существует на момент инициализации
 removeInlineClass();
     // Открытие модального окна
-    $('.add-special-day-button').on('click', function () {
+    $('.add-special-day-button, .work-date').on('click', function () { 
         modalOverlay.addClass('show');
-
+    
         $('.flatpickr-calendar').addClass('inline');
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date(); // Получаем текущую дату
         const formattedDate = currentDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
     
-        // Устанавливаем текущую дату в элементе
-        $("#selected-date").text(formattedDate);
+        // Ищем скрытые input-поля внутри родительского элемента
+        const parent = $(this).closest('div'); // Определяем родительский элемент
+        if (parent.length > 0) { // Проверяем, что родительский элемент найден
+            const startTime = parent.find('input[name="schedule[special_time][0][start_time]"]').val();
+            const endTime = parent.find('input[name="schedule[special_time][0][end_time]"]').val();
+            
+            // Если оба input поля найдены
+            if (startTime && endTime) {
+                const startDateTime = new Date(startTime);
+                const endDateTime = new Date(endTime);
     
-        // Инициализируем Flatpickr с текущей датой по умолчанию
-        flatpickr({
-            defaultDate: currentDate, // Устанавливаем текущую дату по умолчанию
-            onReady: function () {
-                $("#selected-date").text(formattedDate); // Обновляем текст при инициализации
+                // Форматируем дату и время для вывода
+                const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '') + ' ' + 
+                                       startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '') + ' ' + 
+                                     endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+                // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
+                if (startFormatted === endFormatted) {
+                    $("#selected-date").text(startFormatted);
+                } else {
+                    $("#selected-date").text(`${startFormatted} - ${endFormatted}`);
+                }
+                // Передаем в flatpickr период
+                // flatpickr({
+                //     defaultDate: [startDateTime.toISOString().split('T')[0]], // Устанавливаем период (начало и конец)
+                //     mode: "range", // Включаем выбор диапазона
+                //     onReady: function () {
+                //         $("#selected-date").text(`${startFormatted} - ${endFormatted}`); // Обновляем текст при инициализации
+                //     }
+                // });
+
+                $(".calendar-input").flatpickr({
+                    inline: true, // Режим отображения календаря
+                    locale: {
+                        firstDayOfWeek: 1, // Неделя начинается с понедельника
+                        weekdays: {
+                            shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                            longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                        },
+                        months: {
+                            shorthand: [
+                                'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                                'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                            ],
+                            longhand: [
+                                'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                            ]
+                        }
+                    },
+                    // "disable": [
+                    //     function(date, selectedDates, mode) {
+                    //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+                    //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+                    //     }        
+                    // ],
+                    mode: "range", // Выбор диапазона
+                    dateFormat: "Y-m-d", // Внутренний формат данных
+                    altInput: true, // Показывать отформатированную строку
+                    altFormat: "d MMMM Y", // Формат отображаемой строки
+                    defaultDate: [new Date().toISOString().split('T')[0]    ],
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if (selectedDates.length === 2) {
+                            const [startDate, endDate] = selectedDates;
+                            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                            const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                            const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                            // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                            const formattedStartHidden = startDate.toISOString().split('T')[0];
+                            const formattedEndHidden = endDate.toISOString().split('T')[0];
+
+                            const customText = `${formattedStart} - ${formattedEnd}`;
+                            // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                            
+                            // Обновление текста в нужном элементе
+                            $("#selected-date").text(customText);
+                            $("#start-time-hidden").text(formattedStartHidden);
+                            $("#end-time-hidden").text(formattedEndHidden);
+
+
+                        } else if (selectedDates.length > 0) {
+                            const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                            const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                            const formattedStartHidden = selectedDate.toISOString().split('T')[0];
+                            const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+
+                
+                            // Обновление текста в нужном элементе
+                            $("#selected-date").text(formattedDate);
+                            $("#start-time-hidden").text(formattedStartHidden);
+                            $("#end-time-hidden").text(formattedEndHidden);
+                        }
+                    }
+                });
+
+                //     // Инициализация календаря для модального окна
+                // $('.flatpickr-calendar').addClass('inline rangeMode animate');
+            } else {
+                // Если input-поля не найдены, показываем текущую дату
+                $("#selected-date").text(formattedDate);
+
+                    // Инициализация календаря для модального окна
+
+                // $(".calendar").flatpickr({
+                //     inline: true, // Режим отображения календаря
+                //     locale: {
+                //         firstDayOfWeek: 1, // Неделя начинается с понедельника
+                //         weekdays: {
+                //             shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                //             longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                //         },
+                //         months: {
+                //             shorthand: [
+                //                 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                //                 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                //             ],
+                //             longhand: [
+                //                 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                //                 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                //             ]
+                //         }
+                //     },
+                //     // "disable": [
+                //     //     function(date, selectedDates, mode) {
+                //     //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+                //     //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+                //     //     }        
+                //     // ],
+                //     mode: "range", // Выбор диапазона
+                //     dateFormat: "Y-m-d", // Внутренний формат данных
+                //     altInput: true, // Показывать отформатированную строку
+                //     altFormat: "d MMMM Y", // Формат отображаемой строки
+                //     // defaultDate: [new Date().toISOString().split('T')[0]    ],
+                //     onChange: function(selectedDates, dateStr, instance) {
+                //         if (selectedDates.length === 2) {
+                //             const [startDate, endDate] = selectedDates;
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                //             const formattedStartHidden = startDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = endDate.toISOString().split('T')[0];
+
+                //             const customText = `${formattedStart} - ${formattedEnd}`;
+                //             // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                            
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(customText);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
+
+
+                //         } else if (selectedDates.length > 0) {
+                //             const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                //             const formattedStartHidden = selectedDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+
+                
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(formattedDate);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
+                //         }
+                //     }
+                // });
+
+                // Инициализируем Flatpickr с текущей датой по умолчанию (без периода)
+                // flatpickr({
+                //     defaultDate: currentDate, // Устанавливаем текущую дату по умолчанию
+                //     onReady: function () {
+                //         $("#selected-date").text(formattedDate); // Обновляем текст при инициализации
+                //     }
+                // });
+                // $("#selected-date").text(formattedDate);
             }
-        }).open();
+        } else {
+            // Если родительский элемент не найден, выводим текущую дату
+            // $("#selected-date").text(formattedDate);
+            // $(".calendar").flatpickr({
+            //     inline: true, // Режим отображения календаря
+            //     locale: {
+            //         firstDayOfWeek: 1, // Неделя начинается с понедельника
+            //         weekdays: {
+            //             shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            //             longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+            //         },
+            //         months: {
+            //             shorthand: [
+            //                 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+            //                 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+            //             ],
+            //             longhand: [
+            //                 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+            //                 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+            //             ]
+            //         }
+            //     },
+            //     // "disable": [
+            //     //     function(date, selectedDates, mode) {
+            //     //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+            //     //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+            //     //     }        
+            //     // ],
+            //     mode: "range", // Выбор диапазона
+            //     dateFormat: "Y-m-d", // Внутренний формат данных
+            //     altInput: true, // Показывать отформатированную строку
+            //     altFormat: "d MMMM Y", // Формат отображаемой строки
+            //     // defaultDate: [new Date().toISOString().split('T')[0]    ],
+            //     onChange: function(selectedDates, dateStr, instance) {
+            //         if (selectedDates.length === 2) {
+            //             const [startDate, endDate] = selectedDates;
+            //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            //             const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+            //             const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+            //             // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+            //             const formattedStartHidden = startDate.toISOString().split('T')[0];
+            //             const formattedEndHidden = endDate.toISOString().split('T')[0];
+
+            //             const customText = `${formattedStart} - ${formattedEnd}`;
+            //             // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                        
+            //             // Обновление текста в нужном элементе
+            //             $("#selected-date").text(customText);
+            //             $("#start-time-hidden").text(formattedStartHidden);
+            //             $("#end-time-hidden").text(formattedEndHidden);
+
+
+            //         } else if (selectedDates.length > 0) {
+            //             const selectedDate = selectedDates[0]; // Выбираем только первую дату
+            //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            //             const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+            //             const formattedStartHidden = selectedDate.toISOString().split('T')[0];
+            //             const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+
+            
+            //             // Обновление текста в нужном элементе
+            //             $("#selected-date").text(formattedDate);
+            //             $("#start-time-hidden").text(formattedStartHidden);
+            //             $("#end-time-hidden").text(formattedEndHidden);
+            //         }
+            //     }
+            // });
+            // Инициализируем Flatpickr с текущей датой по умолчанию
+            // flatpickr({
+            //     defaultDate: currentDate, // Устанавливаем текущую дату по умолчанию
+            //     onReady: function () {
+            //         $("#selected-date").text(formattedDate); // Обновляем текст при инициализации
+            //     }
+            // });\
+        }
     });
 
     // брос выборов
@@ -85,6 +329,9 @@ removeInlineClass();
             resetDates();
         }
     });
+    function removeFlatpickrClasses() {
+        $('.flatpickr-day').removeClass('selected startRange inRange endRange');
+    }
     var randomValue = 0; 
     // Добавление рабочей записи по нажатию на "Добавить"
     $('.add-btn').on('click', function () {
@@ -160,6 +407,8 @@ removeInlineClass();
         modalOverlay.removeClass('show');
         resetDates();
         removeInlineClass()
+        removeFlatpickrClasses();
+
     });
         
     $(document).ready(function () {
@@ -189,10 +438,12 @@ removeInlineClass();
             }
         });
     });
+
         // Закрытие модального окна
         $('.calendar-cancel-btn').on('click', function () {
             modalOverlay.removeClass('show');
             removeInlineClass();
+            removeFlatpickrClasses();
         });
 
         $('form').on('submit', function(event) {
@@ -223,8 +474,8 @@ removeInlineClass();
         $(document).on('click', '.edit-work-time', function () {
             var parentWrapper = $(this).closest('.days-wrapper');
             
-            parentWrapper.find('.remove-work-time').addClass('can-remove');
-            parentWrapper.find('.can-remove').removeClass('remove-work-time');
+            // parentWrapper.find('.remove-work-time').addClass('can-remove');
+            // parentWrapper.find('.can-remove').removeClass('remove-work-time');
             parentWrapper.find('.edit-work-time').addClass('check-work-time');
             parentWrapper.find('.check-work-time').removeClass('edit-work-time');
             parentWrapper.find('.day').removeClass('disabled');
@@ -260,12 +511,12 @@ function disabled() {
     });
 }
 
-$(document).on('click', '.can-remove', function () {
-    var parentWrapper = $(this).closest('.days-wrapper');
-    parentWrapper.find(`input[type="checkbox"][name$="][day]"]`).prop('checked', false).prop('disabled', false);
-    updateStyles();
-    parentWrapper.find('input[type="time"]').val('00:00');;
-});
+// $(document).on('click', '.can-remove', function () {
+//     var parentWrapper = $(this).closest('.days-wrapper');
+//     parentWrapper.find(`input[type="checkbox"][name$="][day]"]`).prop('checked', false).prop('disabled', false);
+//     updateStyles();
+//     parentWrapper.find('input[type="time"]').val('00:00');;
+// });
 
 // // Обработчик события изменения состояния всех чекбоксов
 $(document).on('change', `input[name$="][day]"]`, function() {
@@ -337,8 +588,8 @@ $(document).on('change', '.checkbox', function () {
             parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
             $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][day]"]`).addClass('disabled');
 
-            parentWrapper.find('.can-remove').addClass('remove-work-time');
-            parentWrapper.find('.remove-work-time').removeClass('can-remove');
+            // parentWrapper.find('.can-remove').addClass('remove-work-time');
+            // parentWrapper.find('.remove-work-time').removeClass('can-remove');
             parentWrapper.find('.check-work-time').addClass('edit-work-time');
             parentWrapper.find('.edit-work-time').removeClass('check-work-time');
             parentWrapper.find('.disabled').removeClass('day');
@@ -627,4 +878,55 @@ $(document).on('change', '.checkbox', function () {
     text = translateDate(text);
     $(this).html(text);
   });
+
+
+//   $('#orgregistry-form').on('beforeSubmit', function(e) {
+//     // console.log($('#schedule-form').yiiActiveForm('valid'));
+//     var form = $(this);
+//     console.log(form);
+//     console.log($('#orgregistry-form').yiiActiveForm('validate'));
+//     alert(form);
+//     // Проверяем, если форма невалидна (есть ошибки)
+//     if (!form.yiiActiveForm('validate')) {
+//         console.log("22");
+//         e.preventDefault();  // Останавливаем отправку формы
+//         alert('There are validation errors. Please fix them before submitting.');
+//         return false;
+//     }
+//     // e.preventDefault();  // Останавливаем отправку формы
+//     // Форма будет отправлена только если валидация прошла успешно
+//     return true;
+// });
+
+// // Убедитесь, что форма отправляется с помощью AJAX
+// $('#orgregistry-form').on('beforeSubmit', function (e) {
+//     // Этот код выполнится перед отправкой формы
+//     var form = $(this);
+    
+//     // Получаем данные формы и отправляем их с помощью AJAX
+//     $.ajax({
+//         url: form.attr('action'),  // URL формы
+//         type: form.attr('method'),  // Метод (POST)
+//         data: form.serialize(),  // Сериализация данных формы
+//         success: function(response) {
+//             var res = JSON.parse(response);
+//             if (res.valid) {
+//                 // Если валидация успешна, отправляем данные, например, сохраняем
+//                 form.submit();  // Если валидация успешна, можно продолжить отправку формы
+//             } else {
+//                 // Если есть ошибки, показываем их пользователю
+//                 $.each(res.errors, function (field, errors) {
+//                     var errorMessage = errors.join(', ');
+//                     form.find('[name="' + field + '"]').after('<div class="error">' + errorMessage + '</div>');
+//                 });
+//             }
+//         },
+//         error: function () {
+//             alert('Ошибка отправки формы.');
+//         }
+//     });
+
+//     // Останавливаем стандартную отправку формы
+//     return false;
+// });
 });

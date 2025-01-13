@@ -78,7 +78,13 @@ body {
     width: 100%;
     height: 1px;
     background-color: #E3E3E3;
-    margin: 20px 0 0 0;
+    margin: 10px 0;
+}
+.sub-header~.divider {
+        width: 100%;
+        height: 1px;
+        background-color: #E3E3E3;
+        margin: 10px 0 0 0;
 }
 
 /* Время */
@@ -800,4 +806,7 @@ button:hover {
 
 .day input[type="checkbox"]:not(:disabled) ~ .day-circle:hover {
     filter: brightness(120%);
+}
+.help-block{
+    color: red;
 }
