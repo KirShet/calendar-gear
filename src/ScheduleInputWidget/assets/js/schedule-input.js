@@ -100,8 +100,12 @@ removeInlineClass();
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
                 if (startFormatted === endFormatted) {
                     $("#selected-date").text(startFormatted);
+                    $("#start-time-hidden").text(startDateValue);
+                    $("#end-time-hidden").text(endDateValue);
                 } else {
                     $("#selected-date").text(`${startFormatted} - ${endFormatted}`);
+                    $("#start-time-hidden").text(startDateValue);
+                    $("#end-time-hidden").text(endDateValue);
                 }
                 // Передаем в flatpickr период
                 // flatpickr({
@@ -184,6 +188,7 @@ removeInlineClass();
                 // Если input-поля не найдены, показываем текущую дату
                 $("#selected-date").text(formattedDate);
 
+                console.log(startDateValue);
                     // Инициализация календаря для модального окна
 
                 // $(".calendar") .flatpickr({
