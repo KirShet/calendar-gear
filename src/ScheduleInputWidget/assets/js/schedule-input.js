@@ -50,36 +50,51 @@ removeInlineClass();
         // Ищем скрытые input-поля внутри родительского элемента
         const parent = $(this).closest('div'); // Определяем родительский элемент
         if (parent.length > 0) { // Проверяем, что родительский элемент найден
-            // const startTime = parent.find('input[name="schedule[special_time][0][start_time]"]').val();
-            // const endTime = parent.find('input[name="schedule[special_time][0][end_time]"]').val();
-            const startTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[start_time]"]`);
+            // const startTime = parent.find('input[name="schedule[special_time][0][star t_time]"]').val();
+            // const endTime = parent.find('input[name="schedule[special_time][0][end_ time]"]').val();
+            const startTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`);
             // console.log(startTimeInput.length); // Проверка, существует ли элемент
             
-            const endTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[end_time]"]`);
+            const endTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[time_end]"]`);
+            // console.log(endTimeInput.length); // Проверка, существует ли элемент
+
+            const startDateInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[date_start]"]`);
+            // console.log(startTimeInput.length); // Проверка, существует ли элемент
+            
+            const endDateInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[date_end]"]`);
             // console.log(endTimeInput.length); // Проверка, существует ли элемент
             
             const startTime = startTimeInput.val();
-            // console.log(startTime);  // Печать значения
+            console.log(startTime);  // Печать значения
             
             const endTime = endTimeInput.val();
-            // console.log(endTime);  // Печать значения
+            console.log(endTime);  // Печать значения
+
+            const startDateValue = startDateInput.val();
+            // console.log(startDate);  // Печать значения
             
+            const endDateValue = endDateInput.val();
+            // console.log(endDate);  // Печать значени
+            
+            // console.log(endDate+' '+endTime);  // Печать значени
             // Если оба input поля найдены
-            if (startTime && endTime) {
-                const startDateTime = new Date(startTime);
-                const endDateTime = new Date(endTime);
+            if (startTime && endTime && startDateValue && endDateValue) {
+                // console.log(endDate+' '+endTime);  // ReferenceError: Cannot access 'endDate' before initialization
+                const startDateTime = new Date(startTime +' '+ startDateValue);  // Combine date and time
+                const endDateTime = new Date(endTime +' '+ endDateValue);  // Combine date and time
     
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
 
                 // Форматирование начала (только дата)
                 const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                // console.log(startFormatted);
+                console.log(startFormatted);
                 // Форматирование конца (только дата)
                 const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                // console.log(endFormatted);
+                console.log(endFormatted);
 
                 const startDate = startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                 const endDate = endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
                 $('.time-selection-wrapper input#startTime').val(startDate);
                 $('.time-selection-wrapper input#endTime').val(endDate);
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
@@ -139,7 +154,7 @@ removeInlineClass();
                             const formattedEndHidden = endDate.toISOString().split('T')[0];
 
                             const customText = `${formattedStart} - ${formattedEnd}`;
-                            // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                            // const hiddenText = `"star t_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
                             
                             // Обновление текста в нужном элементе
                             $("#selected-date").text(customText);
@@ -212,7 +227,7 @@ removeInlineClass();
                 //             const formattedEndHidden = endDate.toISOString().split('T')[0];
 
                 //             const customText = `${formattedStart} - ${formattedEnd}`;
-                //             // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                //             // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
                             
                 //             // Обновление текста в нужном элементе
                 //             $("#selected-date").text(customText);
@@ -289,7 +304,7 @@ removeInlineClass();
             //             const formattedEndHidden = endDate.toISOString().split('T')[0];
 
             //             const customText = `${formattedStart} - ${formattedEnd}`;
-            //             // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+            //             // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
                         
             //             // Обновление текста в нужном элементе
             //             $("#selected-date").text(customText);
@@ -361,9 +376,9 @@ removeInlineClass();
                 // Функция для поиска максимального индекса
         function getMaxIndex() {
             let maxIndex = 0;
-            $(`input[name^="${schedule}[special_time]"][name$="[start_time]"]`).each(function() {
-                console.log($('input[name^="[special_time]"][name$="[start_time]"]'));
-                const match = $(this).attr('name').match(/\[special_time\]\[(\d+)\]\[start_time\]/);
+            $(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`).each(function() {
+                console.log($('input[name^="[special_time]"][name$="[time_start]"]'));
+                const match = $(this).attr('name').match(/\[special_time\]\[(\d+)\]\[time_start\]/);
                 console.log(match);
                 if (match) {
                     const index = parseInt(match[1], 10);
@@ -398,8 +413,8 @@ removeInlineClass();
         }
 
         // if (preg_match('/(\d{1,2}) (\w+) (\d{4}) - (\d{1,2}) (\w+) (\d{4})/', $date_range, $matches)) {
-        //     $start_date = "{$matches[3]}-{$matches[2]}-{$matches[1]}"; // Форматируем start_time
-        //     $end_date = "{$matches[6]}-{$matches[5]}-{$matches[4]}"; // Форматируем end_time
+        //     $start_date = "{$matches[3]}-{$matches[2]}-{$matches[1]}"; // Форматируем star t_time
+        //     $end_date = "{$matches[6]}-{$matches[5]}-{$matches[4]}"; // Форматируем end_ time
         // }        
         // Генерация случайного числа
         var startDate = $('#start-time-hidden').text();
@@ -407,8 +422,10 @@ removeInlineClass();
         const newEntry = `
             <div class="days-wrapper">
                 <div class="work-time-info" style="pointer-events: none;">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][start_time]" value="${startDate} ${startTime}:00">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][end_time]" value="${endDate} ${endTime}:59">
+                    <input type="hidden" name="${schedule}[special_time][${newIndex}][date_start]" value="${startDate}">
+                    <input type="hidden" name="${schedule}[special_time][${newIndex}][date_end]" value="${endDate}">
+                     <input type="hidden" name="${schedule}[special_time][${newIndex}][time_start]" value="${startTime}:00">
+                    <input type="hidden" name="${schedule}[special_time][${newIndex}][time_end]" value="${endTime}:59">
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
@@ -505,7 +522,7 @@ workTimeContainer.append(newEntry);
     $(document).on('click', '.edit-work-time', function () {
         var parentWrapper = $(this).closest('.days-wrapper');
         parentWrapper.find('.time-selection input[type="time"]').prop('disabled', false); 
-        $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][day]"]`).removeAttr('disabled');
+        $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][week_day]"]`).removeAttr('disabled');
     });
 
         $(document).on('click', '.edit-work-time', function () {
@@ -516,7 +533,7 @@ workTimeContainer.append(newEntry);
             parentWrapper.find('.edit-work-time').addClass('check-work-time');
             parentWrapper.find('.check-work-time').removeClass('edit-work-time');
             parentWrapper.find('.day').removeClass('disabled');
-            parentWrapper.find('.work-time-info').css('pointer-events', 'all');
+            parentWrapper.find('.work-date').css({'pointer-events': 'all', 'color': '#515151',});
             updateStyles();
 
         });
@@ -526,7 +543,7 @@ workTimeContainer.append(newEntry);
 
 //  // Функция для обновления стиля для всех чекбоксов
  function updateStyles() {
-    $(`input[name$="][day]"]`).each(function() {
+    $(`input[name$="][week_day]"]`).each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
         // console.log(isChecked);
@@ -541,11 +558,12 @@ workTimeContainer.append(newEntry);
         }
     });
 }
-function disabled() {
-    $(`input[name$="][day]"]`).each(function() {
+function disabled(parent) {
+    $(parent).find(`input[name$="][week_day]"]`).each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
-        $(`input[name$="][day]"]`).not(this).prop('disabled', true);
+        $(parent).find(`input[name$="][week_day]"]`).not(this).prop('disabled', true);
+        // parentWrapper.find('.edit-work-time').removeClass('check-work-time');
     });
 }
 
@@ -557,7 +575,7 @@ function disabled() {
 // });
 
 // // Обработчик события изменения состояния всех чекбоксов
-$(document).on('change', `input[name$="][day]"]`, function() {
+$(document).on('change', `input[name$="][week_day]"]`, function() {
     // console.log("qw");
     updateStyles();
 });
@@ -629,15 +647,15 @@ $(document).on('change', '.checkbox', function () {
             // console.log("33"+isAnyMatching);
             var parentWrapper = $(this).closest('.days-wrapper');
             parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
-            $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][day]"]`).addClass('disabled');
+            $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][week_day]"]`).addClass('disabled');
 
             // parentWrapper.find('.can-remove').addClass('remove-work-time');
             // parentWrapper.find('.remove-work-time').removeClass('can-remove');
             parentWrapper.find('.check-work-time').addClass('edit-work-time');
             parentWrapper.find('.edit-work-time').removeClass('check-work-time');
             parentWrapper.find('.disabled').removeClass('day');
-            parentWrapper.find('.work-time-info').css('pointer-events', 'none');
-            disabled();
+            parentWrapper.find('.work-date').css({'pointer-events': 'none', 'color': '#BABABA',});
+            disabled(parentWrapper);
         }
 
     });
@@ -655,31 +673,31 @@ $(document).on('change', '.checkbox', function () {
         <div class="days-wrapper">
             <div class="weekday-group">
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="1" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="1" disabled>
                     <div class="day-circle"><span class="day-name">Пн</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="2" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="2" disabled>
                     <div class="day-circle"><span class="day-name">Вт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="3" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="3" disabled>
                     <div class="day-circle"><span class="day-name">Ср</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="4" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="4" disabled>
                     <div class="day-circle"><span class="day-name">Чт</span></div>
                 </label>
                 <label class="day">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="5" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="5" disabled>
                     <div class="day-circle"><span class="day-name">Пт</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="6" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="6" disabled>
                     <div class="day-circle"><span class="day-name">Сб</span></div>
                 </label>
                 <label class="day disabled">
-                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][day]" value="7" disabled>
+                    <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][][week_day]" value="7" disabled>
                     <div class="day-circle"><span class="day-name">Вс</span></div>
                 </label>
             </div>
@@ -773,7 +791,7 @@ $(document).on('change', '.checkbox', function () {
                 const formattedEndHidden = endDate.toISOString().split('T')[0];
 
                 const customText = `${formattedStart} - ${formattedEnd}`;
-                // const hiddenText = `"start_time" => "${formattedStartHidden}", "end_time" => "${formattedEndHidden}"`;
+                // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
                 
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(customText);
@@ -802,11 +820,11 @@ $(document).on('change', '.checkbox', function () {
         var activeIndexes = [];
         indexChecked=0;
 
-        $('input[name*="[work_time]"][name*="end_time"]').remove();
-        $('input[name*="[work_time]"][name*="start_time"]').remove();
+        $('input[name*="[work_time]"][name*="time_end"]').remove();
+        $('input[name*="[work_time]"][name*="time_start"]').remove();
     
         // Проходим по всем инпутам с нужным name
-        $(`input[type="checkbox"][name$="][day]"]`).each(function(index, element) {
+        $(`input[type="checkbox"][name$="][week_day]"]`).each(function(index, element) {
 
             // console.log("Проходим по всем инпутам снова0");
 
@@ -820,7 +838,7 @@ $(document).on('change', '.checkbox', function () {
         });
     
         // Проходим по всем инпутам снова и присваиваем новые имена с индексами
-        $(`input[type="checkbox"][name$="][day]"]`).each(function(i, element) {
+        $(`input[type="checkbox"][name$="][week_day]"]`).each(function(i, element) {
 
             // console.log("Проходим по всем инпутам снова");
 
@@ -828,7 +846,7 @@ $(document).on('change', '.checkbox', function () {
 
                 var activeIndex = activeIndexes.shift(); // Получаем следующий индекс для time инпутов
                 // Обновляем атрибут name, ставя индекс
-                var newName = `${schedule}[work_time][${activeIndex}][day]`;
+                var newName = `${schedule}[work_time][${activeIndex}][week_day]`;
                 $(element).attr('name', newName);
                 
                 // Находим ближайший родительский элемент .days-wrapper
@@ -840,8 +858,8 @@ $(document).on('change', '.checkbox', function () {
     
                 // Добавляем инпуты time в блок time-selection
                 if ($(element).is(':checked')) {
-                    // Проверяем, существует ли уже инпут для start_time с данным activeIndex
-                    var existingStartTimeInput = $(`input[name="${schedule}[work_time][${activeIndex}][start_time]"]`);
+                    // Проверяем, существует ли уже инпут для st art_time с данным activeIndex
+                    var existingStartTimeInput = $(`input[name="${schedule}[work_time][${activeIndex}][time_start]"]`);
                     if (existingStartTimeInput.length > 0) {
                         // Если существует, заменяем значение
                         existingStartTimeInput.val(startTime);
@@ -849,7 +867,7 @@ $(document).on('change', '.checkbox', function () {
                         // Если не существует, создаем новый инпут
                         var startTimeInput = $('<input>', {
                             type: 'time',
-                            name: `${schedule}[work_time][${activeIndex}][start_time]`,
+                            name: `${schedule}[work_time][${activeIndex}][time_start]`,
                             value: startTime,
                             disabled: true,
                             class:"hidden-checkbox"
@@ -859,8 +877,8 @@ $(document).on('change', '.checkbox', function () {
                         $('.time-selection').append(startTimeInput);
                     }
 
-                    // Аналогично для end_time
-                    var existingEndTimeInput = $(`input[name="${schedule}work_time][${activeIndex}][end_time]"]`);
+                    // Аналогично для end_ time
+                    var existingEndTimeInput = $(`input[name="${schedule}work_time][${activeIndex}][time_end]"]`);
                     if (existingEndTimeInput.length > 0) {
                         // Если существует, заменяем значение
                         existingEndTimeInput.val(endTime);
@@ -868,7 +886,7 @@ $(document).on('change', '.checkbox', function () {
                         // Если не существует, создаем новый инпут
                         var endTimeInput = $('<input>', {
                             type: 'time',
-                            name: `${schedule}[work_time][${activeIndex}][end_time]`,
+                            name: `${schedule}[work_time][${activeIndex}][time_end]`,
                             value: endTime,
                             disabled: true,
                             class:"hidden-checkbox"

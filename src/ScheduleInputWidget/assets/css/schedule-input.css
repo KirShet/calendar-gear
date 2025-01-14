@@ -526,7 +526,7 @@ input[type="time"] {
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    color: #9E9E9E;
+    color: #BABABA;
     display: flex;
     align-items: center;
 }
@@ -807,6 +807,7 @@ button:hover {
 }
 .day input[type="checkbox"]:not(:disabled) ~ .day-circle {
     transition: filter 0.3s ease;
+    cursor: pointer;
 }
 
 .day input[type="checkbox"]:not(:disabled) ~ .day-circle:hover {

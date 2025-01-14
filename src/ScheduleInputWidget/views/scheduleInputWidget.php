@@ -20,7 +20,7 @@ use yii\helpers\Html;
         <div class="action-row">
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" id="enable_time_zone" name="<?= $name ?>[enable_time_zone]" value="1"
+                    <input type="checkbox" id="enable_time_zone" name="<?= $name ?>[enable_time_zone]" value="true"
                     <?= isset($model->schedule['enable_time_zone']) && $model->schedule['enable_time_zone'] ? 'checked' : '' ?> class="hidden-checkbox">
                     Учитывать часовой пояс
                 </label>
@@ -36,7 +36,7 @@ use yii\helpers\Html;
         <div class="action-row">
             <div class="schedule-label-with-icon">
                 <label class="schedule-label">
-                    <input type="checkbox" id="enable_production_calendar" name="<?= $name ?>[enable_production_calendar]" value="1"
+                    <input type="checkbox" id="enable_production_calendar" name="<?= $name ?>[enable_production_calendar]" value="true"
                     <?= isset($model->schedule['enable_production_calendar']) && $model->schedule['enable_production_calendar'] ? 'checked' : '' ?> class="hidden-checkbox">
                     Использовать производственный календарь
                 </label>
@@ -55,19 +55,19 @@ use yii\helpers\Html;
             <?php
 
             $grouped_work_time = [];
-            if (isset($model->schedule['work_time']) && is_array($model->schedule['work_time'])) {
+            if (isset($model->schedule['time_start']) && is_array($model->schedule['work_time'])) {
 
-                foreach ($model->schedule['work_time'] as $item) {
-                    $key = $item['start_time'] . '|' . $item['end_time'];
+                foreach ($model->schedule['time_start'] as $item) {
+                    $key = $item['time_start'] . '|' . $item['time_end'];
                     if (!isset($grouped_work_time[$key])) {
                         $grouped_work_time[$key] = [
-                            'start_time' => $item['start_time'],
-                            'end_time' => $item['end_time'],
-                            'days' => []
+                            'time_start' => $item['time_start'],
+                            'time_end' => $item['time_end'],
+                            'week_day' => []
                         ];
                     }
 
-                    $grouped_work_time[$key]['days'][] = $item['days'];
+                    $grouped_work_time[$key]['week_day'][] = $item['week_day'];
                 }
 
 
@@ -76,12 +76,12 @@ use yii\helpers\Html;
                     <div class="days-wrapper">
                         <?php
 
-                        if (substr($group['start_time'], -3) === ':00') {
-                            $startTime = substr($group['start_time'], 0, -3); 
+                        if (substr($group['time_start'], -3) === ':00') {
+                            $startTime = substr($group['time_start'], 0, -3); 
                         }
 
-                        if (substr($group['end_time'], -3) === ':59') {
-                            $endTime = substr($group['end_time'], 0, -3); 
+                        if (substr($group['time_end'], -3) === ':59') {
+                            $endTime = substr($group['time_end'], 0, -3); 
                         }
                         ?>
                         <div class="weekday-group">
@@ -91,10 +91,10 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day" >
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][week_day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
-               <?php echo in_array($index + 1, $group['days']) ? 'checked' : ''; ?> disabled>
+               <?php echo in_array($index + 1, $group['week_day']) ? 'checked' : ''; ?> disabled>
         <div class="day-circle">
             <span class="day-name text-white"><?php echo $day; ?></span>
         </div>
@@ -137,7 +137,7 @@ $daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 foreach ($daysOfWeek as $index => $day) {
     ?>
     <label class="day">
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][day]" 
+        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][week_day]" 
                value="<?php echo $index + 1; ?>" 
                id="day-<?php echo $index + 1; ?>" 
                 disabled>
@@ -178,12 +178,13 @@ foreach ($daysOfWeek as $index => $day) {
                 <?php
                 if (isset($model->schedule['special_time']) && is_array($model->schedule['special_time'])) {
                     foreach ($model->schedule['special_time'] as $key => $timeSlot) {
-                        $startDate = new DateTime($timeSlot['start_time']);
-                        $endDate = new DateTime($timeSlot['end_time']);
-
+                        $startDate = new DateTime($timeSlot['date_start'] . ' ' . $timeSlot['time_start']);
+                        $endDate = new DateTime($timeSlot['date_end'] . ' ' . $timeSlot['time_end']);
 
                         $startFormatted = $startDate->format('j F Y');
                         $endFormatted = $endDate->format('j F Y');
+                        // list($date_start, $time_start) = explode(' ', $timeSlot['time_start']);
+                        // list($date_end, $time_end) = explode(' ', $timeSlot['time_end']);
 
 
                         $dateRange = ($startFormatted === $endFormatted) ? $startFormatted : $startFormatted . ' - ' . $endFormatted;
@@ -195,10 +196,15 @@ foreach ($daysOfWeek as $index => $day) {
                         ?>
                         <div class="days-wrapper">
                             <div class="work-time-info" style="pointer-events: none;">
-                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][start_time]"
-                                    value="<?php echo $timeSlot['start_time']; ?>">
-                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][end_time]"
-                                    value="<?php echo $timeSlot['end_time']; ?>">
+                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_start]"
+                                    value="<?php echo $timeSlot['date_start'] ?>">
+                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_end]"
+                                    value="<?php echo  $timeSlot['date_end']; ?>">
+
+                                    <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_start]"
+                                    value="<?php echo $timeSlot['time_start']; ?>">
+                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_end]"
+                                    value="<?php echo $timeSlot['time_end']; ?>">
                                 <span class="work-date"><?php echo $dateRange; ?></span>
                             </div>
                             <div class="time-selection">
