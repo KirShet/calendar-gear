@@ -55,9 +55,9 @@ use yii\helpers\Html;
             <?php
 
             $grouped_work_time = [];
-            if (isset($model->schedule['time_start']) && is_array($model->schedule['work_time'])) {
+            if (isset($model->schedule['work_time']) && is_array($model->schedule['work_time'])) {
 
-                foreach ($model->schedule['time_start'] as $item) {
+                foreach ($model->schedule['work_time'] as $item) {
                     $key = $item['time_start'] . '|' . $item['time_end'];
                     if (!isset($grouped_work_time[$key])) {
                         $grouped_work_time[$key] = [
