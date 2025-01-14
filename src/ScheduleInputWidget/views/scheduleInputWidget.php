@@ -80,7 +80,7 @@ use yii\helpers\Html;
                             $startTime = substr($group['start_time'], 0, -3); 
                         }
 
-                        if (substr($group['end_time'], -3) === ':00') {
+                        if (substr($group['end_time'], -3) === ':59') {
                             $endTime = substr($group['end_time'], 0, -3); 
                         }
                         ?>
@@ -194,7 +194,7 @@ foreach ($daysOfWeek as $index => $day) {
 
                         ?>
                         <div class="days-wrapper">
-                            <div class="work-time-info">
+                            <div class="work-time-info" style="pointer-events: none;">
                                 <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][start_time]"
                                     value="<?php echo $timeSlot['start_time']; ?>">
                                 <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][end_time]"
@@ -255,9 +255,9 @@ foreach ($daysOfWeek as $index => $day) {
                     <span id="selected-date">10 декабря</span> с
                     <span id="start-time-hidden"></span>
                     <span id="end-time-hidden"></span>
-                    <input type="time" value="00:00">
+                    <input type="time" value="00:00" id="startTime">
                     <span>до</span>
-                    <input type="time" value="00:00">
+                    <input type="time" value="00:00" id="endTime">
                 </section>
                 <div class="divider"></div>
                 <div class="buttons">
@@ -277,3 +277,4 @@ foreach ($daysOfWeek as $index => $day) {
             </div>
         </div>
     </div>
+    

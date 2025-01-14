@@ -527,8 +527,13 @@ input[type="time"] {
     font-size: 14px;
     line-height: 16px;
     color: #9E9E9E;
+    display: flex;
+    align-items: center;
 }
-
+.work-date:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
 .action-buttons {
     display: flex;
     gap: 8px;

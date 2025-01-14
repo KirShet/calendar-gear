@@ -6,6 +6,7 @@ $(document).ready(function () {
     const schedule = $('#schedule').text();
     let firstDate = null; // Переменная для хранения первой выбранной даты
     let secondDate = null; // Переменная для второй даты
+    let $daysWrapper;
 
     let workItemToDelete = null;
 
@@ -35,9 +36,12 @@ observer.observe(document.body, { childList: true, subtree: true });
 // Вызовем сразу на случае, если элемент уже существует на момент инициализации
 removeInlineClass();
     // Открытие модального окна
-    $('.add-special-day-button, .work-date').on('click', function () { 
+    $(document).on('click', '.add-special-day-button, .work-date', function () {
+        $('.time-selection-wrapper input[type="time"]').val('00:00'); 
         modalOverlay.addClass('show');
-    
+
+        // console.log($(this).closest('div.days-wrapper'));
+        $daysWrapper = $(this).closest('div.days-wrapper')
         $('.flatpickr-calendar').addClass('inline');
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date(); // Получаем текущую дату
@@ -46,20 +50,38 @@ removeInlineClass();
         // Ищем скрытые input-поля внутри родительского элемента
         const parent = $(this).closest('div'); // Определяем родительский элемент
         if (parent.length > 0) { // Проверяем, что родительский элемент найден
-            const startTime = parent.find('input[name="schedule[special_time][0][start_time]"]').val();
-            const endTime = parent.find('input[name="schedule[special_time][0][end_time]"]').val();
+            // const startTime = parent.find('input[name="schedule[special_time][0][start_time]"]').val();
+            // const endTime = parent.find('input[name="schedule[special_time][0][end_time]"]').val();
+            const startTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[start_time]"]`);
+            // console.log(startTimeInput.length); // Проверка, существует ли элемент
+            
+            const endTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[end_time]"]`);
+            // console.log(endTimeInput.length); // Проверка, существует ли элемент
+            
+            const startTime = startTimeInput.val();
+            // console.log(startTime);  // Печать значения
+            
+            const endTime = endTimeInput.val();
+            // console.log(endTime);  // Печать значения
             
             // Если оба input поля найдены
             if (startTime && endTime) {
                 const startDateTime = new Date(startTime);
                 const endDateTime = new Date(endTime);
     
-                // Форматируем дату и время для вывода
-                const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '') + ' ' + 
-                                       startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '') + ' ' + 
-                                     endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-    
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+
+                // Форматирование начала (только дата)
+                const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                // console.log(startFormatted);
+                // Форматирование конца (только дата)
+                const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                // console.log(endFormatted);
+
+                const startDate = startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const endDate = endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                $('.time-selection-wrapper input#startTime').val(startDate);
+                $('.time-selection-wrapper input#endTime').val(endDate);
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
                 if (startFormatted === endFormatted) {
                     $("#selected-date").text(startFormatted);
@@ -75,6 +97,7 @@ removeInlineClass();
                 //     }
                 // });
 
+                // console.log([new Date().toISOString().split('T')[0]    ]);
                 $(".calendar-input").flatpickr({
                     inline: true, // Режим отображения календаря
                     locale: {
@@ -148,7 +171,7 @@ removeInlineClass();
 
                     // Инициализация календаря для модального окна
 
-                // $(".calendar").flatpickr({
+                // $(".calendar") .flatpickr({
                 //     inline: true, // Режим отображения календаря
                 //     locale: {
                 //         firstDayOfWeek: 1, // Неделя начинается с понедельника
@@ -225,7 +248,7 @@ removeInlineClass();
         } else {
             // Если родительский элемент не найден, выводим текущую дату
             // $("#selected-date").text(formattedDate);
-            // $(".calendar").flatpickr({
+            // $(".calendar") .flatpickr({
             //     inline: true, // Режим отображения календаря
             //     locale: {
             //         firstDayOfWeek: 1, // Неделя начинается с понедельника
@@ -338,10 +361,13 @@ removeInlineClass();
                 // Функция для поиска максимального индекса
         function getMaxIndex() {
             let maxIndex = 0;
-            $('input[name^="[special_time]"][name$="[start_time]"]').each(function() {
+            $(`input[name^="${schedule}[special_time]"][name$="[start_time]"]`).each(function() {
+                console.log($('input[name^="[special_time]"][name$="[start_time]"]'));
                 const match = $(this).attr('name').match(/\[special_time\]\[(\d+)\]\[start_time\]/);
+                console.log(match);
                 if (match) {
                     const index = parseInt(match[1], 10);
+                    console.log(index);
                     if (index > maxIndex) {
                         maxIndex = index;
                     }
@@ -351,14 +377,17 @@ removeInlineClass();
         }
 
         // Получаем максимальный индекс или начинаем с нуля
-        const maxIndex = getMaxIndex();
+        console.log(getMaxIndex());
+        let maxIndex = getMaxIndex();
         const newIndex = maxIndex + 1;
 
         const selectedDate = selectedDateSpan.text();
 
         const startTime = modalOverlay.find('input[type="time"]').eq(0).val();
+        // console.log(startTime);
         const endTime = modalOverlay.find('input[type="time"]').eq(1).val();
-        
+        // console.log(endTime);
+
         if (!startTime || !endTime) {
             alert('Пожалуйста, заполните все временные поля.');
             return;
@@ -377,9 +406,9 @@ removeInlineClass();
         var endDate = $('#end-time-hidden').text();
         const newEntry = `
             <div class="days-wrapper">
-                <div class="work-time-info">
+                <div class="work-time-info" style="pointer-events: none;">
                     <input type="hidden" name="${schedule}[special_time][${newIndex}][start_time]" value="${startDate} ${startTime}:00">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][end_time]" value="${endDate} ${endTime}:00">
+                    <input type="hidden" name="${schedule}[special_time][${newIndex}][end_time]" value="${endDate} ${endTime}:59">
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
@@ -402,7 +431,15 @@ removeInlineClass();
                 </div>
             </div>
                 `;
-        workTimeContainer.append(newEntry);
+    // console.log($daysWrapper);
+    // Предполагается, что $daysWrapper и newEntry уже определены
+    if ($daysWrapper.length) { 
+        // Удаляем существующий $daysWrapper
+        $daysWrapper.remove();
+    }
+
+// Добавляем новый элемент newEntry
+workTimeContainer.append(newEntry);
         
         modalOverlay.removeClass('show');
         resetDates();
@@ -479,6 +516,7 @@ removeInlineClass();
             parentWrapper.find('.edit-work-time').addClass('check-work-time');
             parentWrapper.find('.check-work-time').removeClass('edit-work-time');
             parentWrapper.find('.day').removeClass('disabled');
+            parentWrapper.find('.work-time-info').css('pointer-events', 'all');
             updateStyles();
 
         });
@@ -550,19 +588,24 @@ $(document).on('change', '.checkbox', function () {
 
         parentWrapper.find('.time-selection input[type="time"]').each(function() {
             let value = $(this).val();
-
+        
+            // Убираем класс 'border-thick-slow'
             $(this).removeClass('border-thick-slow');
-            
-                if (value == '00:00' || value === '') {
+        
+            // Проверяем, если текущее значение равно '00:00' или пустое
+            if (value === '00:00' || value === '') {
+                // Проверяем наличие других input с value='00:00' среди соседей
+                let otherInputs = $(this).siblings('input[type="time"]').filter(function() {
+                    return $(this).val() === '00:00';
+                });
+        
+                if (otherInputs.length > 0) {
                     setTimeout(() => {
                         $(this).addClass('border-thick-slow');
                     }, 100);
                     isAnyMatching = true;
-                    // console.log("11"+isAnyMatching);
                 }
-
-            // console.log("22"+isAnyMatching);
-
+            }
         });
         var startTime = parentWrapper.find('.start-time').val();
         var endTime = parentWrapper.find('.end-time').val();
@@ -593,6 +636,7 @@ $(document).on('change', '.checkbox', function () {
             parentWrapper.find('.check-work-time').addClass('edit-work-time');
             parentWrapper.find('.edit-work-time').removeClass('check-work-time');
             parentWrapper.find('.disabled').removeClass('day');
+            parentWrapper.find('.work-time-info').css('pointer-events', 'none');
             disabled();
         }
 
@@ -666,7 +710,7 @@ $(document).on('change', '.checkbox', function () {
         });
 
     // // Инициализация Flatpickr для полей времени
-    // $("input[type='time']").flatpickr({
+    // $("input[type='time']") .flatpickr({
     //     // // enableTime: true,
     //     // // // mode: "range",  // Диапазон выбора дат
     //     // // dateFormat: "H:i",  // Формат даты и времени
@@ -720,6 +764,7 @@ $(document).on('change', '.checkbox', function () {
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const [startDate, endDate] = selectedDates;
+                // console.log(selectedDates);
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
                 const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
                 const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
@@ -791,7 +836,7 @@ $(document).on('change', '.checkbox', function () {
                 
                 // Извлекаем значения времени из инпутов с классами .schedule-time.start-time и .schedule-time.end-time
                 var startTime = $daysWrapper.find('.schedule-time.start-time').val() + ":00" || '00:00' + ":00"; // Если значение не указано, берем дефолтное
-                var endTime = $daysWrapper.find('.schedule-time.end-time').val() + ":00" || '00:00' + ":00"; // То же для end-time
+                var endTime = $daysWrapper.find('.schedule-time.end-time').val() + ":59" || '00:00' + ":59"; // То же для end-time
     
                 // Добавляем инпуты time в блок time-selection
                 if ($(element).is(':checked')) {
