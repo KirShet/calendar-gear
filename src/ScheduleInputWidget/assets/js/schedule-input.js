@@ -20,7 +20,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
     // Проверяем все изменения DOM
     mutationsList.forEach(mutation => {
         if (mutation.type === 'childList') {
-            // Если новый элемент с классом 'flatpickr-calendar' добавлен в DOM
+            // Если новый элемент с классом 'flatp ickr-calendar' добавлен в DOM
             mutation.addedNodes.forEach(node => {
                 if (node.nodeType === 1 && node.matches('.flatpickr-calendar')) {
                     removeInlineClass();
@@ -65,10 +65,10 @@ removeInlineClass();
             // console.log(endTimeInput.length); // Проверка, существует ли элемент
             
             const startTime = startTimeInput.val();
-            console.log(startTime);  // Печать значения
+            // console.log(startTime);  // Печать значения
             
             const endTime = endTimeInput.val();
-            console.log(endTime);  // Печать значения
+            // console.log(endTime);  // Печать значения
 
             const startDateValue = startDateInput.val();
             // console.log(startDate);  // Печать значения
@@ -87,16 +87,21 @@ removeInlineClass();
 
                 // Форматирование начала (только дата)
                 const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                console.log(startFormatted);
+                // console.log(startFormatted);
                 // Форматирование конца (только дата)
                 const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                console.log(endFormatted);
+                // console.log(endFormatted);
 
                 const startDate = startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                 const endDate = endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
                 $('.time-selection-wrapper input#startTime').val(startDate);
                 $('.time-selection-wrapper input#endTime').val(endDate);
+
+                var defaultStartDate = startDateValue.length > 0 ? startDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
+                var defaultEndDate = endDateValue.length > 0 ? endDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
+                var defaultDate = [defaultStartDate, defaultEndDate];
+                console.log(defaultDate); // Для проверки в консоли
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
                 if (startFormatted === endFormatted) {
                     $("#selected-date").text(startFormatted);
@@ -107,8 +112,96 @@ removeInlineClass();
                     $("#start-time-hidden").text(startDateValue);
                     $("#end-time-hidden").text(endDateValue);
                 }
-                // Передаем в flatpickr период
-                // flatpickr({
+                if (Array.isArray(calendars)) {
+                    calendars.forEach(function(calendar) {
+                        calendar.setDate(defaultDate, true); // Устанавливаем новую дефолтную дату
+                    });
+                } else {
+                    // Если это одиночный объект, применяем метод напрямую
+                    calendars.setDate(defaultDate, true);
+                }
+            
+                // Открываем календарь после изменения дефолтной даты
+                if (Array.isArray(calendars)) {
+                    calendars.forEach(function(calendar) {
+                        calendar.open();
+                    });
+                } else {
+                    calendars.open();
+                }
+                console.log(calendars);
+                // $(".calendar")[1].flatpi ckr({
+                //     defaultDate: defaultDate1 // Устанавливаем defaultDate
+                // }).open();
+                // $(".calendar").flatp ickr({
+                //     inline: true, // Режим отображения календаря
+                //     locale: {
+                //         firstDayOfWeek: 1, // Неделя начинается с понедельника
+                //         weekdays: {
+                //             shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                //             longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                //         },
+                //         months: {
+                //             shorthand: [
+                //                 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                //                 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                //             ],
+                //             longhand: [
+                //                 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                //                 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                //             ]
+                //         }
+                //     },
+                //     // "disable": [
+                //     //     function(date, selectedDates, mode) {
+                //     //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+                //     //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+                //     //     }        
+                //     // ],
+                //     mode: "range", // Выбор диапазона
+                //     dateFormat: "Y-m-d", // Внутренний формат данных
+                //     altInput: true, // Показывать отформатированную строку
+                //     altFormat: "d MMMM Y", // Формат отображаемой строки
+                //     // defaultDate: [new Date().toISOString().split('T')[0]    ],
+                //     defaultDate: defaultDate1,
+                //     onChange: function(selectedDates, dateStr, instance) {
+                //         if (selectedDates.length === 2) {
+                //             const [startDate, endDate] = selectedDates;
+                //             // console.log(selectedDates);
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                //             const formattedStartHidden = startDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = endDate.toISOString().split('T')[0];
+            
+                //             const customText = `${formattedStart} - ${formattedEnd}`;
+                //             // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
+                            
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(customText);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
+            
+            
+                //         } else if (selectedDates.length > 0) {
+                //             const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                //             const formattedStartHidden = selectedDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+            
+                
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(formattedDate);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
+                //         }
+                //     }
+                // });
+
+                // Передаем в flatpi ckr период
+                // flatp ickr({
                 //     defaultDate: [startDateTime.toISOString().split('T')[0]], // Устанавливаем период (начало и конец)
                 //     mode: "range", // Включаем выбор диапазона
                 //     onReady: function () {
@@ -117,81 +210,81 @@ removeInlineClass();
                 // });
 
                 // console.log([new Date().toISOString().split('T')[0]    ]);
-                $(".calendar-input").flatpickr({
-                    inline: true, // Режим отображения календаря
-                    locale: {
-                        firstDayOfWeek: 1, // Неделя начинается с понедельника
-                        weekdays: {
-                            shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                            longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
-                        },
-                        months: {
-                            shorthand: [
-                                'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
-                                'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
-                            ],
-                            longhand: [
-                                'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-                            ]
-                        }
-                    },
-                    // "disable": [
-                    //     function(date, selectedDates, mode) {
-                    //         // Если режим "range", отключаем выходные (суббота и воскресенье)
-                    //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
-                    //     }        
-                    // ],
-                    mode: "range", // Выбор диапазона
-                    dateFormat: "Y-m-d", // Внутренний формат данных
-                    altInput: true, // Показывать отформатированную строку
-                    altFormat: "d MMMM Y", // Формат отображаемой строки
-                    defaultDate: [new Date().toISOString().split('T')[0]    ],
-                    onChange: function(selectedDates, dateStr, instance) {
-                        if (selectedDates.length === 2) {
-                            const [startDate, endDate] = selectedDates;
-                            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                            const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                            const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                            // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
-                            const formattedStartHidden = startDate.toISOString().split('T')[0];
-                            const formattedEndHidden = endDate.toISOString().split('T')[0];
+                // $(". calendar-input").flatpic kr({
+                //     inline: true, // Режим отображения календаря
+                //     locale: {
+                //         firstDayOfWeek: 1, // Неделя начинается с понедельника
+                //         weekdays: {
+                //             shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                //             longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                //         },
+                //         months: {
+                //             shorthand: [
+                //                 'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                //                 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                //             ],
+                //             longhand: [
+                //                 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                //                 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                //             ]
+                //         }
+                //     },
+                //     // "disable": [
+                //     //     function(date, selectedDates, mode) {
+                //     //         // Если режим "range", отключаем выходные (суббота и воскресенье)
+                //     //             return (date.getDay() === 0 || date.getDay() === 6); // Отключаем воскресенье (0) и субботу (6)
+                //     //     }        
+                //     // ],
+                //     mode: "range", // Выбор диапазона
+                //     dateFormat: "Y-m-d", // Внутренний формат данных
+                //     altInput: true, // Показывать отформатированную строку
+                //     altFormat: "d MMMM Y", // Формат отображаемой строки
+                //     defaultDate: ["2025-01-20"],
+                //     onChange: function(selectedDates, dateStr, instance) {
+                //         if (selectedDates.length === 2) {
+                //             const [startDate, endDate] = selectedDates;
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                //             // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                //             const formattedStartHidden = startDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = endDate.toISOString().split('T')[0];
 
-                            const customText = `${formattedStart} - ${formattedEnd}`;
-                            // const hiddenText = `"star t_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
+                //             const customText = `${formattedStart} - ${formattedEnd}`;
+                //             // const hiddenText = `"star t_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
                             
-                            // Обновление текста в нужном элементе
-                            $("#selected-date").text(customText);
-                            $("#start-time-hidden").text(formattedStartHidden);
-                            $("#end-time-hidden").text(formattedEndHidden);
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(customText);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
 
 
-                        } else if (selectedDates.length > 0) {
-                            const selectedDate = selectedDates[0]; // Выбираем только первую дату
-                            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                            const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
-                            const formattedStartHidden = selectedDate.toISOString().split('T')[0];
-                            const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+                //         } else if (selectedDates.length > 0) {
+                //             const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                //             const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                //             const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                //             const formattedStartHidden = selectedDate.toISOString().split('T')[0];
+                //             const formattedEndHidden = selectedDate.toISOString().split('T')[0];
 
                 
-                            // Обновление текста в нужном элементе
-                            $("#selected-date").text(formattedDate);
-                            $("#start-time-hidden").text(formattedStartHidden);
-                            $("#end-time-hidden").text(formattedEndHidden);
-                        }
-                    }
-                });
+                //             // Обновление текста в нужном элементе
+                //             $("#selected-date").text(formattedDate);
+                //             $("#start-time-hidden").text(formattedStartHidden);
+                //             $("#end-time-hidden").text(formattedEndHidden);
+                //         }
+                //     }
+                // });
 
                 //     // Инициализация календаря для модального окна
-                // $('.flatpickr-calendar').addClass('inline rangeMode animate');
+                // $('.flatpic kr-calendar').addClass('inline rangeMode animate');
             } else {
                 // Если input-поля не найдены, показываем текущую дату
                 $("#selected-date").text(formattedDate);
 
-                console.log(startDateValue);
+                // console.log(startDateValue);
                     // Инициализация календаря для модального окна
 
-                // $(".calendar") .flatpickr({
+                // $(" .calendar") .flat pickr({
                 //     inline: true, // Режим отображения календаря
                 //     locale: {
                 //         firstDayOfWeek: 1, // Неделя начинается с понедельника
@@ -256,8 +349,8 @@ removeInlineClass();
                 //     }
                 // });
 
-                // Инициализируем Flatpickr с текущей датой по умолчанию (без периода)
-                // flatpickr({
+                // Инициализируем Flatpi ckr с текущей датой по умолчанию (без периода)
+                // flat pickr({
                 //     defaultDate: currentDate, // Устанавливаем текущую дату по умолчанию
                 //     onReady: function () {
                 //         $("#selected-date").text(formattedDate); // Обновляем текст при инициализации
@@ -268,7 +361,7 @@ removeInlineClass();
         } else {
             // Если родительский элемент не найден, выводим текущую дату
             // $("#selected-date").text(formattedDate);
-            // $(".calendar") .flatpickr({
+            // $(" .calendar") .flatp ickr({
             //     inline: true, // Режим отображения календаря
             //     locale: {
             //         firstDayOfWeek: 1, // Неделя начинается с понедельника
@@ -332,8 +425,8 @@ removeInlineClass();
             //         }
             //     }
             // });
-            // Инициализируем Flatpickr с текущей датой по умолчанию
-            // flatpickr({
+            // Инициализируем Flatpi ckr с текущей датой по умолчанию
+            // flat pickr({
             //     defaultDate: currentDate, // Устанавливаем текущую дату по умолчанию
             //     onReady: function () {
             //         $("#selected-date").text(formattedDate); // Обновляем текст при инициализации
@@ -373,7 +466,7 @@ removeInlineClass();
         }
     });
     function removeFlatpickrClasses() {
-        $('.flatpickr-day').removeClass('selected startRange inRange endRange');
+        // $('.flatpi ckr-day').removeClass('selected startRange inRange endRange');
     }
     var randomValue = 0; 
     // Добавление рабочей записи по нажатию на "Добавить"
@@ -382,12 +475,12 @@ removeInlineClass();
         function getMaxIndex() {
             let maxIndex = 0;
             $(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`).each(function() {
-                console.log($('input[name^="[special_time]"][name$="[time_start]"]'));
+                // console.log($('input[name^="[special_time]"][name$="[time_start]"]'));
                 const match = $(this).attr('name').match(/\[special_time\]\[(\d+)\]\[time_start\]/);
-                console.log(match);
+                // console.log(match);
                 if (match) {
                     const index = parseInt(match[1], 10);
-                    console.log(index);
+                    // console.log(index);
                     if (index > maxIndex) {
                         maxIndex = index;
                     }
@@ -397,7 +490,7 @@ removeInlineClass();
         }
 
         // Получаем максимальный индекс или начинаем с нуля
-        console.log(getMaxIndex());
+        // console.log(getMaxIndex());
         let maxIndex = getMaxIndex();
         const newIndex = maxIndex + 1;
 
@@ -456,12 +549,12 @@ removeInlineClass();
     // console.log($daysWrapper);
     // Предполагается, что $daysWrapper и newEntry уже определены
     if ($daysWrapper.length) { 
-        // Удаляем существующий $daysWrapper
-        $daysWrapper.remove();
+        // Заменяем содержимое $daysWrapper на содержимое newEntry
+        $daysWrapper.replaceWith(newEntry);
+    } else {
+        // Если $daysWrapper не существует, добавляем новый элемент
+        workTimeContainer.append(newEntry);
     }
-
-// Добавляем новый элемент newEntry
-workTimeContainer.append(newEntry);
         
         modalOverlay.removeClass('show');
         resetDates();
@@ -732,8 +825,8 @@ $(document).on('change', '.checkbox', function () {
             resetDates();
         });
 
-    // // Инициализация Flatpickr для полей времени
-    // $("input[type='time']") .flatpickr({
+    // // Инициализация Flatp ickr для полей времени
+    // $("input[type='time']") .flatpi ckr({
     //     // // enableTime: true,
     //     // // // mode: "range",  // Диапазон выбора дат
     //     // // dateFormat: "H:i",  // Формат даты и времени
@@ -752,9 +845,54 @@ $(document).on('change', '.checkbox', function () {
     //     // dateFormat: "H:i",
     //     // time_24hr: true
     // });
+    // Получаем значения из span и проверяем их наличие
+    var startDate = $('#start-time-hidden').text().trim();
+    var endDate = $('#end-time-hidden').text().trim();
 
+    // Устанавливаем текущую дату, если span пуст
+    var defaultStartDate = startDate.length > 0 ? startDate : new Date().toISOString().split('T')[0];
+    var defaultEndDate = endDate.length > 0 ? endDate : new Date().toISOString().split('T')[0];
+
+    // Формируем массив с датами
+    var defaultDate = [defaultStartDate, defaultEndDate];
+    console.log(defaultDate);
+    $('.work-date').on('click', function() {
+        var startDate = $('#start-time-hidden').text().trim();
+        var endDate = $('#end-time-hidden').text().trim();
+
+        // Устанавливаем текущую дату, если span пуст
+        var defaultStartDate = startDate.length > 0 ? startDate : new Date().toISOString().split('T')[0];
+        var defaultEndDate = endDate.length > 0 ? endDate : new Date().toISOString().split('T')[0];
+
+        // Формируем массив с датами
+        defaultDate = [defaultStartDate, defaultEndDate];
+        console.log(defaultDate);
+    });
+    // $('.work-date').on('click', function() {
+    //             // При клике на .work-date обновляем defaultDate
+    // // Проверяем, является ли calendars массивом или одиночным объектом
+    // if (Array.isArray(calendars)) {
+    //     calendars.forEach(function(calendar) {
+    //         calendar.setDate(defaultDate, true); // Устанавливаем новую дефолтную дату
+    //     });
+    // } else {
+    //     // Если это одиночный объект, применяем метод напрямую
+    //     calendars.setDate(defaultDate, true);
+    // }
+
+    // // Открываем календарь после изменения дефолтной даты
+    // if (Array.isArray(calendars)) {
+    //     calendars.forEach(function(calendar) {
+    //         calendar.open();
+    //     });
+    // } else {
+    //     calendars.open();
+    // }
+
+    // console.log(calendars); // Для отладки
+    // });
     // Инициализация календаря для модального окна
-    $(".calendar").flatpickr({
+    const calendars = $(".calendar").flatpickr({
         inline: true, // Режим отображения календаря
         locale: {
             firstDayOfWeek: 1, // Неделя начинается с понедельника
@@ -782,8 +920,8 @@ $(document).on('change', '.checkbox', function () {
         mode: "range", // Выбор диапазона
         dateFormat: "Y-m-d", // Внутренний формат данных
         altInput: true, // Показывать отформатированную строку
-        altFormat: "d MMMM Y", // Формат отображаемой строки
-        // defaultDate: [new Date().toISOString().split('T')[0]    ],
+        altFormat: "d MMMM Y",
+        defaultDate: defaultDate,
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 const [startDate, endDate] = selectedDates;

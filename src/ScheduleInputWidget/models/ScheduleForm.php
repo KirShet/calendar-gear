@@ -19,7 +19,6 @@ class ScheduleForm extends Model
     {
         $schedule = $this->$attribute;
 
-        
         if (isset($schedule['work_time']) && is_array($schedule['work_time'])) {
             foreach ($schedule['work_time'] as $workTime) {
                 
@@ -29,12 +28,10 @@ class ScheduleForm extends Model
                         $this->addError($attribute, 'Start time and end time cannot both be 00:00:00.');
                     }
                 } else {
-                    
                     $this->addError($attribute, 'Each work_time must contain start_time and end_time.');
                 }
             }
         } else {
-            
             $this->addError($attribute, 'Work time is missing or malformed.');
         }
     }

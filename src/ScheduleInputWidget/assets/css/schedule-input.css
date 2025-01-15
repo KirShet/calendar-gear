@@ -379,9 +379,9 @@ body {
     top: 25px;
     font-weight: 600;
     color: #424242;
-    /* margin-top: 0px; */
+    margin-top: 0px;
     align-self: center;
-    margin-bottom: 0rem;
+    margin-bottom: 0px;
 }
 
 .modal-wrapper p {
@@ -759,8 +759,8 @@ button:hover {
     display: flex;
     padding: 0px;
     align-items: center;
-    /* display: table-cell; */
-    /* vertical-align: middle; */
+    border-bottom: none;
+    margin-top: 0px;
     margin-bottom: 10px;
   }
   .calendar-close-btn {
