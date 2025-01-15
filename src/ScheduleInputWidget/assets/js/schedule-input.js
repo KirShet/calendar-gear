@@ -546,10 +546,10 @@ removeInlineClass();
         const newEntry = `
             <div class="days-wrapper">
                 <div class="work-time-info" style="pointer-events: none;">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][date_start]" value="${startDate}">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][date_end]" value="${endDate}">
-                     <input type="hidden" name="${schedule}[special_time][${newIndex}][time_start]" value="${startTime}:00">
-                    <input type="hidden" name="${schedule}[special_time][${newIndex}][time_end]" value="${endTime}:59">
+                    <input type="hidden" class="work-time_date_start" name="${schedule}[special_time][${newIndex}][date_start]" value="${startDate}">
+                    <input type="hidden" class="work-time_date_end" name="${schedule}[special_time][${newIndex}][date_end]" value="${endDate}">
+                     <input type="hidden" class="work-time_time_start" name="${schedule}[special_time][${newIndex}][time_start]" value="${startTime}:00">
+                    <input type="hidden" class="work-time_time_end" name="${schedule}[special_time][${newIndex}][time_end]" value="${endTime}:59">
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
@@ -950,8 +950,10 @@ $(document).on('change', '.checkbox', function () {
         defaultDate: defaultDate,
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
-                const [startDate, endDate] = selectedDates;
+                var [startDate, endDate] = selectedDates;
                 // console.log(selectedDates);
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
                 const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
                 const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
@@ -965,11 +967,13 @@ $(document).on('change', '.checkbox', function () {
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(customText);
                 $("#start-time-hidden").text(formattedStartHidden);
-                console.log(formattedStartHidden);
+                // console.log(formattedStartHidden);
                 $("#end-time-hidden").text(formattedEndHidden);
-                console.log(formattedEndHidden);
+                // console.log(formattedEndHidden);
             } else if (selectedDates.length > 0) {
-                const selectedDate = selectedDates[0]; // Выбираем только первую дату
+                var selectedDate = selectedDates[0]; // Выбираем только первую дату
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
                 const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
                 const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
@@ -979,9 +983,9 @@ $(document).on('change', '.checkbox', function () {
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(formattedDate);
                 $("#start-time-hidden").text(formattedStartHidden);
-                console.log(formattedStartHidden);
+                // console.log(formattedStartHidden);
                 $("#end-time-hidden").text(formattedEndHidden);
-                console.log(formattedEndHidden);
+                // console.log(formattedEndHidden);
             }
         }
     });
@@ -1026,46 +1030,47 @@ $(document).on('change', '.checkbox', function () {
                 // Извлекаем значения времени из инпутов с классами .schedule-time.start-time и .schedule-time.end-time
                 var startTime = $daysWrapper.find('.schedule-time.start-time').val() + ":00" || '00:00' + ":00"; // Если значение не указано, берем дефолтное
                 var endTime = $daysWrapper.find('.schedule-time.end-time').val() + ":59" || '00:00' + ":59"; // То же для end-time
-    
                 // Добавляем инпуты time в блок time-selection
                 if ($(element).is(':checked')) {
-                    // Проверяем, существует ли уже инпут для st art_time с данным activeIndex
-                    var existingStartTimeInput = $(`input[name="${schedule}[work_time][${activeIndex}][time_start]"]`);
-                    if (existingStartTimeInput.length > 0) {
-                        // Если существует, заменяем значение
-                        existingStartTimeInput.val(startTime);
-                    } else {
-                        // Если не существует, создаем новый инпут
-                        var startTimeInput = $('<input>', {
-                            type: 'time',
-                            name: `${schedule}[work_time][${activeIndex}][time_start]`,
-                            value: startTime,
-                            disabled: true,
-                            class:"hidden-checkbox"
-                        });
+                                            // Проверяем, существует ли уже инпут для st art_time с данным activeIndex
+                        var existingStartTimeInput = $(`input[name="${schedule}[work_time][${activeIndex}][time_start]"]`);
+                        if (existingStartTimeInput.length > 0) {
+                            // Если существует, заменяем значение
+                            existingStartTimeInput.val(startTime);
+                        } else {
+                            // Если не существует, создаем новый инпут
+                            var startTimeInput = $('<input>', {
+                                type: 'time',
+                                name: `${schedule}[work_time][${activeIndex}][time_start]`,
+                                value: startTime,
+                                disabled: true,
+                                class:"hidden-checkbox"
+                            });
 
-                        // Добавляем его в блок с классом .time-selection
-                        $('.time-selection').append(startTimeInput);
-                    }
+                            // Добавляем его в блок с классом .time-selection
+                            $('.time-selection').append(startTimeInput);
+                            // console.log(startTimeInput);
+                        }
 
-                    // Аналогично для end_ time
-                    var existingEndTimeInput = $(`input[name="${schedule}work_time][${activeIndex}][time_end]"]`);
-                    if (existingEndTimeInput.length > 0) {
-                        // Если существует, заменяем значение
-                        existingEndTimeInput.val(endTime);
-                    } else {
-                        // Если не существует, создаем новый инпут
-                        var endTimeInput = $('<input>', {
-                            type: 'time',
-                            name: `${schedule}[work_time][${activeIndex}][time_end]`,
-                            value: endTime,
-                            disabled: true,
-                            class:"hidden-checkbox"
-                        });
+                        // Аналогично для end_ time
+                        var existingEndTimeInput = $(`input[name="${schedule}work_time][${activeIndex}][time_end]"]`);
+                        if (existingEndTimeInput.length > 0) {
+                            // Если существует, заменяем значение
+                            existingEndTimeInput.val(endTime);
+                        } else {
+                            // Если не существует, создаем новый инпут
+                            var endTimeInput = $('<input>', {
+                                type: 'time',
+                                name: `${schedule}[work_time][${activeIndex}][time_end]`,
+                                value: endTime,
+                                disabled: true,
+                                class:"hidden-checkbox"
+                            });
 
-                        // Добавляем его в блок с классом .time-selection
-                        $('.time-selection').append(endTimeInput);
-                    }
+                            // Добавляем его в блок с классом .time-selection
+                            $('.time-selection').append(endTimeInput);
+                            // console.log(endTimeInput);
+                        }
                 }
             }
         });
@@ -1073,6 +1078,79 @@ $(document).on('change', '.checkbox', function () {
 
     }
     
+        // Функция для обработки изменения значений
+    function updateWorkTimeInfo(element) {
+        // console.log('1');
+        var $daysWrapper = $(element).closest('.days-wrapper');
+
+        // Извлекаем значения времени из инпутов с классами .schedule-time.start-time и .schedule-time.end-time
+        var startTime = $daysWrapper.find('.schedule-time.start-time').val() + ":00" || '00:00' + ":00"; // Если значение не указано, берем дефолтное
+        var endTime = $daysWrapper.find('.schedule-time.end-time').val() + ":00" || '00:00' + ":00"; // То же для end-time
+
+        // Получаем элемент .work-time-info в $daysWrapper
+        var $workTimeInfo = $daysWrapper.find('.work-time-info');
+            // console.log('2');
+        if ($workTimeInfo.length > 0) {
+
+            // console.log('3');
+            // Добавляем инпуты time в блок time-selection
+            // if ($(element).is(':checked')) {
+                // Проверяем, существует ли уже инпут для start_time с данным activeIndex
+                var existingStartTimeInput = $daysWrapper.find('.work-time_time_start');
+                // console.log(existingStartTimeInput);
+                if (existingStartTimeInput.length > 0) {
+                    // Если существует, заменяем значение
+                    existingStartTimeInput.val(startTime);
+                    // console.log(startTime);
+                                // Проверка, ввелось ли значение
+                    if (existingStartTimeInput.val() === startTime) {
+                        // console.log('start_time успешно обновлено:', startTime);
+                    } else {
+                        // console.log('Не удалось обновить start_time');
+                    }
+                } else {
+                    // Если не существует, создаем новый инпут
+                    var startTimeInput = $('<input>', {
+                        type: 'time',
+                        name: `${schedule}[special_time][][time_start]`,
+                        value: startTime,
+                        disabled: true,
+                        class: "hidden-checkbox"
+                    });
+
+                    // Добавляем его в блок с классом .work-time-info (или .time-selection, если это нужно)
+                    $('.work-time-info').append(startTimeInput); // Или $('.time-selection').append(startTimeInput); если нужен другой контейнер
+                    // console.log(startTimeInput);
+                }
+
+                // Аналогично для end_time
+                var existingEndTimeInput = $daysWrapper.find('.work-time_time_end');
+                if (existingEndTimeInput.length > 0) {
+                    // Если существует, заменяем значение
+                    existingEndTimeInput.val(endTime);
+                    // console.log(endTime);
+                } else {
+                    // Если не существует, создаем новый инпут
+                    var endTimeInput = $('<input>', {
+                        type: 'time',
+                        name: `${schedule}[special_time][][time_end]`,
+                        value: endTime,
+                        disabled: true,
+                        class: "hidden-checkbox"
+                    });
+
+                    // Добавляем его в блок с классом .work-time-info (или .time-selection, если это нужно)
+                    $('.work-time-info').append(endTimeInput); // Или $('.time-selection').append(endTimeInput); если нужен другой контейнер
+                    // console.log(endTimeInput);
+                }
+            // }
+        } else {
+            // console.log('Элемент .work-time-info не найден.');
+        }
+
+    }
+
+
     // Обработчик изменения состояния чекбоксов с классом .days-checkbox
     $(document).on('change', '.days-checkbox', function() {
         // console.log('Изменение произошло');
@@ -1083,6 +1161,7 @@ $(document).on('change', '.checkbox', function () {
     $(document).on('change', '.schedule-time.start-time, .schedule-time.end-time', function() {
         // console.log('Изменение произошло');
         updateScheduleInputs();
+        updateWorkTimeInfo(this);
     });
 
     updateScheduleInputs();

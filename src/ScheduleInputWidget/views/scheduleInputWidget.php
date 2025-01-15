@@ -196,14 +196,14 @@ foreach ($daysOfWeek as $index => $day) {
                         ?>
                         <div class="days-wrapper">
                             <div class="work-time-info" style="pointer-events: none;">
-                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_start]"
+                                <input type="hidden" class="work-time_date_start" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_start]"
                                     value="<?php echo $timeSlot['date_start'] ?>">
-                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_end]"
+                                <input type="hidden" class="work-time_date_end" name="<?= $name ?>[special_time][<?php echo $key; ?>][date_end]"
                                     value="<?php echo  $timeSlot['date_end']; ?>">
 
-                                    <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_start]"
+                                    <input type="hidden" class="work-time_time_start" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_start]"
                                     value="<?php echo $timeSlot['time_start']; ?>">
-                                <input type="hidden" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_end]"
+                                <input type="hidden" class="work-time_time_end" name="<?= $name ?>[special_time][<?php echo $key; ?>][time_end]"
                                     value="<?php echo $timeSlot['time_end']; ?>">
                                 <span class="work-date"><?php echo $dateRange; ?></span>
                             </div>
