@@ -71,10 +71,10 @@ removeInlineClass();
             // console.log(endTime);  // Печать значения
 
             const startDateValue = startDateInput.val();
-            // console.log(startDate);  // Печать значения
+            // console.log(startDateValue);  // Печать значения
             
             const endDateValue = endDateInput.val();
-            // console.log(endDate);  // Печать значени
+            // console.log(endDateValue);  // Печать значени
             
             // console.log(endDate+' '+endTime);  // Печать значени
             // Если оба input поля найдены
@@ -101,16 +101,24 @@ removeInlineClass();
                 var defaultStartDate = startDateValue.length > 0 ? startDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
                 var defaultEndDate = endDateValue.length > 0 ? endDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
                 var defaultDate = [defaultStartDate, defaultEndDate];
-                console.log(defaultDate); // Для проверки в консоли
+                // console.log(defaultDate); // Для проверки в консоли
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
+
+                startDateValue1 = new Date(startDateValue);
+                endDateValue1 = new Date(endDateValue);
+
                 if (startFormatted === endFormatted) {
                     $("#selected-date").text(startFormatted);
-                    $("#start-time-hidden").text(startDateValue);
-                    $("#end-time-hidden").text(endDateValue);
+                    $("#start-time-hidden").text("11");
+                    // console.log(startDateValue);  // Печать значения
+                    $("#end-time-hidden").text("11");
+                    // console.log(endDateValue);  // Печать значени
                 } else {
                     $("#selected-date").text(`${startFormatted} - ${endFormatted}`);
-                    $("#start-time-hidden").text(startDateValue);
-                    $("#end-time-hidden").text(endDateValue);
+                    $("#start-time-hidden").text("11");;
+                    // console.log(startDateValue);  // Печать значения
+                    $("#end-time-hidden").text("11");;
+                    // console.log(endDateValue);  // Печать значени
                 }
                 if (Array.isArray(calendars)) {
                     calendars.forEach(function(calendar) {
@@ -129,7 +137,7 @@ removeInlineClass();
                 } else {
                     calendars.open();
                 }
-                console.log(calendars);
+                // console.log(calendars);
                 // $(".calendar")[1].flatpi ckr({
                 //     defaultDate: defaultDate1 // Устанавливаем defaultDate
                 // }).open();
@@ -280,7 +288,25 @@ removeInlineClass();
             } else {
                 // Если input-поля не найдены, показываем текущую дату
                 $("#selected-date").text(formattedDate);
+                const today = new Date(); // Получаем текущую дату
 
+                if (Array.isArray(calendars)) { 
+                    calendars.forEach(function(calendar) {
+                        calendar.setDate(today, true); // Устанавливаем сегодняшнюю дату
+                    });
+                } else {
+                    // Если это одиночный объект, применяем метод напрямую
+                    calendars.setDate(today, true);
+                }
+                
+                // Открываем календарь после изменения даты
+                if (Array.isArray(calendars)) {
+                    calendars.forEach(function(calendar) {
+                        calendar.open();
+                    });
+                } else {
+                    calendars.open();
+                }
                 // console.log(startDateValue);
                     // Инициализация календаря для модального окна
 
@@ -855,38 +881,38 @@ $(document).on('change', '.checkbox', function () {
 
     // Формируем массив с датами
     var defaultDate = [defaultStartDate, defaultEndDate];
-    console.log(defaultDate);
-    $('.work-date').on('click', function() {
-        var startDate = $('#start-time-hidden').text().trim();
-        var endDate = $('#end-time-hidden').text().trim();
+    // console.log(defaultDate);
+    // $('.work-date').on('click', function() {
+    //     var startDate = $('#start-time-hidden').text().trim();
+    //     var endDate = $('#end-time-hidden').text().trim();
 
-        // Устанавливаем текущую дату, если span пуст
-        var defaultStartDate = startDate.length > 0 ? startDate : new Date().toISOString().split('T')[0];
-        var defaultEndDate = endDate.length > 0 ? endDate : new Date().toISOString().split('T')[0];
+    //     // Устанавливаем текущую дату, если span пуст
+    //     var defaultStartDate = startDate.length > 0 ? startDate : new Date().toISOString().split('T')[0];
+    //     var defaultEndDate = endDate.length > 0 ? endDate : new Date().toISOString().split('T')[0];
 
-        // Формируем массив с датами
-        defaultDate = [defaultStartDate, defaultEndDate];
-        console.log(defaultDate);
-    });
+    //     // Формируем массив с датами
+    //     defaultDate = [defaultStartDate, defaultEndDate];
+    //     // console.log(defaultDate);
+    // });
     // $('.work-date').on('click', function() {
     //             // При клике на .work-date обновляем defaultDate
     // // Проверяем, является ли calendars массивом или одиночным объектом
     // if (Array.isArray(calendars)) {
-    //     calendars.forEach(function(calendar) {
-    //         calendar.setDate(defaultDate, true); // Устанавливаем новую дефолтную дату
+    //     calend ars.forEach(function(calendar) {
+    //         calen dar.setDate(defaultDate, true); // Устанавливаем новую дефолтную дату
     //     });
     // } else {
     //     // Если это одиночный объект, применяем метод напрямую
-    //     calendars.setDate(defaultDate, true);
+    //     calend ars.setDate(defaultDate, true);
     // }
 
     // // Открываем календарь после изменения дефолтной даты
     // if (Array.isArray(calendars)) {
-    //     calendars.forEach(function(calendar) {
-    //         calendar.open();
+    //     calend ars.forEach(function(calendar) {
+    //         calen dar.open();
     //     });
     // } else {
-    //     calendars.open();
+    //     calen dars.open();
     // }
 
     // console.log(calendars); // Для отладки
@@ -930,8 +956,8 @@ $(document).on('change', '.checkbox', function () {
                 const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
                 const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
                 // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
-                const formattedStartHidden = startDate.toISOString().split('T')[0];
-                const formattedEndHidden = endDate.toISOString().split('T')[0];
+                const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
 
                 const customText = `${formattedStart} - ${formattedEnd}`;
                 // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
@@ -939,21 +965,23 @@ $(document).on('change', '.checkbox', function () {
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(customText);
                 $("#start-time-hidden").text(formattedStartHidden);
+                console.log(formattedStartHidden);
                 $("#end-time-hidden").text(formattedEndHidden);
-
-
+                console.log(formattedEndHidden);
             } else if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0]; // Выбираем только первую дату
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
                 const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
-                const formattedStartHidden = selectedDate.toISOString().split('T')[0];
-                const formattedEndHidden = selectedDate.toISOString().split('T')[0];
+                const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
 
     
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(formattedDate);
                 $("#start-time-hidden").text(formattedStartHidden);
+                console.log(formattedStartHidden);
                 $("#end-time-hidden").text(formattedEndHidden);
+                console.log(formattedEndHidden);
             }
         }
     });
