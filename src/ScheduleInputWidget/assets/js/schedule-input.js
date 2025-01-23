@@ -734,21 +734,6 @@ $(document).on('change', '.checkbox', function () {
         
             // Убираем класс 'border-thick-slow'
             $(this).removeClass('border-thick-slow');
-        
-            // Проверяем, если текущее значение равно '00:00' или пустое
-            if (value === '00:00' || value === '') {
-                // Проверяем наличие других input с value='00:00' среди соседей
-                let otherInputs = $(this).siblings('input[type="time"]').filter(function() {
-                    return $(this).val() === '00:00';
-                });
-        
-                if (otherInputs.length > 0) {
-                    setTimeout(() => {
-                        $(this).addClass('border-thick-slow');
-                    }, 100);
-                    isAnyMatching = true;
-                }
-            }
         });
         var startTime = parentWrapper.find('.start-time').val();
         var endTime = parentWrapper.find('.end-time').val();
@@ -757,16 +742,6 @@ $(document).on('change', '.checkbox', function () {
             var parts = time.split(':');
             return parseInt(parts[0]) * 60 + parseInt(parts[1]);
         }
-
-       
-            // if (timeToMinutes(startTime) > timeToMinutes(endTime)) {
-            //     // console.log(timeToMinutes(startTime)+">"+timeToMinutes(endTime));
-            //     setTimeout(() => {
-            //         parentWrapper.find('.start-time').addClass('border-thick-slow');
-            //         parentWrapper.find('.end-time').addClass('border-thick-slow');
-            //     }, 100);
-            //     isAnyMatching = true;
-            // }
 
         if (!isAnyMatching) {
             // console.log("33"+isAnyMatching);
