@@ -607,6 +607,7 @@ removeInlineClass();
             if (modalMessage) {  // Добавляем проверку на null или undefined
                 modalMessage.removeClass('show');
             }
+            updateScheduleInputs();
         });
     
         // Закрытие модального окна
@@ -758,14 +759,14 @@ $(document).on('change', '.checkbox', function () {
         }
 
        
-            if (timeToMinutes(startTime) > timeToMinutes(endTime)) {
-                // console.log(timeToMinutes(startTime)+">"+timeToMinutes(endTime));
-                setTimeout(() => {
-                    parentWrapper.find('.start-time').addClass('border-thick-slow');
-                    parentWrapper.find('.end-time').addClass('border-thick-slow');
-                }, 100);
-                isAnyMatching = true;
-            }
+            // if (timeToMinutes(startTime) > timeToMinutes(endTime)) {
+            //     // console.log(timeToMinutes(startTime)+">"+timeToMinutes(endTime));
+            //     setTimeout(() => {
+            //         parentWrapper.find('.start-time').addClass('border-thick-slow');
+            //         parentWrapper.find('.end-time').addClass('border-thick-slow');
+            //     }, 100);
+            //     isAnyMatching = true;
+            // }
 
         if (!isAnyMatching) {
             // console.log("33"+isAnyMatching);
@@ -1048,7 +1049,7 @@ $(document).on('change', '.checkbox', function () {
                             });
 
                             // Добавляем его в блок с классом .time-selection
-                            $('.time-selection').append(startTimeInput);
+                            $('.time-selection').first().append(startTimeInput);
                             // console.log(startTimeInput);
                         }
 
@@ -1068,7 +1069,7 @@ $(document).on('change', '.checkbox', function () {
                             });
 
                             // Добавляем его в блок с классом .time-selection
-                            $('.time-selection').append(endTimeInput);
+                            $('.time-selection').first().append(endTimeInput);
                             // console.log(endTimeInput);
                         }
                 }
