@@ -816,3 +816,24 @@ button:hover {
 .help-block{
     color: red;
 }
+
+/*  */
+.schedule-widget-plain {
+    width: 700px;
+    /* background-color: #FFFFFF; */
+    /* border: 1px solid #E3E3E3; */
+    /* border-radius: 8px; */
+    /* padding: 20px; */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start; */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+    /* margin: 20px 0; */
+    /* padding: 10px; */
+    /* border: 1px solid #ccc; */
+    /* border-radius: 5px; */
+    /* background-color: #f9f9f9; */
+}

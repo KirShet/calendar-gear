@@ -8,17 +8,22 @@ use yii\helpers\Html;
 /** @var string $header */
 /** @var string $preheader */
 // print_r($model);
+$containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widget-plain';
 ?>
 <div class="container">
-    <div class="frame schedule-widget card p-3">
-        <div class="header"><?= htmlspecialchars($header) ?></div>
-        <div class="sub-header"><?= htmlspecialchars($preheader) ?></div>
+    <div class="<?= $containerClass ?>">
+        <?php if ($showHeader): ?>
+            <div class="header"><?= htmlspecialchars($header) ?></div>
+            <div class="sub-header"><?= htmlspecialchars($preheader) ?></div>
+        <?php endif; ?>
         <div id="schedule"><?= htmlspecialchars($name)?></div>
-        <div class="divider"></div>
+        <?php if ($useFrame): ?>
+            <div class="divider"></div>
+        <?php endif; ?>
 
     <?php if ($enableTimeZone): ?>
         <div class="action-row">
-            <div class="schedule-label-with-icon">
+            <div class="schedule-label-containerClass -icon">
                 <label class="schedule-label">
                     <input type="checkbox" id="enable_time_zone" name="<?= $name ?>[enable_time_zone]" value="true"
                     <?= isset($model->schedule['enable_time_zone']) && $model->schedule['enable_time_zone'] ? 'checked' : '' ?> class="hidden-checkbox">

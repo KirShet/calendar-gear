@@ -13,6 +13,8 @@ class ScheduleInputWidget extends InputWidget
     public $allowMultipleItems = true;
     public $header = 'Рабочие часы';
     public $preheader = 'Установить рабочие часы';
+    public $showHeader = true;
+    public $useFrame = true;
 
     public function run()
     {
@@ -26,6 +28,8 @@ class ScheduleInputWidget extends InputWidget
             'allowMultipleItems' => $this->allowMultipleItems,
             'header' => $this->header,
             'preheader' => $this->preheader,
+            'showHeader' => $this->showHeader,
+            'useFrame' => $this->useFrame,
         ]);
     }
 
