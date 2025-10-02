@@ -15,12 +15,15 @@ class ScheduleInputWidget extends InputWidget
     public $preheader = 'Установить рабочие часы';
     public $showHeader = true;
     public $useFrame = true;
+    public $nameTemplate = null;
 
     public function run()
     {
 
+        $fieldName = $this->nameTemplate ?: $this->attribute;
+
         return $this->render('scheduleInputWidget', [
-            'name' => $this->attribute,
+            'name' => $fieldName,
             'model' => $this->model,
             'enableTimeZone' => $this->enableTimeZone,
             'enableSpecialTime' => $this->enableSpecialTime,

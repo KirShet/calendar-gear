@@ -39,7 +39,7 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
-.container {
+.container-schedule {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -288,7 +288,7 @@ body {
     transition: left 0.3s ease;
 }
 
-.switch.active .switch-thumb {
+.switch.active-shebule .switch-thumb {
     margin-left: 16px;
     background-color: #28B956;
     background-image: url('../images/thumb.png');
@@ -296,7 +296,7 @@ body {
     background-repeat: no-repeat;
 }
 
-.active {
+.active-shebule {
     background: #74CF8A;
 }
 .abc1 {

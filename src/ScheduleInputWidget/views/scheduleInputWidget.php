@@ -10,7 +10,8 @@ use yii\helpers\Html;
 // print_r($model);
 $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widget-plain';
 ?>
-<div class="container">
+<input type="hidden" id="schedule-prefix" value="<?= $name ?>">
+<div class="container-schedule">
     <div class="<?= $containerClass ?>">
         <?php if ($showHeader): ?>
             <div class="header"><?= htmlspecialchars($header) ?></div>
@@ -32,7 +33,7 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                 <div data-tooltip="Всплывающая подсказка сообщает о чём-то многозначном и полезном..."
                     class="icon-margin day disabled"></div>
             </div>
-            <div class="switch <?= isset($model->schedule['enable_time_zone']) && $model->schedule['enable_time_zone'] ? 'active' : '' ?>" id="timezone-switch">
+            <div class="switch <?= isset($model->schedule['enable_time_zone']) && $model->schedule['enable_time_zone'] ? 'active-shebule' : '' ?>" id="timezone-switch">
                 <div class="switch-thumb"></div>
             </div>
         </div>
@@ -48,7 +49,7 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                 <div data-tooltip="Всплывающая подсказка сообщает о чём-то многозначном и полезном..."
                     class="icon-margin day disabled"></div>
             </div>
-            <div class="switch <?= isset($model->schedule['enable_production_calendar']) && $model->schedule['enable_production_calendar'] ? 'active' : '' ?>">
+            <div class="switch <?= isset($model->schedule['enable_production_calendar']) && $model->schedule['enable_production_calendar'] ? 'active-shebule' : '' ?>">
                 <div class="switch-thumb"></div>
             </div>
         </div>
@@ -57,6 +58,29 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
         <div id="special-time-container">
             <?php
             ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <?php
 
             $grouped_work_time = [];
@@ -90,24 +114,31 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                         }
                         ?>
                         <div class="weekday-group">
-<?php 
 
-$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
+<?php
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
+// Instead of grouping by time, output each day with its own time fields
 foreach ($daysOfWeek as $index => $day) {
+    $dayNumber = $index + 1;
+    $isChecked = in_array($dayNumber, $group['week_day'] ?? []);
     ?>
-    <label class="day" >
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][week_day]" 
-               value="<?php echo $index + 1; ?>" 
-               id="day-<?php echo $index + 1; ?>" 
-               <?php echo in_array($index + 1, $group['week_day']) ? 'checked' : ''; ?> disabled>
+    <label class="day">
+        <input type="checkbox" class="days-checkbox" 
+               name="<?=$name?>[work_time][<?=$dayNumber?>][week_day]" 
+               value="<?=$dayNumber?>" 
+               <?=$isChecked ? 'checked' : ''?> disabled>
+        <input type="hidden" name="<?=$name?>[work_time][<?=$dayNumber?>][time_start]" 
+               value="<?=!empty($group['time_start']) ? $group['time_start'] : '00:00'?>">
+        <input type="hidden" name="<?=$name?>[work_time][<?=$dayNumber?>][time_end]" 
+               value="<?=!empty($group['time_end']) ? $group['time_end'] : '00:00'?>">
         <div class="day-circle">
-            <span class="day-name text-white"><?php echo $day; ?></span>
+            <span class="day-name text-white"><?=$day?></span>
         </div>
     </label>
     <?php
 }
-?>
-                        </div>
+?>                   </div>
                         <div class="time-selection">
                             <input type="time" class="schedule-time start-time"
                                 value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>" disabled>
@@ -136,23 +167,67 @@ foreach ($daysOfWeek as $index => $day) {
                     <div class="days-wrapper">
                         <div class="weekday-group">
 
-                        <?php 
+                        <?php
+$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-$daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']; 
+// Instead of grouping by time, output each day with its own time fields
 foreach ($daysOfWeek as $index => $day) {
+    $dayNumber = $index + 1;
+    $isChecked = in_array($dayNumber, $group['week_day'] ?? []);
     ?>
     <label class="day">
-        <input type="checkbox" class="days-checkbox" name="<?=$name?>[work_time][][week_day]" 
-               value="<?php echo $index + 1; ?>" 
-               id="day-<?php echo $index + 1; ?>" 
-                disabled>
+        <input type="checkbox" class="days-checkbox" 
+               name="<?=$name?>[work_time][<?=$dayNumber?>][week_day]" 
+               value="<?=$dayNumber?>" 
+               <?=$isChecked ? 'checked' : ''?> disabled>
+        <input type="hidden" name="<?=$name?>[work_time][<?=$dayNumber?>][time_start]" 
+               value="<?=!empty($group['time_start']) ? $group['time_start'] : '00:00'?>">
+        <input type="hidden" name="<?=$name?>[work_time][<?=$dayNumber?>][time_end]" 
+               value="<?=!empty($group['time_end']) ? $group['time_end'] : '00:00'?>">
         <div class="day-circle">
-            <span class="day-name text-white"><?php echo $day; ?></span>
+            <span class="day-name text-white"><?=$day?></span>
         </div>
     </label>
     <?php
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         </div>
                         <div class="time-selection">
 
