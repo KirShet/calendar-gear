@@ -312,6 +312,50 @@ foreach ($daysOfWeek as $index => $day) {
                 }
                 ?>
 
+<?php
+                if (isset($model->schedule['production_holidays_time']) && is_array($model->schedule['production_holidays_time'])) {
+                    foreach ($model->schedule['production_holidays_time'] as $key => $timeSlot) {
+                        $startDate = new DateTime($timeSlot['date_start'] . ' ' . $timeSlot['time_start']);
+                        $endDate = new DateTime($timeSlot['date_end'] . ' ' . $timeSlot['time_end']);
+
+                        $startFormatted = $startDate->format('j F Y');
+                        $endFormatted = $endDate->format('j F Y');
+                        // list($date_start, $time_start) = explode(' ', $timeSlot['time_start']);
+                        // list($date_end, $time_end) = explode(' ', $timeSlot['time_end']);
+
+
+                        $dateRange = ($startFormatted === $endFormatted) ? $startFormatted : $startFormatted . ' - ' . $endFormatted;
+
+
+                        $startTime = $startDate->format('H:i');
+                        $endTime = $endDate->format('H:i');
+
+                        ?>
+                        <div class="days-wrapper">
+                            <div class="work-time-info" style="pointer-events: none;">
+                                <input type="hidden" class="work-time_date_start" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][date_start]"
+                                    value="<?php echo $timeSlot['date_start'] ?>">
+                                <input type="hidden" class="work-time_date_end" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][date_end]"
+                                    value="<?php echo  $timeSlot['date_end']; ?>">
+
+                                    <input type="hidden" class="work-time_time_start" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][time_start]"
+                                    value="<?php echo $timeSlot['time_start']; ?>">
+                                <input type="hidden" class="work-time_time_end" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][time_end]"
+                                    value="<?php echo $timeSlot['time_end']; ?>">
+                                <span class="work-date">Праздничные дни</span>
+                            </div>
+                            <div class="time-selection">
+                                <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>"
+                                    disabled="">
+                                <div class="time-divider"></div>
+                                <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+
             </div>
             <div class="button-group schedule-row d-flex align-items-center">
             <?php if ($allowMultipleItems): ?>
