@@ -4,23 +4,24 @@ $(document).ready(function () {
     const workTimeContainer = $('#work-time-container');
     const specialTimeContainer = $('#special-time-container');
     const schedule = $('#schedule').text();
-    let firstDate = null; // Переменная для хранения первой выбранной даты
-    let secondDate = null; // Переменная для второй даты
+    let firstDate = null; 
+    let secondDate = null; 
     let $daysWrapper;
-
+    let $workTimeContainer;
     let workItemToDelete = null;
+    let $widget;
+    let $modalOverlay;
 
-// Функция для удаления класса 'inline'
 function removeInlineClass() {
     $('.flatpickr-calendar').removeClass('inline');
 }
 
-// Создаем наблюдатель за изменениями в DOM
+
 const observer = new MutationObserver((mutationsList, observer) => {
-    // Проверяем все изменения DOM
+
     mutationsList.forEach(mutation => {
         if (mutation.type === 'childList') {
-            // Если новый элемент с классом 'flatp ickr-calendar' добавлен в DOM
+
             mutation.addedNodes.forEach(node => {
                 if (node.nodeType === 1 && node.matches('.flatpickr-calendar')) {
                     removeInlineClass();
@@ -30,19 +31,215 @@ const observer = new MutationObserver((mutationsList, observer) => {
     });
 });
 
-// Настройка наблюдателя: отслеживаем добавление новых узлов в body
+
 observer.observe(document.body, { childList: true, subtree: true });
 
-// Вызовем сразу на случае, если элемент уже существует на момент инициализации
-removeInlineClass();
-    // Открытие модального окна
-    $(document).on('click', '.add-special-day-button, .work-date', function () {
-        $('.time-selection-wrapper input[type="time"]').val('00:00'); 
-        modalOverlay.addClass('show');
 
-        // console.log($(this).closest('div.days-wrapper'));
+removeInlineClass();
+
+    const flatpickrConfig = {
+        inline: true, 
+        locale: {
+            firstDayOfWeek: 1, 
+            weekdays: {
+                shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+            },
+            months: {
+                shorthand: [
+                    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                ],
+                longhand: [
+                    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                ]
+            }
+        },
+
+        mode: "range", // Выбор диапазона
+        dateFormat: "Y-m-d", // Внутренний формат данных
+        altInput: true, // Показывать отформатированную строку
+        altFormat: "d MMMM Y",
+        defaultDate: defaultDate,
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+                var [startDate, endDate] = selectedDates;
+                
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
+
+                const customText = `${formattedStart} - ${formattedEnd}`;
+                // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
+                
+                // Обновление текста в нужном элементе
+                $("#selected-date").text(customText);
+                $("#start-time-hidden").text(formattedStartHidden);
+
+                $("#end-time-hidden").text(formattedEndHidden);
+
+            } else if (selectedDates.length > 0) {
+                var selectedDate = selectedDates[0]; // Выбираем только первую дату
+                startDate = new Date(startDate);
+                endDate = new Date(endDate);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
+
+    
+                // Обновление текста в нужном элементе
+                $("#selected-date").text(formattedDate);
+                $("#start-time-hidden").text(formattedStartHidden);
+
+                $("#end-time-hidden").text(formattedEndHidden);
+
+            }
+        }
+    }
+
+    // function openCalendar($button, mode) {
+    // work-days-btn
+    $(document).on('click', '.work-days-btn, .work-date', function () {
+        $widget = $(this).closest('.container-schedule');
+        const calendarElement4 = $widget.find('.calendar')[0];
+
+        if (calendarElement4 && !calendarElement4._flatpickr && window.flatpickr) {
+// 
+
+
+    // Получаем значения из span и проверяем их наличие
+    var startDate = $('#start-time-hidden').text().trim();
+    var endDate = $('#end-time-hidden').text().trim();
+
+    // Устанавливаем текущую дату, если span пуст
+    var defaultStartDate = startDate.length > 0 ? startDate : new Date().toISOString().split('T')[0];
+    var defaultEndDate = endDate.length > 0 ? endDate : new Date().toISOString().split('T')[0];
+
+    // Формируем массив с датами
+    var defaultDate = [defaultStartDate, defaultEndDate];
+// 
+            const calendar = flatpickr(calendarElement4, {
+                inline: true, // Режим отображения календаря
+                locale: {
+                    firstDayOfWeek: 1, // Неделя начинается с понедельника
+                    weekdays: {
+                        shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                        longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                    },
+                    months: {
+                        shorthand: [
+                            'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
+                            'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+                        ],
+                        longhand: [
+                            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                        ]
+                    }
+                },
+        
+                mode: "range", // Выбор диапазона
+                dateFormat: "Y-m-d", // Внутренний формат данных
+                altInput: true, // Показывать отформатированную строку
+                altFormat: "d MMMM Y",
+                defaultDate: defaultDate,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        var [startDate, endDate] = selectedDates;
+
+                        startDate = new Date(startDate);
+                        endDate = new Date(endDate);
+                        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                        const formattedStart = startDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                        const formattedEnd = endDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
+                        // Форматируем дату для отображения в нужном формате (например, 2024-11-07)
+                        const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                        const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
+        
+                        const customText = `${formattedStart} - ${formattedEnd}`;
+                        // const hiddenText = `"sta rt_time" => "${formattedStartHidden}", "end_ time" => "${formattedEndHidden}"`;
+                        
+                        // Обновление текста в нужном элементе
+                        $("#selected-date").text(customText);
+                        $("#start-time-hidden").text(formattedStartHidden);
+
+                        $("#end-time-hidden").text(formattedEndHidden);
+
+                    } else if (selectedDates.length > 0) {
+                        var selectedDate = selectedDates[0]; // Выбираем только первую дату
+                        startDate = new Date(startDate);
+                        endDate = new Date(endDate);
+                        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                        const formattedDate = selectedDate.toLocaleDateString('ru-RU', options).replace(' г.', ''); // Форматируем дату
+                        const formattedStartHidden = startDate.getFullYear() + '-' + (startDate.getMonth() + 1).toString().padStart(2, '0') + '-' + startDate.getDate().toString().padStart(2, '0');
+                        const formattedEndHidden = endDate.getFullYear() + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getDate().toString().padStart(2, '0');
+        
+            
+                        // Обновление текста в нужном элементе
+                        $("#selected-date").text(formattedDate);
+                        $("#start-time-hidden").text(formattedStartHidden);
+
+                        $("#end-time-hidden").text(formattedEndHidden);
+
+                    }
+                }
+            });
+// 
+            // Сохраняем в глобальный массив для последующего использования
+            calendars.push(calendar);
+            
+
+        }
+
+        $modalOverlay = $widget.find('.calendar-modal-overlay'); 
+        const $modalOverlay1 = $widget.find('.calendar-modal-overlay'); 
+
+        // '#calendar-modal-overlay'
+        const $selectedDateSpan = $widget.find('.selected-date'); 
+        $workTimeContainer = $widget.find('#work-time-container'); 
+        let $daysWrapper = $(this).closest('div.days-wrapper');
+
+
+        const calendarElement = $widget.find('.calendar')[0];
+        
+
+
+         // Способ 3: Прямой доступ к экземпляру
+            if (calendarElement && calendarElement._flatpickr) {
+
+                let calendar6 = calendarElement._flatpickr;
+
+            }
+
+        const calendar = calendars.find(cal => cal.element === calendarElement);
+// 22
+        let calendar2 = $widget.data('calendar');
+     
+        const calendarElement3 = $widget.find('.flatpickr-calendar')[0];
+        
+       
+        const calendar3 = calendarElement3 ? calendarElement3._flatpickr : null;
+
+        $('.time-selection-wrapper input[type="time"]').val('00:00'); 
+        $modalOverlay.addClass('show');
+
         $daysWrapper = $(this).closest('div.days-wrapper')
-        $('.flatpickr-calendar').addClass('inline');
+
+        setTimeout(() => {
+
+            // $widget.find('.flatpickr-calendar').addClass('inline');
+            $widget.find('.flatpickr-calendar').first().addClass('inline');
+        }, 100);
+
+        // $widget.find('.calendar')[0]
+        // $widget.find('.calendar')[0].addClass('inline');
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date(); // Получаем текущую дату
         const formattedDate = currentDate.toLocaleDateString('ru-RU', options).replace(' г.', '');
@@ -50,36 +247,28 @@ removeInlineClass();
         // Ищем скрытые input-поля внутри родительского элемента
         const parent = $(this).closest('div'); // Определяем родительский элемент
         if (parent.length > 0) { // Проверяем, что родительский элемент найден
+            const schedulePref = $widget.find('#schedule').text();
+
             // const startTime = parent.find('input[name="schedule[special_time][0][star t_time]"]').val();
             // const endTime = parent.find('input[name="schedule[special_time][0][end_ time]"]').val();
-            const startTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`);
-            // console.log(startTimeInput.length); // Проверка, существует ли элемент
-            
-            const endTimeInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[time_end]"]`);
-            // console.log(endTimeInput.length); // Проверка, существует ли элемент
+            const startTimeInput = parent.find(`input[name^="${schedulePref}[special_time]"][name$="[time_start]"]`);
 
-            const startDateInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[date_start]"]`);
-            // console.log(startTimeInput.length); // Проверка, существует ли элемент
+            const endTimeInput = parent.find(`input[name^="${schedulePref}[special_time]"][name$="[time_end]"]`);
+
+            const startDateInput = parent.find(`input[name^="${schedulePref}[special_time]"][name$="[date_start]"]`);
             
-            const endDateInput = parent.find(`input[name^="${schedule}[special_time]"][name$="[date_end]"]`);
-            // console.log(endTimeInput.length); // Проверка, существует ли элемент
+            const endDateInput = parent.find(`input[name^="${schedulePref}[special_time]"][name$="[date_end]"]`);
             
             const startTime = startTimeInput.val();
-            // console.log(startTime);  // Печать значения
             
             const endTime = endTimeInput.val();
-            // console.log(endTime);  // Печать значения
 
             const startDateValue = startDateInput.val();
-            // console.log(startDateValue);  // Печать значения
             
             const endDateValue = endDateInput.val();
-            // console.log(endDateValue);  // Печать значени
-            
-            // console.log(endDate+' '+endTime);  // Печать значени
-            // Если оба input поля найдены
+
             if (startTime && endTime && startDateValue && endDateValue) {
-                // console.log(endDate+' '+endTime);  // ReferenceError: Cannot access 'endDate' before initialization
+
                 const startDateTime = new Date(startTime +' '+ startDateValue);  // Combine date and time
                 const endDateTime = new Date(endTime +' '+ endDateValue);  // Combine date and time
     
@@ -87,21 +276,21 @@ removeInlineClass();
 
                 // Форматирование начала (только дата)
                 const startFormatted = startDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                // console.log(startFormatted);
+
                 // Форматирование конца (только дата)
                 const endFormatted = endDateTime.toLocaleDateString('ru-RU', options).replace(' г.', '');
-                // console.log(endFormatted);
+
 
                 const startDate = startDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
                 const endDate = endDateTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
-                $('.time-selection-wrapper input#startTime').val(startDate);
-                $('.time-selection-wrapper input#endTime').val(endDate);
+                $widget.find('.time-selection-wrapper input#startTime').val(startDate);
+                $widget.find('.time-selection-wrapper input#endTime').val(endDate);
 
                 var defaultStartDate = startDateValue.length > 0 ? startDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
                 var defaultEndDate = endDateValue.length > 0 ? endDateValue : new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
                 var defaultDate = [defaultStartDate, defaultEndDate];
-                // console.log(defaultDate); // Для проверки в консоли
+
                 // Если startFormatted и endFormatted одинаковые, выводим только startFormatted
 
                 startDateValue1 = new Date(startDateValue);
@@ -110,55 +299,33 @@ removeInlineClass();
                 if (startFormatted === endFormatted) {
                     $("#selected-date").text(startFormatted);
                     $("#start-time-hidden").text("11");
-                    // console.log(startDateValue);  // Печать значения
+
                     $("#end-time-hidden").text("11");
-                    // console.log(endDateValue);  // Печать значени
+
                 } else {
                     $("#selected-date").text(`${startFormatted} - ${endFormatted}`);
                     $("#start-time-hidden").text("11");;
-                    // console.log(startDateValue);  // Печать значения
+
                     $("#end-time-hidden").text("11");;
-                    // console.log(endDateValue);  // Печать значени
                 }
-                if (Array.isArray(calendars)) {
-                    calendars.forEach(function(calendar) {
-                        calendar.setDate(defaultDate, true); // Устанавливаем новую дефолтную дату
-                    });
+                // Используем найденный календарь текущего виджета
+                if (calendar) {
+                    calendar.setDate(defaultDate, true);
+                    // calendar.open();
                 } else {
-                    // Если это одиночный объект, применяем метод напрямую
-                    calendars.setDate(defaultDate, true);
-                }
-            
-                // Открываем календарь после изменения дефолтной даты
-                if (Array.isArray(calendars)) {
-                    calendars.forEach(function(calendar) {
-                        calendar.open();
-                    });
-                } else {
-                    calendars.open();
+                    console.warn("Calendar not found in current widget");
                 }
 
             } else {
-                // Если input-поля не найдены, показываем текущую дату
-                $("#selected-date").text(formattedDate);
-                const today = new Date(); // Получаем текущую дату
 
-                if (Array.isArray(calendars)) { 
-                    calendars.forEach(function(calendar) {
-                        calendar.setDate(today, true); // Устанавливаем сегодняшнюю дату
-                    });
-                } else {
-                    // Если это одиночный объект, применяем метод напрямую
-                    calendars.setDate(today, true);
-                }
+                // Если данных нет, показываем текущую дату
+                $selectedDateSpan.text(formattedDate);
                 
-                // Открываем календарь после изменения даты
-                if (Array.isArray(calendars)) {
-                    calendars.forEach(function(calendar) {
-                        calendar.open();
-                    });
+                if (calendar) {
+                    calendar.setDate(currentDate, true);
+                    // calendar.open();
                 } else {
-                    calendars.open();
+                    console.warn("Calendar not found in current widget");
                 }
 
             }
@@ -167,6 +334,18 @@ removeInlineClass();
         }
     });
 
+
+// // 🔹 Обработчик клика для рабочих дней
+// $(document).on('click', '.work-days-btn', function(e) {
+//     // e.preventDefault();
+//     openCalendar($(this), 'work');
+// });
+
+// 🔹 Обработчик клика для праздничных дней
+$(document).on('click', '.holidays-btn', function(e) {
+    // e.preventDefault();
+    // openCalendar($(this), 'holiday');
+});
     // брос выборов
     function resetDates() {
         firstDate = null;
@@ -178,7 +357,7 @@ removeInlineClass();
     $('.days div').on('click', function () {
         const month = $(this).closest('.month').find('h3').text();
         const dayNumber = $(this).text();
-    
+
         if (!firstDate) {
             firstDate = `${dayNumber} ${month}`;
             $(this).addClass('green-selected');
@@ -202,17 +381,18 @@ removeInlineClass();
     }
     var randomValue = 0; 
     // Добавление рабочей записи по нажатию на "Добавить"
-    $('.add-btn').on('click', function () {
+    //  $(document).on('click', '.add-work-time', function() {
+     $(document).on('click', '.add-btn', function () {
                 // Функция для поиска максимального индекса
         function getMaxIndex() {
             let maxIndex = 0;
             $(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`).each(function() {
-                // console.log($('input[name^="[special_time]"][name$="[time_start]"]'));
+
                 const match = $(this).attr('name').match(/\[special_time\]\[(\d+)\]\[time_start\]/);
-                // console.log(match);
+
                 if (match) {
                     const index = parseInt(match[1], 10);
-                    // console.log(index);
+
                     if (index > maxIndex) {
                         maxIndex = index;
                     }
@@ -220,19 +400,18 @@ removeInlineClass();
             });
             return maxIndex;
         }
-        console.log(33);
 
-        // Получаем максимальный индекс или начинаем с нуля
-        // console.log(get MaxIndex());
+        let schedule = $widget.find('#schedule').text();
+
         let maxIndex = getMaxIndex();
         const newIndex = maxIndex + 1;
 
         const selectedDate = selectedDateSpan.text();
 
         const startTime = modalOverlay.find('input[type="time"]').eq(0).val();
-        // console.log(startTime);
+
         const endTime = modalOverlay.find('input[type="time"]').eq(1).val();
-        // console.log(endTime);
+
 
         if (!startTime || !endTime) {
             alert('Пожалуйста, заполните все временные поля.');
@@ -273,17 +452,17 @@ removeInlineClass();
                 </div>
             </div>
                 `;
-    // console.log($daysWrapper);
+
     // Предполагается, что $daysWrapper и newEntry уже определены
-    if ($daysWrapper.length) { 
+    if ($daysWrapper && $daysWrapper.length) { 
+
         // Заменяем содержимое $daysWrapper на содержимое newEntry
         $daysWrapper.replaceWith(newEntry);
     } else {
-        // Если $daysWrapper не существует, добавляем новый элемент
-        workTimeContainer.append(newEntry);
+        $workTimeContainer.append(newEntry);
     }
         
-        modalOverlay.removeClass('show');
+        $modalOverlay.removeClass('show');
         resetDates();
         removeInlineClass()
         removeFlatpickrClasses();
@@ -339,29 +518,27 @@ $(document).on('submit', 'form', function(event) {
     // event.preventDefault();
 
     const $form = $(this);
-    console.log("Начало обработки формы");
+
     
     // Перебираем все блоки days-wrapper внутри формы
     $form.find('.days-wrapper').each(function() {
         const $widget = $(this);
-        console.log("Обрабатываем блок:", $widget);
         
         // Находим первый чекбокс, чтобы извлечь префикс
         const $firstCheckbox = $widget.find('input[type="checkbox"][name*="[work_time]"]').first();
         if ($firstCheckbox.length === 0) {
-            console.log("Чекбоксы не найдены");
+
             return;
         }
         
         const name = $firstCheckbox.attr('name');
         const prefixMatch = name.match(/^(.*?)\[work_time\]/);
         if (!prefixMatch) {
-            console.log("Не удалось извлечь префикс");
+
             return;
         }
         
         const schedulePrefix = prefixMatch[1];
-        console.log("Префикс:", schedulePrefix);
         
         // Создаем массив для хранения индексов отмеченных дней
         const checkedIndexes = [];
@@ -378,7 +555,6 @@ $(document).on('submit', 'form', function(event) {
             }
         });
         
-        console.log("Отмеченные индексы:", checkedIndexes);
         
         // Теперь удаляем ВСЕ поля work_time
         $widget.find(`input[name^="${schedulePrefix}[work_time]"]`).remove();
@@ -398,25 +574,11 @@ $(document).on('submit', 'form', function(event) {
             $widget.append(`<input type="hidden" name="${schedulePrefix}[work_time][${index}][time_end]" value="${endTime}">`);
         });
         
-        console.log("После обработки осталось полей:", $widget.find(`input[name^="${schedulePrefix}[work_time]"]`).length);
     });
     
     // Теперь отправляем форму
     // $form.unbind('submit').submit();
 });
-
-// $('form').on('submit', function() {
-//     // Remove time fields for unchecked days
-//     $(`input[name$="[time_start]"], input[name$="[time_end]"]`).each(function() {
-//         const name = $(this).attr('name');
-//         const dayIndex = name.match(/\[work_time\]\[(\d+)\]/)[1];
-//         const $checkbox = $(`input[name="${name.replace(/\[(time_start|time_end)\]/, '[week_day]')}"]`);
-        
-//         if (!$checkbox.is(':checked')) {
-//             // $(this).remove();
-//         }
-//     });
-// });
 
     $('.action-row .switch').click(function() {
         var checkboxes = $(this).closest('.action-row').find('input[type="checkbox"]');
@@ -455,7 +617,6 @@ $(document).on('submit', 'form', function(event) {
     $(`input[name$="][week_day]"]`).each(function() {
         var isChecked = $(this).prop('checked'); // Получаем состояние чекбокса
         var dayCircle = $(this).siblings('.day-circle'); // Находим соседний div.day-circle
-        // console.log(isChecked);
         if (isChecked) {
             // Если чекбокс включен, добавляем классы
             dayCircle.addClass('highlighted-circle');
@@ -478,7 +639,6 @@ function disabled(parent) {
 
 
 $(document).on('change', `input[name$="][week_day]"]`, function() {
-    // console.log("qw");
     updateStyles();
 });
 
@@ -499,6 +659,70 @@ $(document).on('change', '.checkbox', function () {
         }
     }
 });
+
+
+// Редактирование праздничного времени
+$(document).on('click', '.edit-holiday-time', function () {
+    const parentWrapper = $(this).closest('.days-wrapper');
+
+    // Активируем поля для редактирования
+    parentWrapper.find('.time-selection input[type="time"]').prop('disabled', false);
+    parentWrapper.find('.work-time-info').css({'pointer-events': 'all', 'color': '#515151'});
+    
+    // Меняем кнопку на "проверку"
+    parentWrapper.find('.edit-holiday-time')
+        .addClass('check-holiday-time')
+        .removeClass('edit-holiday-time');
+
+    // Визуальное обновление (если у тебя есть функция updateStyles — она применится)
+    if (typeof updateStyles === 'function') updateStyles();
+});
+
+// Удаление праздничного блока
+$(document).on('click', '.remove-holiday-time', function () {
+    const parentWrapper = $(this).closest('.days-wrapper');
+    // Если хочешь использовать модалку — адаптируй под свою структуру
+    const modalMessage = $(this).closest('.action-buttons').next('div');  
+    if (modalMessage.length) {
+        modalMessage.addClass('show');
+    } else {
+        // Если без модалки — просто удаляем блок
+        parentWrapper.remove();
+    }
+});
+
+// Подтверждение изменений праздничного времени
+$(document).on('click', '.check-holiday-time', function () {
+    const parentWrapper = $(this).closest('.days-wrapper');
+    let startTime = parentWrapper.find('.start-time').val();
+    let endTime = parentWrapper.find('.end-time').val();
+
+    // Очистка возможных визуальных эффектов
+    parentWrapper.find('.time-selection input[type="time"]').removeClass('border-thick-slow');
+
+    // Проверка на валидность
+    const timeToMinutes = (time) => {
+        const [h, m] = time.split(':').map(Number);
+        return h * 60 + m;
+    };
+
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
+
+
+    // Если всё в порядке — блокируем редактирование обратно
+    parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
+    parentWrapper.find('.work-time-info').css({'pointer-events': 'none', 'color': '#BABABA'});
+
+    // Возврат кнопки в исходное состояние
+    parentWrapper.find('.check-holiday-time')
+        .addClass('edit-holiday-time')
+        .removeClass('check-holiday-time');
+
+    // Если у тебя есть функция disabled() — применяем её
+    if (typeof disabled === 'function') disabled(parentWrapper);
+});
+
 
     $(document).on('click', '.check-work-time', function() {
 
@@ -521,7 +745,6 @@ $(document).on('change', '.checkbox', function () {
         }
 
         if (!isAnyMatching) {
-            // console.log("33"+isAnyMatching);
             var parentWrapper = $(this).closest('.days-wrapper');
             parentWrapper.find('.time-selection input[type="time"]').prop('disabled', true);
             $(this).closest('.days-wrapper').find(`.day input[type="checkbox"][name$="][week_day]"]`).addClass('disabled');
@@ -541,12 +764,10 @@ $(document).on('change', '.checkbox', function () {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         
-        $('.add-work-time').on('click', function () {   
-            console.log("222");
+        $(document).on('click', '.add-work-time', function() {
             const parentWidget = $(this).closest('.schedule-widget-plain'); 
-            const workTimeContainer = parentWidget.find('#work-time-container');
+            const workTimeContainer = parentWidget.find('#special-time-container');
             const schedule = parentWidget.find('#schedule').text();
-        
             const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
             
             let newEntry = `
@@ -581,6 +802,66 @@ $(document).on('change', '.checkbox', function () {
             workTimeContainer.append(newEntry);
         });
 
+
+        // Добавление блока "Праздничные дни"
+$(document).on('click', '.holidays-btn', function () {
+
+    // Находим родительский виджет
+    const parentWidget = $(this).closest('.schedule-widget-plain');
+    const holidayContainer = parentWidget.find('#holiday-time-container');
+    const schedule = parentWidget.find('#schedule').text().trim();
+
+    // Если контейнера нет — создаём его
+    if (!holidayContainer.length) {
+        parentWidget.append('<div id="holiday-time-container"></div>');
+    }
+
+    // Обновляем ссылку на контейнер (вдруг только что создали)
+    const $holidayContainer = parentWidget.find('#holiday-time-container');
+
+    // Проверка: если уже есть хотя бы один .days-wrapper с праздничными — не добавляем повторно
+    if ($holidayContainer.find('.days-wrapper').length > 0) {
+        return;
+    }
+
+    // Текущая дата
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
+    const defaultTime = "00:00";
+
+    // Создаём новый HTML-блок (по структуре PHP-кода)
+    const newHolidayEntry = `
+        <div class="days-wrapper">
+            <div class="work-time-info" style="pointer-events: none;">
+
+                <input type="hidden" class="work-time_time_start" 
+                       name="${schedule}[production_holidays_time][0][time_start]" 
+                       value="${defaultTime}">
+                <input type="hidden" class="work-time_time_end" 
+                       name="${schedule}[production_holidays_time][0][time_end]" 
+                       value="${defaultTime}">
+
+                <span class="work-date">Праздничные дни</span>
+            </div>
+
+            <div class="time-selection">
+                <input type="time" class="schedule-time start-time" value="${defaultTime}" disabled>
+                <div class="time-divider"></div>
+                <input type="time" class="schedule-time end-time" value="${defaultTime}" disabled>
+            </div>
+            <div class="action-buttons">
+                <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
+                <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
+            </div>
+        </div>
+    `;
+    // Переносим блок с праздниками ПЕРЕД кнопками, если нужно
+    const buttonGroup = parentWidget.find('.button-group');
+    $holidayContainer.insertBefore(buttonGroup);
+    // Добавляем блок
+    $holidayContainer.append(newHolidayEntry);
+
+});
 
     // Получаем значения из span и проверяем их наличие
     var startDate = $('#start-time-hidden').text().trim();
@@ -622,7 +903,7 @@ $(document).on('change', '.checkbox', function () {
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {
                 var [startDate, endDate] = selectedDates;
-                // console.log(selectedDates);
+
                 startDate = new Date(startDate);
                 endDate = new Date(endDate);
                 const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -638,9 +919,9 @@ $(document).on('change', '.checkbox', function () {
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(customText);
                 $("#start-time-hidden").text(formattedStartHidden);
-                // console.log(formattedStartHidden);
+
                 $("#end-time-hidden").text(formattedEndHidden);
-                // console.log(formattedEndHidden);
+                   
             } else if (selectedDates.length > 0) {
                 var selectedDate = selectedDates[0]; // Выбираем только первую дату
                 startDate = new Date(startDate);
@@ -654,9 +935,9 @@ $(document).on('change', '.checkbox', function () {
                 // Обновление текста в нужном элементе
                 $("#selected-date").text(formattedDate);
                 $("#start-time-hidden").text(formattedStartHidden);
-                // console.log(formattedStartHidden);
+                
                 $("#end-time-hidden").text(formattedEndHidden);
-                // console.log(formattedEndHidden);
+                
             }
         }
     });
@@ -664,9 +945,6 @@ $(document).on('change', '.checkbox', function () {
 function updateScheduleInputs() {
 
 } 
-
-
-
 
 // / Функция для обновления времени в work_time блоке
 function updateWorkTimeBlock($block) {
@@ -686,8 +964,7 @@ $(document).on('change', '.days-wrapper .schedule-time.start-time, .days-wrapper
     
         // Функция для обработки изменения значений
     function updateWorkTimeInfo(element) {
-        console.log("44");
-        // console.log('1');
+        
         var $daysWrapper = $(element).closest('.days-wrapper');
 
         // Извлекаем значения времени из инпутов с классами .schedule-time.start-time и .schedule-time.end-time
@@ -696,20 +973,20 @@ $(document).on('change', '.days-wrapper .schedule-time.start-time, .days-wrapper
 
         // Получаем элемент .work-time-info в $daysWrapper
         var $workTimeInfo = $daysWrapper.find('.work-time-info');
-            // console.log('2');
+
         if ($workTimeInfo.length > 0) {
 
                 var existingStartTimeInput = $daysWrapper.find('.work-time_time_start');
-                // console.log(existingStartTimeInput);
+
                 if (existingStartTimeInput.length > 0) {
                     // Если существует, заменяем значение
                     existingStartTimeInput.val(startTime);
-                    // console.log(startTime);
+
                                 // Проверка, ввелось ли значение
                     if (existingStartTimeInput.val() === startTime) {
-                        // console.log('start_time успешно обновлено:', startTime);
+
                     } else {
-                        // console.log('Не удалось обновить start_time');
+
                     }
                 } else {
                     // Если не существует, создаем новый инпут
@@ -723,7 +1000,7 @@ $(document).on('change', '.days-wrapper .schedule-time.start-time, .days-wrapper
 
                     // Добавляем его в блок с классом .work-time-info (или .time-selection, если это нужно)
                     $('.work-time-info').append(startTimeInput); // Или $('.time-selection').append(startTimeInput); если нужен другой контейнер
-                    // console.log(startTimeInput);
+
                 }
 
                 // Аналогично для end_time
@@ -731,7 +1008,6 @@ $(document).on('change', '.days-wrapper .schedule-time.start-time, .days-wrapper
                 if (existingEndTimeInput.length > 0) {
                     // Если существует, заменяем значение
                     existingEndTimeInput.val(endTime);
-                    // console.log(endTime);
                 } else {
                     // Если не существует, создаем новый инпут
                     var endTimeInput = $('<input>', {
@@ -744,25 +1020,23 @@ $(document).on('change', '.days-wrapper .schedule-time.start-time, .days-wrapper
 
                     // Добавляем его в блок с классом .work-time-info (или .time-selection, если это нужно)
                     $('.work-time-info').append(endTimeInput); // Или $('.time-selection').append(endTimeInput); если нужен другой контейнер
-                    // console.log(endTimeInput);
+
                 }
             // }
         } else {
-            // console.log('Элемент .work-time-info не найден.');
+
         }
-
     }
-
 
     // Обработчик изменения состояния чекбоксов с классом .days-checkbox
     $(document).on('change', '.days-checkbox', function() {
-        // console.log('Изменение произошло');
+
         updateScheduleInputs();
     });
     
     // Делегируем событие для изменения значений инпутов с классами .schedule-time.start-time и .schedule-time.end-time
     $(document).on('change', '.schedule-time.start-time, .schedule-time.end-time', function() {
-        // console.log('Изменение произошло');
+
         updateScheduleInputs();
         updateWorkTimeInfo(this);
     });

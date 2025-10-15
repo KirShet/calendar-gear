@@ -563,8 +563,10 @@ button:hover {
 
 .edit-work-time::before,
 .remove-work-time::before,
+.edit-holiday-time::before,
+.remove-holiday-time::before,
 .can-remove::before,
-.check-work-time::before {
+.check-holiday-time::before {
     content: '';
     display: block;
     width: 16px;
@@ -572,12 +574,12 @@ button:hover {
     margin: auto;
 }
 
-.edit-work-time::before {
+.edit-work-time::before, .edit-holiday-time::before {
     background: url('../images/stylus.png') no-repeat center center;
     background-size: contain;
 }
 
-.remove-work-time::before {
+.remove-work-time::before, .remove-holiday-time::before {
     background: url('../images/delete.png') no-repeat center center;
     background-size: contain;
 }
@@ -588,7 +590,7 @@ button:hover {
     background-size: contain;
 }
 
-.check-work-time::before {
+.check-work-time::before, .check-holiday-time::before {
     background: url('../images/check.png') no-repeat center center;
     background-size: contain;
 }
@@ -836,4 +838,62 @@ button:hover {
     /* border: 1px solid #ccc; */
     /* border-radius: 5px; */
     /* background-color: #f9f9f9; */
+}
+
+/* Контейнер блока */
+.add-special-day-block {
+    display: inline-block;
+    position: relative;
+}
+
+/* Главная кнопка */
+.add-special-day-button {
+    background-color: #FFFFFF;
+    border: 1px dashed #28B956 !important;
+    color: #28B956;
+    border-radius: 100px !important;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 18px;
+    transition: all 0.3s ease;
+}
+
+.add-special-day-button:hover {
+    background-color: #F4F4F4;
+}
+
+/* Меню в стиле твоей темы */
+.custom-dropdown-menu {
+    border: 1px dashed #28B956;
+    border-radius: 10px;
+    padding: 8px;
+    min-width: 230px;
+    background-color: #fff;
+}
+
+/* Кнопки внутри меню */
+.dropdown-btn {
+    width: 100%;
+    background-color: #FFFFFF;
+    border: 1px solid #28B956;
+    border-radius: 100px;
+    color: #28B956;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 7px 12px;
+    margin: 4px 0;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.dropdown-btn:hover,
+.dropdown-btn:focus {
+    background-color: #28B956;
+    color: #fff;
+}
+
+/* caret в цвет темы */
+.add-special-day-button .caret {
+    border-top-color: #28B956;
+    margin-left: 6px;
 }

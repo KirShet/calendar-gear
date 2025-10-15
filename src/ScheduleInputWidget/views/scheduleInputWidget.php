@@ -59,28 +59,6 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
             <?php
             ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <?php
 
             $grouped_work_time = [];
@@ -191,43 +169,6 @@ foreach ($daysOfWeek as $index => $day) {
     <?php
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </div>
                         <div class="time-selection">
 
@@ -312,6 +253,7 @@ foreach ($daysOfWeek as $index => $day) {
                 }
                 ?>
 
+</div>
 <?php
                 if (isset($model->schedule['production_holidays_time']) && is_array($model->schedule['production_holidays_time'])) {
                     foreach ($model->schedule['production_holidays_time'] as $key => $timeSlot) {
@@ -331,12 +273,14 @@ foreach ($daysOfWeek as $index => $day) {
                         $endTime = $endDate->format('H:i');
 
                         ?>
+                        <div id="holiday-time-container">
+
                         <div class="days-wrapper">
                             <div class="work-time-info" style="pointer-events: none;">
-                                <input type="hidden" class="work-time_date_start" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][date_start]"
+                                <!-- <input type="hidden" class="work-time_date_start" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][date_start]"
                                     value="<?php echo $timeSlot['date_start'] ?>">
                                 <input type="hidden" class="work-time_date_end" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][date_end]"
-                                    value="<?php echo  $timeSlot['date_end']; ?>">
+                                    value="<?php echo  $timeSlot['date_end']; ?>"> -->
 
                                     <input type="hidden" class="work-time_time_start" name="<?= $name ?>[production_holidays_time][<?php echo $key; ?>][time_start]"
                                     value="<?php echo $timeSlot['time_start']; ?>">
@@ -350,22 +294,52 @@ foreach ($daysOfWeek as $index => $day) {
                                 <div class="time-divider"></div>
                                 <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
                             </div>
+                            <div class="action-buttons">
+                                <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
+                                <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
+                            </div>
+                        </div>
+                        
                         </div>
                         <?php
                     }
                 }
                 ?>
 
-            </div>
             <div class="button-group schedule-row d-flex align-items-center">
             <?php if ($allowMultipleItems): ?>
                 <button type="button" class="btn btn-primary add-work-time button-calendar time-button-add">Добавить
                     рабочие часы</button>
             <?php endif; ?>
             <?php if ($enableSpecialTime): ?>
-                <button type="button"
+                <!-- <button type="button"
                     class="btn btn-secondary add-special-time button-calendar add-special-day-button">Добавить особенные
-                    дни</button>
+                    дни</button> -->
+
+                <div class="dropdown button-calendar add-special-day-block">
+                    <button class="btn add-special-day-button dropdown-toggle"
+                            type="button"
+                            id="dropdownMenu1"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        Добавить особенные дни
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
+                            <button class="btn dropdown-btn work-days-btn" type="button">
+                                Добавить рабочие дни
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn dropdown-btn holidays-btn" type="button">
+                                Добавить праздничные дни
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             <?php endif; ?>
             </div>
         </div>
