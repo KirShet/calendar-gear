@@ -254,7 +254,9 @@ foreach ($daysOfWeek as $index => $day) {
                 ?>
 
 </div>
+
 <?php
+
                 if (isset($model->schedule['production_holidays_time']) && is_array($model->schedule['production_holidays_time'])) {
                     foreach ($model->schedule['production_holidays_time'] as $key => $timeSlot) {
                         $startDate = new DateTime($timeSlot['date_start'] . ' ' . $timeSlot['time_start']);
@@ -322,7 +324,8 @@ foreach ($daysOfWeek as $index => $day) {
                             id="dropdownMenu1"
                             data-toggle="dropdown"
                             aria-haspopup="true"
-                            aria-expanded="false">
+                            aria-expanded="false"
+                            style="width: 100%;">
                         Добавить особенные дни
                         <span class="caret"></span>
                     </button>
