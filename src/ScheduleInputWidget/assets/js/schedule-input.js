@@ -499,8 +499,9 @@ $(document).on('click', '.holidays-btn', function(e) {
     });
 
         // Закрытие модального окна
-        $('.calendar-cancel-btn').on('click', function () {
-            modalOverlay.removeClass('show');
+        $(document).on('click', '.calendar-cancel-btn', function () {
+        // $('.calendar-cancel-btn').on('click', function () {
+            $modalOverlay.removeClass('show');
             removeInlineClass();
             removeFlatpickrClasses();
         });
