@@ -566,7 +566,8 @@ button:hover {
 .edit-holiday-time::before,
 .remove-holiday-time::before,
 .can-remove::before,
-.check-holiday-time::before {
+.check-holiday-time::before,
+.check-work-time::before {
     content: '';
     display: block;
     width: 16px;
@@ -590,11 +591,14 @@ button:hover {
     background-size: contain;
 }
 
-.check-work-time::before, .check-holiday-time::before {
+.check-work-time::before{
     background: url('../images/check.png') no-repeat center center;
     background-size: contain;
 }
-
+.check-holiday-time::before {
+    background: url('../images/check.png') no-repeat center center;
+    background-size: contain;
+}
 /* Модальное окно */
 .modal-overlay-message {
     top: 0;
@@ -896,4 +900,8 @@ button:hover {
 .add-special-day-button .caret {
     border-top-color: #28B956;
     margin-left: 6px;
+}
+
+.dropdown-btn {
+    text-align: left;
 }
