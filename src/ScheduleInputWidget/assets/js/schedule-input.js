@@ -80,9 +80,9 @@ $(document).ready(function () {
       },
     },
 
-    mode: "range", 
-    dateFormat: "Y-m-d", 
-    altInput: true, 
+    mode: "range",
+    dateFormat: "Y-m-d",
+    altInput: true,
     altFormat: "d MMMM Y",
     defaultDate: defaultDate,
     onChange: function (selectedDates, dateStr, instance) {
@@ -119,13 +119,13 @@ $(document).ready(function () {
 
         $("#end-time-hidden").text(formattedEndHidden);
       } else if (selectedDates.length > 0) {
-        var selectedDate = selectedDates[0]; 
+        var selectedDate = selectedDates[0];
         startDate = new Date(startDate);
         endDate = new Date(endDate);
         const options = { day: "numeric", month: "long", year: "numeric" };
         const formattedDate = selectedDate
           .toLocaleDateString("ru-RU", options)
-          .replace(" г.", ""); 
+          .replace(" г.", "");
         const formattedStartHidden =
           startDate.getFullYear() +
           "-" +
@@ -152,10 +152,8 @@ $(document).ready(function () {
     const calendarElement4 = $widget.find(".calendar")[0];
 
     if (calendarElement4 && !calendarElement4._flatpickr && window.flatpickr) {
-
       var startDate = $("#start-time-hidden").text().trim();
       var endDate = $("#end-time-hidden").text().trim();
-
 
       var defaultStartDate =
         startDate.length > 0
@@ -164,13 +162,12 @@ $(document).ready(function () {
       var defaultEndDate =
         endDate.length > 0 ? endDate : new Date().toISOString().split("T")[0];
 
-
       var defaultDate = [defaultStartDate, defaultEndDate];
 
       const calendar = flatpickr(calendarElement4, {
-        inline: true, 
+        inline: true,
         locale: {
-          firstDayOfWeek: 1, 
+          firstDayOfWeek: 1,
           weekdays: {
             shorthand: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             longhand: [
@@ -215,9 +212,9 @@ $(document).ready(function () {
           },
         },
 
-        mode: "range", 
-        dateFormat: "Y-m-d", 
-        altInput: true, 
+        mode: "range",
+        dateFormat: "Y-m-d",
+        altInput: true,
         altFormat: "d MMMM Y",
         defaultDate: defaultDate,
         onChange: function (selectedDates, dateStr, instance) {
@@ -254,13 +251,13 @@ $(document).ready(function () {
 
             $("#end-time-hidden").text(formattedEndHidden);
           } else if (selectedDates.length > 0) {
-            var selectedDate = selectedDates[0]; 
+            var selectedDate = selectedDates[0];
             startDate = new Date(startDate);
             endDate = new Date(endDate);
             const options = { day: "numeric", month: "long", year: "numeric" };
             const formattedDate = selectedDate
               .toLocaleDateString("ru-RU", options)
-              .replace(" г.", ""); 
+              .replace(" г.", "");
             const formattedStartHidden =
               startDate.getFullYear() +
               "-" +
@@ -273,7 +270,6 @@ $(document).ready(function () {
               (endDate.getMonth() + 1).toString().padStart(2, "0") +
               "-" +
               endDate.getDate().toString().padStart(2, "0");
-
 
             $("#selected-date").text(formattedDate);
             $("#start-time-hidden").text(formattedStartHidden);
@@ -313,22 +309,18 @@ $(document).ready(function () {
     $daysWrapper = $(this).closest("div.days-wrapper");
 
     setTimeout(() => {
-
       $widget.find(".flatpickr-calendar").first().addClass("inline");
     }, 100);
 
     const options = { year: "numeric", month: "long", day: "numeric" };
-    const currentDate = new Date(); 
+    const currentDate = new Date();
     const formattedDate = currentDate
       .toLocaleDateString("ru-RU", options)
       .replace(" г.", "");
 
-
-    const parent = $(this).closest("div"); 
+    const parent = $(this).closest("div");
     if (parent.length > 0) {
-
       const schedulePref = $widget.find("#schedule").text();
-
 
       const startTimeInput = parent.find(
         `input[name^="${schedulePref}[special_time]"][name$="[time_start]"]`
@@ -355,15 +347,14 @@ $(document).ready(function () {
       const endDateValue = endDateInput.val();
 
       if (startTime && endTime && startDateValue && endDateValue) {
-        const startDateTime = new Date(startTime + " " + startDateValue); 
-        const endDateTime = new Date(endTime + " " + endDateValue); 
+        const startDateTime = new Date(startTime + " " + startDateValue);
+        const endDateTime = new Date(endTime + " " + endDateValue);
 
         const options = { day: "numeric", month: "long", year: "numeric" };
 
         const startFormatted = startDateTime
           .toLocaleDateString("ru-RU", options)
           .replace(" г.", "");
-
 
         const endFormatted = endDateTime
           .toLocaleDateString("ru-RU", options)
@@ -384,14 +375,12 @@ $(document).ready(function () {
         var defaultStartDate =
           startDateValue.length > 0
             ? startDateValue
-            : new Date().toISOString().split("T")[0]; 
+            : new Date().toISOString().split("T")[0];
         var defaultEndDate =
           endDateValue.length > 0
             ? endDateValue
-            : new Date().toISOString().split("T")[0]; 
+            : new Date().toISOString().split("T")[0];
         var defaultDate = [defaultStartDate, defaultEndDate];
-
-
 
         startDateValue1 = new Date(startDateValue);
         endDateValue1 = new Date(endDateValue);
@@ -410,17 +399,14 @@ $(document).ready(function () {
 
         if (calendar) {
           calendar.setDate(defaultDate, true);
-
         } else {
           console.warn("Calendar not found in current widget");
         }
       } else {
-
         $selectedDateSpan.text(formattedDate);
 
         if (calendar) {
           calendar.setDate(currentDate, true);
-
         } else {
           console.warn("Calendar not found in current widget");
         }
@@ -429,16 +415,13 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on("click", ".holidays-btn", function (e) {
-
-  });
+  $(document).on("click", ".holidays-btn", function (e) {});
 
   function resetDates() {
     firstDate = null;
     secondDate = null;
     $(".days .green-selected").removeClass("green-selected");
   }
-
 
   $(".days div").on("click", function () {
     const month = $(this).closest(".month").find("h3").text();
@@ -462,13 +445,10 @@ $(document).ready(function () {
       resetDates();
     }
   });
-  function removeFlatpickrClasses() {
-
-  }
+  function removeFlatpickrClasses() {}
   var randomValue = 0;
 
   $(document).on("click", ".add-btn", function () {
-
     function getMaxIndex() {
       let maxIndex = 0;
       $(`input[name^="${schedule}[special_time]"][name$="[time_start]"]`).each(
@@ -540,9 +520,7 @@ $(document).ready(function () {
             </div>
                 `;
 
-
     if ($daysWrapper && $daysWrapper.length) {
-
       $daysWrapper.replaceWith(newEntry);
     } else {
       $workTimeContainer.append(newEntry);
@@ -555,7 +533,7 @@ $(document).ready(function () {
   });
 
   $(document).ready(function () {
-    let modalMessage; 
+    let modalMessage;
 
     // Удаление рабочей записи
     $(document).on("click", ".remove-work-time", function () {
@@ -1086,13 +1064,13 @@ $(document).ready(function () {
 
         $("#end-time-hidden").text(formattedEndHidden);
       } else if (selectedDates.length > 0) {
-        var selectedDate = selectedDates[0]; 
+        var selectedDate = selectedDates[0];
         startDate = new Date(startDate);
         endDate = new Date(endDate);
         const options = { day: "numeric", month: "long", year: "numeric" };
         const formattedDate = selectedDate
           .toLocaleDateString("ru-RU", options)
-          .replace(" г.", ""); 
+          .replace(" г.", "");
         const formattedStartHidden =
           startDate.getFullYear() +
           "-" +
@@ -1116,16 +1094,13 @@ $(document).ready(function () {
 
   function updateScheduleInputs() {}
 
-
   function updateWorkTimeBlock($block) {
     const startTime = $block.find(".start-time").val() + ":00";
     const endTime = $block.find(".end-time").val() + ":00";
 
-
     $block.find('input[name$="[time_start]"]').val(startTime);
     $block.find('input[name$="[time_end]"]').val(endTime);
   }
-
 
   $(document).on(
     "change",
@@ -1136,18 +1111,15 @@ $(document).ready(function () {
     }
   );
 
-
   function updateWorkTimeInfo(element) {
     var $daysWrapper = $(element).closest(".days-wrapper");
 
-
     var startTime =
       $daysWrapper.find(".schedule-time.start-time").val() + ":00" ||
-      "00:00" + ":00"; 
+      "00:00" + ":00";
     var endTime =
       $daysWrapper.find(".schedule-time.end-time").val() + ":00" ||
-      "00:00" + ":00"; 
-
+      "00:00" + ":00";
 
     var $workTimeInfo = $daysWrapper.find(".work-time-info");
 
@@ -1155,15 +1127,12 @@ $(document).ready(function () {
       var existingStartTimeInput = $daysWrapper.find(".work-time_time_start");
 
       if (existingStartTimeInput.length > 0) {
-
         existingStartTimeInput.val(startTime);
-
 
         if (existingStartTimeInput.val() === startTime) {
         } else {
         }
       } else {
-
         var startTimeInput = $("<input>", {
           type: "time",
           name: `${schedule}[special_time][][time_start]`,
@@ -1172,17 +1141,13 @@ $(document).ready(function () {
           class: "hidden-checkbox",
         });
 
-
-        $(".work-time-info").append(startTimeInput); 
+        $(".work-time-info").append(startTimeInput);
       }
-
 
       var existingEndTimeInput = $daysWrapper.find(".work-time_time_end");
       if (existingEndTimeInput.length > 0) {
-
         existingEndTimeInput.val(endTime);
       } else {
-
         var endTimeInput = $("<input>", {
           type: "time",
           name: `${schedule}[special_time][][time_end]`,
@@ -1191,18 +1156,16 @@ $(document).ready(function () {
           class: "hidden-checkbox",
         });
 
-        $(".work-time-info").append(endTimeInput); 
+        $(".work-time-info").append(endTimeInput);
       }
       // }
     } else {
     }
   }
 
-
   $(document).on("change", ".days-checkbox", function () {
     updateScheduleInputs();
   });
-
 
   $(document).on(
     "change",
@@ -1212,7 +1175,6 @@ $(document).ready(function () {
       updateWorkTimeInfo(this);
     }
   );
-
 
   function updateWorkTimeFields($block, startTime, endTime) {
     $block.find('input[name$="[time_start]"]').val(startTime + ":00");
@@ -1277,4 +1239,101 @@ $(document).ready(function () {
     text = translateDate(text);
     $(this).html(text);
   });
+
+  var $form = $("form");
+    // Находим форму по контексту - ищем форму, которая содержит наши блоки
+    var $form = $("#special-time-container").closest("form");
+
+    // Если не нашли, используем первую форму на странице
+    if ($form.length === 0) {
+      $form = $("form").first();
+    }
+
+    // Обработчик submit формы
+    $form.on("submit", function (e) {
+      // Перебираем все блоки days-wrapper внутри формы
+
+      $form.find(".container-schedule").each(function () {
+
+        const containerSchedule = $(this);
+
+        let globalIndex = 0;
+
+        containerSchedule.find(".days-wrapper").each(function () {
+
+          const daysWrapper = $(this);
+
+          // Находим первый чекбокс, чтобы извлечь префикс
+          const $firstCheckbox = daysWrapper
+            .find('input[type="checkbox"][name*="[work_time]"]')
+            .first();
+          if ($firstCheckbox.length === 0) {
+            return;
+          }
+
+          const name = $firstCheckbox.attr("name");
+          // Извлекаем префикс имени (всё до [work_time])
+          const prefixMatch = name.match(/^(.*?)\[work_time\]/);
+          if (!prefixMatch) {
+            return;
+          }
+
+          const schedulePrefix = prefixMatch[1];
+
+          // Собираем отмеченные дни с их временными интервалами
+          const checkedDays = [];
+
+          daysWrapper
+            .find(
+              `input[name^="${schedulePrefix}[work_time]"][name$="[week_day]"]`
+            )
+            .each(function () {
+              const $checkbox = $(this);
+              if ($checkbox.is(":checked")) {
+
+                const nameAttr = $checkbox.attr("name");
+                const indexMatch = nameAttr.match(/\[work_time\]\[(\d+)\]/);
+                if (indexMatch) {
+                  const groupIndex = indexMatch[1];
+                  const timeStart = daysWrapper
+                    .find(
+                      `input[name="${schedulePrefix}[work_time][${groupIndex}][time_start]"]`
+                    )
+                    .val();
+                  const timeEnd = daysWrapper
+                    .find(
+                      `input[name="${schedulePrefix}[work_time][${groupIndex}][time_end]"]`
+                    )
+                    .val();
+
+                  checkedDays.push({
+                    week_day: $checkbox.val(),
+                    time_start: timeStart,
+                    time_end: timeEnd,
+                    index: globalIndex++,
+                  });
+                }
+              }
+            });
+
+          // Удаляем старые поля work_time
+          daysWrapper.find(`input[name^="${schedulePrefix}[work_time]"]`).remove();
+
+          // Создаем новые поля с последовательной нумерацией
+          checkedDays.forEach((day, index) => {
+
+            daysWrapper.append(
+              `<input type="hidden" name="${schedulePrefix}[work_time][${day.index}][week_day]" value="${day.week_day}">`
+            );
+            daysWrapper.append(
+              `<input type="hidden" name="${schedulePrefix}[work_time][${day.index}][time_start]" value="${day.time_start}">`
+            );
+            daysWrapper.append(
+              `<input type="hidden" name="${schedulePrefix}[work_time][${day.index}][time_end]" value="${day.time_end}">`
+            );
+          });
+        });
+      });
+
+    });
 });
