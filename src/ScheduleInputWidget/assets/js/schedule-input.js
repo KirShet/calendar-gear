@@ -445,7 +445,6 @@ $(document).ready(function () {
       resetDates();
     }
   });
-  function removeFlatpickrClasses() {}
   var randomValue = 0;
 
   $(document).on("click", ".add-btn", function () {
