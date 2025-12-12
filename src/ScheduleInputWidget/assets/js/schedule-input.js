@@ -896,6 +896,15 @@ $(document).ready(function () {
                     <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
                     <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                 </div>
+                  <div id="modal-overlay-message" class="modal-overlay-message">
+                        <div class="modal-content">
+                            <div class="modal-message">Вы хотите удалить это правило?</div>
+                            <div class="modal-buttons">
+                            <button type="button" class="cancel-btn">Отмена</button>
+                            <button type="button" class="delete-btn">Удалить</button>
+                        </div>
+                    </div>
+                </div>
             </div>`;
 
     workTimeContainer.append(newEntry);
