@@ -303,6 +303,15 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                             <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
                             <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
                         </div>
+                        <div id="modal-overlay-message" class="modal-overlay-message">
+                            <div class="modal-content">
+                                <div class="modal-message">Вы хотите удалить это правило?</div>
+                                <div class="modal-buttons">
+                                    <button type="button" class="cancel-btn">Отмена</button>
+                                    <button type="button" class="delete-btn">Удалить</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

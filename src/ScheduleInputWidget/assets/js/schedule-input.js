@@ -764,20 +764,9 @@ $(document).ready(function () {
 
   // Удаление праздничного блока
   $(document).on("click", ".remove-holiday-time", function () {
-    const parentWrapper = $(this).closest(".days-wrapper");
-    // Если хочешь использовать модалку — адаптируй под свою структуру
-    const modalMessage = $(this).closest(".action-buttons").next("div");
-    const parentWidget = $(this).closest(".schedule-widget-plain");
-    if (modalMessage.length) {
-      modalMessage.addClass("show");
-    } else {
-      console.log("11");
-      console.log(parentWidget);
-      // Если без модалки — просто удаляем блок
-      parentWrapper.remove();
-    }
-
-    parentWidget.find(".holidays-btn").show();
+    workItemToDelete = $(this).closest(".days-wrapper");
+    modalMessage = $(this).closest(".action-buttons").next("div"); // Присваиваем значение переменной
+    modalMessage.addClass("show");
   });
 
   // Подтверждение изменений праздничного времени
@@ -959,6 +948,15 @@ $(document).ready(function () {
                 <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
                 <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
             </div>
+              <div id="modal-overlay-message" class="modal-overlay-message">
+                  <div class="modal-content">
+                      <div class="modal-message">Вы хотите удалить это правило?</div>
+                      <div class="modal-buttons">
+                      <button type="button" class="cancel-btn">Отмена</button>
+                      <button type="button" class="delete-btn">Удалить</button>
+                    </div>
+                  </div>
+              </div>
         </div>
     `;
     // Переносим блок с праздниками ПЕРЕД кнопками, если нужно
