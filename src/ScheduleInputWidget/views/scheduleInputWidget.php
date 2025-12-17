@@ -257,10 +257,15 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
             ?>
 
         </div>
+        <?php
+        $holidaysBtnClass = isset($model->schedule['production_holidays_time']) 
+                            && is_array($model->schedule['production_holidays_time']) 
+                            && count($model->schedule['production_holidays_time']) > 0;
+        ?>
 
         <?php
 
-        if (isset($model->schedule['production_holidays_time']) && is_array($model->schedule['production_holidays_time'])) {
+        if ($holidaysBtnClass) {
             foreach ($model->schedule['production_holidays_time'] as $key => $timeSlot) {
                 $startDate = new DateTime($timeSlot['date_start'] . ' ' . $timeSlot['time_start']);
                 $endDate = new DateTime($timeSlot['date_end'] . ' ' . $timeSlot['time_end']);
@@ -349,7 +354,7 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                             </button>
                         </li>
                         <li>
-                            <button class="btn dropdown-btn holidays-btn" type="button">
+                            <button class="btn dropdown-btn holidays-btn" type="button"<?php if ($holidaysBtnClass ): ?>style="display: none;"<?php endif; ?>>
                                 Добавить праздничные дни
                             </button>
                         </li>

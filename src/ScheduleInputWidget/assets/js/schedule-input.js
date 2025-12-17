@@ -399,16 +399,12 @@ $(document).ready(function () {
 
         if (calendar) {
           calendar.setDate(defaultDate, true);
-        } else {
-          console.warn("Calendar not found in current widget");
         }
       } else {
         $selectedDateSpan.text(formattedDate);
 
         if (calendar) {
-          calendar.setDate(currentDate, true);
-        } else {
-          console.warn("Calendar not found in current widget");
+          calendar.setDate([currentDate, currentDate], true);
         }
       }
     } else {
@@ -544,11 +540,18 @@ $(document).ready(function () {
     // Используем делегирование события на родительский элемент (например, body)
     $(document).on("click", ".delete-btn", function () {
       if (workItemToDelete) {
-        workItemToDelete.remove();
+          // Проверяем, что это праздничный блок
+          if (workItemToDelete.find(".work-date").text().trim() === "Праздничные дни") {
+              // Показываем кнопку снова
+              const parentWidget = workItemToDelete.closest(".schedule-widget-plain");
+              parentWidget.find(".holidays-btn").show();
+          }
+  
+          workItemToDelete.remove();
       }
+  
       if (modalMessage) {
-        // Добавляем проверку на null или undefined
-        modalMessage.removeClass("show");
+          modalMessage.removeClass("show");
       }
       updateScheduleInputs();
     });
