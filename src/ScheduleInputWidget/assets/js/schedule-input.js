@@ -295,7 +295,9 @@ $(document).ready(function () {
       let calendar6 = calendarElement._flatpickr;
     }
 
-    const calendar = calendars.find((cal) => cal.element === calendarElement);
+    const calendar = Array.isArray(calendars)
+      ? calendars.find(c => c.element === calendarElement || c._input === calendarElement)
+      : (calendars.element === calendarElement || calendars._input === calendarElement) ? calendars : null;
 
     let calendar2 = $widget.data("calendar");
 
@@ -495,12 +497,12 @@ $(document).ready(function () {
                     <span class="work-date">${selectedDate}</span>
                 </div>
                 <div class="time-selection">
-                    <input type="time" class="schedule-time start-time" value="${startTime}" disabled>
+                    <input type="time" class="schedule-time start-time" value="${startTime}">
                     <div class="time-divider"></div>
-                    <input type="time" class="schedule-time end-time" value="${endTime}" disabled>
+                    <input type="time" class="schedule-time end-time" value="${endTime}">
                 </div>
                 <div class="action-buttons">
-                    <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                    <button type="button" class="check-work-time work-time-button" title="Редактировать"></button>
                     <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                 </div>
                 <div id="modal-overlay-message" class="modal-overlay-message">
@@ -869,7 +871,7 @@ $(document).ready(function () {
       const dayNumber = index + 1;
       newEntry += `
                     <label class="day">
-                        <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][${dayNumber}][week_day]" value="${dayNumber}" disabled>
+                        <input type="checkbox" class="days-checkbox" name="${schedule}[work_time][${dayNumber}][week_day]" value="${dayNumber}">
                         <input type="hidden" name="${schedule}[work_time][${dayNumber}][time_start]" value="00:00">
                         <input type="hidden" name="${schedule}[work_time][${dayNumber}][time_end]" value="00:00">
                         <div class="day-circle"><span class="day-name">${dayName}</span></div>
@@ -880,12 +882,12 @@ $(document).ready(function () {
     newEntry += `
                 </div>
                 <div class="time-selection">
-                    <input type="time" class="schedule-time start-time" value="00:00" disabled>
+                    <input type="time" class="schedule-time start-time" value="00:00">
                     <div class="time-divider"></div>
-                    <input type="time" class="schedule-time end-time" value="00:00" disabled>
+                    <input type="time" class="schedule-time end-time" value="00:00">
                 </div>
                 <div class="action-buttons">
-                    <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                    <button type="button" class="check-work-time work-time-button" title="Редактировать"></button>
                     <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                 </div>
                   <div id="modal-overlay-message" class="modal-overlay-message">
@@ -943,12 +945,12 @@ $(document).ready(function () {
             </div>
 
             <div class="time-selection">
-                <input type="time" class="schedule-time start-time" value="${defaultTime}" disabled>
+                <input type="time" class="schedule-time start-time" value="${defaultTime}">
                 <div class="time-divider"></div>
-                <input type="time" class="schedule-time end-time" value="${defaultTime}" disabled>
+                <input type="time" class="schedule-time end-time" value="${defaultTime}">
             </div>
             <div class="action-buttons">
-                <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
+                <button type="button" class="check-holiday-time work-time-button" title="Редактировать"></button>
                 <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
             </div>
               <div id="modal-overlay-message" class="modal-overlay-message">
@@ -982,7 +984,9 @@ $(document).ready(function () {
 
   // Формируем массив с датами
   var defaultDate = [defaultStartDate, defaultEndDate];
-
+console.log("222");
+console.log(defaultDate);
+console.log($(".calendar"));
   // Инициализация календаря для модального окна
   const calendars = $(".calendar").flatpickr({
     inline: true, // Режим отображения календаря

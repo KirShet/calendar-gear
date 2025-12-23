@@ -107,7 +107,7 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                                     <input type="checkbox" class="days-checkbox"
                                         name="<?= $name ?>[work_time][<?= $dayNumber ?>][week_day]"
                                         value="<?= $dayNumber ?>"
-                                        <?= $isChecked ? 'checked' : '' ?> disabled>
+                                        <?= $isChecked ? 'checked' : '' ?>>
                                     <input type="hidden" name="<?= $name ?>[work_time][<?= $dayNumber ?>][time_start]"
                                         value="<?= !empty($group['time_start']) ? $group['time_start'] : '00:00' ?>">
                                     <input type="hidden" name="<?= $name ?>[work_time][<?= $dayNumber ?>][time_end]"
@@ -122,13 +122,13 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                         </div>
                         <div class="time-selection">
                             <input type="time" class="schedule-time start-time"
-                                value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>" disabled>
+                                value="<?php echo !empty($startTime) ? $startTime : '00:00'; ?>">
                             <div class="time-divider"></div>
                             <input type="time" class="schedule-time end-time"
-                                value="<?php echo !empty($endTime) ? $endTime : '00:00'; ?>" disabled>
+                                value="<?php echo !empty($endTime) ? $endTime : '00:00'; ?>">
                         </div>
                         <div class="action-buttons">
-                            <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                            <button type="button" class="check-work-time work-time-button" title="Редактировать"></button>
                             <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                         </div>
                         <div id="modal-overlay-message" class="modal-overlay-message">
@@ -160,7 +160,7 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                                 <input type="checkbox" class="days-checkbox"
                                     name="<?= $name ?>[work_time][<?= $dayNumber ?>][week_day]"
                                     value="<?= $dayNumber ?>"
-                                    <?= $isChecked ? 'checked' : '' ?> disabled>
+                                    <?= $isChecked ? 'checked' : '' ?>>
                                 <input type="hidden" name="<?= $name ?>[work_time][<?= $dayNumber ?>][time_start]"
                                     value="<?= !empty($group['time_start']) ? $group['time_start'] : '00:00' ?>">
                                 <input type="hidden" name="<?= $name ?>[work_time][<?= $dayNumber ?>][time_end]"
@@ -175,12 +175,12 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                     </div>
                     <div class="time-selection">
 
-                        <input type="time" class="schedule-time start-time" value="00:00" disabled>
+                        <input type="time" class="schedule-time start-time" value="00:00">
                         <div class="time-divider"></div>
-                        <input type="time" class="schedule-time end-time" value="00:00" disabled>
+                        <input type="time" class="schedule-time end-time" value="00:00">
                     </div>
                     <div class="action-buttons">
-                        <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                        <button type="button" class="check-work-time work-time-button" title="Редактировать"></button>
                         <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                     </div>
                     <div id="modal-overlay-message" class="modal-overlay-message">
@@ -232,13 +232,12 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                             <span class="work-date"><?php echo $dateRange; ?></span>
                         </div>
                         <div class="time-selection">
-                            <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>"
-                                disabled="">
+                            <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>">
                             <div class="time-divider"></div>
-                            <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
+                            <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>">
                         </div>
                         <div class="action-buttons">
-                            <button type="button" class="edit-work-time work-time-button" title="Редактировать"></button>
+                            <button type="button" class="check-work-time work-time-button" title="Редактировать"></button>
                             <button type="button" class="remove-work-time work-time-button" title="Удалить"></button>
                         </div>
                         <div id="modal-overlay-message" class="modal-overlay-message">
@@ -299,13 +298,12 @@ $containerClass = $useFrame ? 'frame schedule-widget card p-3' : 'schedule-widge
                             <span class="work-date">Праздничные дни</span>
                         </div>
                         <div class="time-selection">
-                            <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>"
-                                disabled="">
+                            <input type="time" class="schedule-time start-time" value="<?php echo $startTime; ?>">
                             <div class="time-divider"></div>
-                            <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>" disabled="">
+                            <input type="time" class="schedule-time end-time" value="<?php echo $endTime; ?>">
                         </div>
                         <div class="action-buttons">
-                            <button type="button" class="edit-holiday-time work-time-button" title="Редактировать"></button>
+                            <button type="button" class="check-holiday-time work-time-button" title="Редактировать"></button>
                             <button type="button" class="remove-holiday-time work-time-button" title="Удалить"></button>
                         </div>
                         <div id="modal-overlay-message" class="modal-overlay-message">
